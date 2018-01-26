@@ -5,7 +5,7 @@ pipeline:
       - npm install
       - npm test
     when:
-      event: [push, pull_request]
+      event: [push, pull_request, tag]
 
   build:
     image: docker:17.09.1
@@ -15,7 +15,7 @@ pipeline:
       - docker build -t asl .
     when:
       branch: master
-      event: push
+      event: [push, tag]
 
   image_to_quay:
     image: docker:17.09.1
@@ -29,9 +29,9 @@ pipeline:
       - docker push quay.io/ukhomeofficedigital/asl-public-api:$${DRONE_COMMIT_SHA}
     when:
       branch: master
-      event: push
+      event: [push, tag]
 
-  trigger_deploy:
+  trigger_dev_deploy:
     image: quay.io/ukhomeofficedigital/drone-trigger:latest
     drone_server: https://drone.acp.homeoffice.gov.uk
     repo: UKHomeOffice/asl-deploy-bot
@@ -43,6 +43,18 @@ pipeline:
     when:
       branch: master
       event: push
+
+  trigger_preprod_deploy:
+    image: quay.io/ukhomeofficedigital/drone-trigger:latest
+    drone_server: https://drone.acp.homeoffice.gov.uk
+    repo: UKHomeOffice/asl-deploy-bot
+    branch: master
+    secrets:
+      - drone_token
+    params: REPO=${DRONE_REPO},PLUGIN_NUMBER=${DRONE_BUILD_NUMBER}
+    deploy_to: preprod
+    when:
+      event: tag
 
   dev_deploy:
     image: quay.io/ukhomeofficedigital/kd:v0.5.0
