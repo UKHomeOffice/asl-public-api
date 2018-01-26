@@ -2,17 +2,17 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: asl-dev-pubapi
+  name: asl-{{.DEPLOY_TO}}-{{.SERVICE_NAME}}
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        name: asl-dev-pubapi
-        service: asl-dev-pubapi
+        name: asl-{{.DEPLOY_TO}}-{{.SERVICE_NAME}}
+        service: asl-{{.DEPLOY_TO}}-{{.SERVICE_NAME}}
     spec:
       containers:
-        - name: asl-dev-pubapi
+        - name: asl-{{.DEPLOY_TO}}-{{.SERVICE_NAME}}
           image: quay.io/ukhomeofficedigital/asl-public-api:{{.DRONE_COMMIT_SHA}}
           imagePullPolicy: Always
           env:
@@ -21,11 +21,11 @@ spec:
             - name: KEYCLOAK_URL
               value: https://sso-dev.notprod.homeoffice.gov.uk/auth
             - name: KEYCLOAK_CLIENT
-              value: asl-dev-connect
+              value: asl-{{.DEPLOY_TO}}-connect
             - name: KEYCLOAK_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: asl-dev-auth
+                  name: asl-{{.DEPLOY_TO}}-auth
                   key: secret
           resources:
             limits:
