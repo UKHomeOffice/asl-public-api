@@ -3,7 +3,7 @@ export KUBE_NAMESPACE=asl-dev
 export KUBE_SERVER=${KUBE_SERVER}
 export KUBE_TOKEN=${KUBE_TOKEN}
 
-export SERVICE_NAME=pubapi
+export SERVICE_NAME=api
 export DEPLOY_TO=${DRONE_DEPLOY_TO}
 
 kd --insecure-skip-tls-verify \
