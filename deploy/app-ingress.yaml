@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: asl-dev-pubapi-ingress
+  annotations:
+    ingress.kubernetes.io/secure-backends: "true"
+    kubernetes.io/ingress.class: "nginx-external"
+    stable.k8s.psg.io/kcm.provider: http
+  labels:
+    stable.k8s.psg.io/kcm.class: "default"
+spec:
+  tls:
+  - hosts:
+    - "devapi.notprod.asl.homeoffice.gov.uk"
+    secretName: asl-dev-pubapi-cert
+  rules:
+  - host: "devapi.notprod.asl.homeoffice.gov.uk"
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: asl-dev-pubapi
+          servicePort: 10443
