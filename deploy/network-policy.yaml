@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: NetworkPolicy
 metadata:
-  name: permit-ingress
+  name: pubapi-permit-ingress
 spec:
   ingress:
   - from:
