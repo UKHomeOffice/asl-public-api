@@ -21,11 +21,11 @@ spec:
             - name: KEYCLOAK_URL
               value: https://sso-dev.notprod.homeoffice.gov.uk/auth
             - name: KEYCLOAK_CLIENT
-              value: asl-{{.DEPLOY_TO}}-connect
+              value: asl-dev-connect
             - name: KEYCLOAK_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: asl-{{.DEPLOY_TO}}-auth
+                  name: asl-dev-auth
                   key: secret
           resources:
             limits:
