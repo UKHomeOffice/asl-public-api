@@ -17,7 +17,7 @@ spec:
   - host: "devapi.notprod.asl.homeoffice.gov.uk"
     http:
       paths:
-      - path: /api
+      - path: /
         backend:
           serviceName: asl-dev-pubapi
           servicePort: 10443
