@@ -5,5 +5,6 @@ module.exports = {
     url: process.env.KEYCLOAK_URL,
     client: process.env.KEYCLOAK_CLIENT,
     secret: process.env.KEYCLOAK_SECRET
-  }
+  },
+  db: process.env.POSTGRES_URL
 };
