@@ -27,6 +27,31 @@ spec:
                 secretKeyRef:
                   name: asl-dev-auth
                   key: secret
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: asl-dev-rds
+                  key: endpoint
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: asl-dev-rds
+                  key: database
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: asl-dev-rds
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: asl-dev-rds
+                  key: password
+            - name: DATABASE_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: asl-dev-rds
+                  key: port
           resources:
             limits:
               memory: "256Mi"
