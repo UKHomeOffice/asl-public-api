@@ -1,11 +1,13 @@
 const API = require('./lib/api');
 const settings = require('./config');
 
-const server = API(settings).listen(settings.port, (err, result) => {
-  if (err) {
-    return console.error(err);
-  }
-  console.log(`Listening on port ${server.address().port}`);
+const server = API(settings).then(app => {
+  app.listen(settings.port, (err, result) => {
+    if (err) {
+      return console.error(err);
+    }
+    console.log(`Listening on port ${server.address().port}`);
+  });
 });
 
 process.on('SIGINT', () => {
