@@ -36,7 +36,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: asl-dev-rds
-                  key: database
+                  key: db_name
             - name: DATABASE_USER
               valueFrom:
                 secretKeyRef:
