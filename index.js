@@ -8,14 +8,14 @@ API(settings).then(app => {
     }
     console.log(`Listening on port ${server.address().port}`);
   });
-});
 
-process.on('SIGINT', () => {
-  if (server.listening) {
-    console.log('Attempting to exit gracefully.');
-    server.close(() => {
-      console.log('Server closed. Quitting.');
-      process.exit();
-    });
-  }
+  process.on('SIGINT', () => {
+    if (server.listening) {
+      console.log('Attempting to exit gracefully.');
+      server.close(() => {
+        console.log('Server closed. Quitting.');
+        process.exit();
+      });
+    }
+  });
 });
