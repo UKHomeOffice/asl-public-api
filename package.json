@@ -18,7 +18,8 @@
   "homepage": "https://github.com/UKHomeOffice/asl-public-api#readme",
   "dependencies": {
     "@asl/schema": "^1.0.2",
-    "@asl/service": "^1.0.1"
+    "@asl/service": "^1.0.1",
+    "express": "^4.16.2"
   },
   "devDependencies": {
     "eslint": "^4.16.0",
