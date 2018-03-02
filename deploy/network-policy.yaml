@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: NetworkPolicy
 metadata:
-  name: {{.DEPLOY_TO}}-{{.SERVICE_NAME}}-permit-ingress
+  name: {{.SERVICE_NAME}}-permit-ingress
 spec:
   ingress:
   - from:
@@ -15,6 +15,6 @@ spec:
       protocol: TCP
   podSelector:
     matchLabels:
-      name: asl-{{.DEPLOY_TO}}-{{.SERVICE_NAME}}
+      name: {{.SERVICE_NAME}}
   policyTypes:
   - Ingress
