@@ -66,6 +66,16 @@ pipeline:
     when:
       event: tag
 
+  configure_deploy:
+    image: node:8
+    commands:
+      - npm install -g kube-cookbook
+      - cd ./deploy
+      - kube-cookbook ./.kube.yaml
+    when:
+      environment: dev
+      event: deployment
+
   dev_deploy:
     image: quay.io/ukhomeofficedigital/kd:v0.5.0
     secrets:
