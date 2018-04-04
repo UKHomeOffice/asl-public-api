@@ -1,0 +1,33 @@
+name: public-api
+url: public-api.preprod.asl.homeoffice.gov.uk
+image: quay.io/ukhomeofficedigital/asl-public-api:{{.DRONE_COMMIT_SHA}}
+env:
+  KEYCLOAK_REALM: Asl-dev
+  KEYCLOAK_URL: https://sso-dev.notprod.homeoffice.gov.uk/auth
+  KEYCLOAK_CLIENT: asl-dev-connect
+  KEYCLOAK_SECRET:
+    secret: true
+    name: asl-preprod-auth
+    key: secret
+  DATABASE_HOST:
+    secret: true
+    name: asl-preprod-rds
+    key: endpoint
+  DATABASE_NAME:
+    secret: true
+    name: asl-preprod-rds
+    key: db_name
+  DATABASE_USERNAME:
+    secret: true
+    name: asl-preprod-rds
+    key: username
+  DATABASE_PASSWORD:
+    secret: true
+    name: asl-preprod-rds
+    key: password
+  DATABASE_PORT:
+    secret: true
+    name: asl-preprod-rds
+    key: port
+nginx:
+  ADD_NGINX_SERVER_CFG: add_header Cache-Control private;
