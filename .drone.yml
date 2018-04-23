@@ -4,6 +4,11 @@ pipeline:
     image: node:8
     secrets:
       - npm_auth_token
+    environment:
+      - POSTGRES_USER=asl-test
+      - POSTGRES_DB=asl-test
+      - POSTGRES_PASSWORD=asl-test
+      - POSTGRES_HOST=database
     commands:
       - npm install
       - npm test
@@ -91,6 +96,14 @@ pipeline:
     when:
       environment: preprod
       event: deployment
+
+services:
+  database:
+    image: postgres
+    environment:
+      - POSTGRES_USER=asl-test
+      - POSTGRES_DB=asl-test
+      - POSTGRES_PASSWORD=asl-test
 
 matrix:
   NPM_AUTH_USERNAME:

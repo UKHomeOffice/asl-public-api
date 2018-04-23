@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon -r dotenv/config",
-    "test": "eslint . --config lennym"
+    "test": "npm run test:lint && npm run test:unit",
+    "test:lint": "eslint .",
+    "test:unit": "mocha ./test --recursive"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,8 @@
     "dotenv": "^5.0.1",
     "eslint": "^4.16.0",
     "eslint-config-lennym": "^1.4.0",
-    "nodemon": "^1.17.2"
+    "mocha": "^5.1.1",
+    "nodemon": "^1.17.2",
+    "supertest": "^3.0.0"
   }
 }
