@@ -21,7 +21,7 @@
   "dependencies": {
     "@asl/migrator": "^1.2.0",
     "@asl/mocks": "^2.1.0",
-    "@asl/schema": "^1.6.0",
+    "@asl/schema": "^1.7.0",
     "@asl/service": "^1.0.1",
     "express": "^4.16.2",
     "lodash": "^4.17.5"
