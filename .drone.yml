@@ -6,8 +6,6 @@ pipeline:
       - npm_auth_token
     environment:
       - POSTGRES_USER=asl-test
-      - POSTGRES_DB=asl-test
-      - POSTGRES_PASSWORD=asl-test
       - POSTGRES_HOST=database
     commands:
       - npm install
@@ -102,8 +100,6 @@ services:
     image: postgres
     environment:
       - POSTGRES_USER=asl-test
-      - POSTGRES_DB=asl-test
-      - POSTGRES_PASSWORD=asl-test
 
 matrix:
   NPM_AUTH_USERNAME:

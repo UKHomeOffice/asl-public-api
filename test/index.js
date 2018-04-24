@@ -6,8 +6,6 @@ const Api = require('../lib/api');
 const data = require('./data');
 
 const settings = {
-  database: process.env.POSTGRES_DB || 'asl-test',
-  password: process.env.POSTGRES_PASSWORD || 'asl-test',
   username: process.env.POSTGRES_USER || 'asl-test',
   host: process.env.POSTGRES_HOST || 'localhost'
 };
