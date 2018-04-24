@@ -6,14 +6,14 @@ const Api = require('../lib/api');
 const data = require('./data');
 
 const settings = {
-  username: process.env.POSTGRES_USER || 'asl-test',
+  database: process.env.POSTGRES_DB || 'asl-test',
+  username: process.env.POSTGRES_USER,
   host: process.env.POSTGRES_HOST || 'localhost'
 };
 
 describe('API', () => {
 
   beforeEach(() => {
-    console.log(settings);
     return Database(settings).init(data.default)
       .then(() => {
         this.api = Api({
@@ -56,6 +56,21 @@ describe('API', () => {
             response.body.data.forEach(row => {
               assert.equal(row.site, 'Lunar House');
             });
+          });
+      });
+
+    });
+
+    describe('/profiles', () => {
+
+      it('returns only the profiles related to the current establishment', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 1);
+            assert.equal(response.body.data[0].firstName, 'Linford');
+            assert.equal(response.body.data[0].lastName, 'Christie');
           });
       });
 
