@@ -8,7 +8,8 @@
     "dev": "nodemon -r dotenv/config",
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "eslint .",
-    "test:unit": "mocha ./test --recursive"
+    "test:unit": "mocha ./test --recursive",
+    "migrate": "asl-migrate ./node_modules/@asl/mocks/data/*.csv"
   },
   "repository": {
     "type": "git",
