@@ -8,7 +8,8 @@
     "dev": "nodemon -r dotenv/config",
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "eslint .",
-    "test:unit": "mocha ./test --recursive"
+    "test:unit": "mocha ./test --recursive",
+    "migrate": "asl-migrate ./node_modules/@asl/mocks/data/*.csv"
   },
   "repository": {
     "type": "git",
@@ -21,9 +22,9 @@
   },
   "homepage": "https://github.com/UKHomeOffice/asl-public-api#readme",
   "dependencies": {
-    "@asl/migrator": "^1.2.0",
-    "@asl/mocks": "^2.1.0",
-    "@asl/schema": "^1.7.0",
+    "@asl/migrator": "^1.4.0",
+    "@asl/mocks": "^2.1.1",
+    "@asl/schema": "^1.8.2",
     "@asl/service": "^1.4.0",
     "express": "^4.16.2",
     "lodash": "^4.17.5"
@@ -33,7 +34,7 @@
     "eslint": "^4.16.0",
     "eslint-config-lennym": "^1.4.0",
     "mocha": "^5.1.1",
-    "nodemon": "^1.17.2",
+    "nodemon": "^1.17.4",
     "supertest": "^3.0.0"
   }
 }
