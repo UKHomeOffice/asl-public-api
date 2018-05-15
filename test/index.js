@@ -74,6 +74,16 @@ describe('API', () => {
           });
       });
 
+      it('returns a list that includes the `name` virtual property', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 1);
+            assert.equal(response.body.data[0].name, 'Linford Christie');
+          });
+      });
+
     });
 
   });
