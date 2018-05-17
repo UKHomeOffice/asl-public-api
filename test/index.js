@@ -28,6 +28,19 @@ describe('API', () => {
     return this.api && this.api.db.close();
   });
 
+  describe('/establishments', () => {
+
+    it('returns a list of all establishments', () => {
+      return request(this.api)
+        .get('/establishments')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.length, 2);
+        });
+    });
+
+  });
+
   describe('/establishment/:id', () => {
 
     it('returns a 404 error for unknown establishment id', () => {
