@@ -97,6 +97,39 @@ describe('API', () => {
           });
       });
 
+      describe('/profile/:id', () => {
+
+        let id;
+
+        beforeEach(() => {
+          return request(this.api)
+            .get('/establishment/100/profiles')
+            .expect(200)
+            .expect(response => {
+              id = response.body.data[0].id;
+            });
+        });
+
+        it('returns the profile data for an individual profile', () => {
+          return request(this.api)
+            .get(`/establishment/100/profile/${id}`)
+            .expect(200)
+            .expect(profile => {
+              assert.equal(profile.body.data.name, 'Linford Christie');
+            });
+        });
+
+        it('includes the PIL data if it exists', () => {
+          return request(this.api)
+            .get(`/establishment/100/profile/${id}`)
+            .expect(200)
+            .expect(profile => {
+              assert.equal(profile.body.data.pil.licenceNumber, 'ABC123');
+            });
+        });
+
+      });
+
     });
 
   });
