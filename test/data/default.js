@@ -1,6 +1,6 @@
 module.exports = models => {
 
-  const { Establishment, Place, Profile } = models;
+  const { Establishment, Place, Profile, PIL } = models;
 
   return Promise.resolve()
     .then(() => {
@@ -32,13 +32,27 @@ module.exports = models => {
             address: '1 Some Road',
             postcode: 'A1 1AA',
             email: 'test@example.com',
-            telephone: '01234567890'
+            telephone: '01234567890',
+            pil: {
+              status: 'active',
+              issueDate: '2017-01-01',
+              revocationDate: null,
+              licenceNumber: 'ABC123',
+              conditions: 'Conditions'
+            }
           }
         ]
       }, {
         include: [
           Place,
-          { model: Profile, as: 'profiles' }
+          {
+            model: Profile,
+            as: 'profiles',
+            include: {
+              model: PIL,
+              as: 'pil'
+            }
+          }
         ]
       });
     })
