@@ -1,7 +1,8 @@
 const API = require('./lib/api');
 const settings = require('./config');
+const permissions = require('./permissions');
 
-const server = API(settings).listen(settings.port, (err, result) => {
+const server = API({ ...settings, permissions }).listen(settings.port, (err, result) => {
   if (err) {
     return console.error(err);
   }
