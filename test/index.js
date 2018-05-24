@@ -2,6 +2,7 @@ const assert = require('assert');
 const request = require('supertest');
 
 const Database = require('./helpers/db');
+const WithUser = require('./helpers/with-user');
 const Api = require('../lib/api');
 const data = require('./data');
 
@@ -16,16 +17,20 @@ describe('API', () => {
   beforeEach(() => {
     return Database(settings).init(data.default)
       .then(() => {
-        this.api = Api({
+        const user = {
+          roles: ['inspector']
+        };
+        const api = Api({
           auth: false,
           log: { level: 'silent' },
           db: settings
         });
+        this.api = WithUser(api, user);
       });
   });
 
   afterEach(() => {
-    return this.api && this.api.db.close();
+    return this.api && this.api.app.db.close();
   });
 
   describe('/establishments', () => {
@@ -37,6 +42,13 @@ describe('API', () => {
         .expect(response => {
           assert.equal(response.body.data.length, 2);
         });
+    });
+
+    it('returns a 403 id user does not have permission to view all establishments', () => {
+      this.api.setUser({ roles: [] });
+      return request(this.api)
+        .get('/establishments')
+        .expect(403);
     });
 
   });
@@ -65,6 +77,23 @@ describe('API', () => {
         .expect(response => {
           assert.equal(response.body.data.pelh.name, 'Noddy Holder');
         });
+    });
+
+    it('returns the users establishment', () => {
+      this.api.setUser({ roles: [], establishment: '100' })
+      return request(this.api)
+        .get('/establishment/100')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.name, 'University of Croydon');
+        });
+    });
+
+    it('returns a 403 if the user does not belong to the establishment', () => {
+      this.api.setUser({ roles: [], establishment: '101' })
+      return request(this.api)
+        .get('/establishment/100')
+        .expect(403);
     });
 
     describe('/places', () => {
