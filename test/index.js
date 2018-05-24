@@ -58,6 +58,15 @@ describe('API', () => {
         });
     });
 
+    it('includes the details fo the licence holder as `pelh`', () => {
+      return request(this.api)
+        .get('/establishment/100')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.pelh.name, 'Noddy Holder');
+        });
+    });
+
     describe('/places', () => {
 
       it('returns only the places related to the current establishment', () => {

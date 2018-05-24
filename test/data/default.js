@@ -54,7 +54,21 @@ module.exports = models => {
             }
           }
         ]
-      });
+      })
+        .then(establishment => {
+          return establishment.createRole({
+            type: 'pelh',
+            profile: {
+              title: 'Dr',
+              firstName: 'Noddy',
+              lastName: 'Holder',
+              address: '1 Some Road',
+              postcode: 'A1 1AA',
+              email: 'test@example.com',
+              telephone: '01234567890'
+            }
+          }, { include: Profile });
+        });
     })
     .then(() => {
       return Establishment.create({
