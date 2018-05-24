@@ -9,6 +9,8 @@ COPY package-lock.json /app/package-lock.json
 RUN npm install --production --no-optional
 COPY . /app
 
+RUN rm /app/.npmrc
+
 USER nodejs
 
 CMD node index.js
