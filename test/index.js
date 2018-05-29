@@ -53,7 +53,7 @@ describe('API', () => {
 
   });
 
-  describe('/establishment/:id', () => {
+  describe('/establishment/:establishment', () => {
 
     it('returns a 404 error for unknown establishment id', () => {
       return request(this.api)
