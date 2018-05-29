@@ -18,7 +18,7 @@ const WithUser = (app, user) => {
 
   const staticRouter = express.Router();
   wrapper.use(staticRouter);
-  wrapper.setUser = user => staticRouter.use(makeDummyUser(user))
+  wrapper.setUser = user => staticRouter.use(makeDummyUser(user));
 
   wrapper.use(app);
   wrapper.app = app;

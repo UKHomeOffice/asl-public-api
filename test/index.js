@@ -80,7 +80,7 @@ describe('API', () => {
     });
 
     it('returns the users establishment', () => {
-      this.api.setUser({ roles: [], establishment: '100' })
+      this.api.setUser({ roles: [], establishment: '100' });
       return request(this.api)
         .get('/establishment/100')
         .expect(200)
@@ -90,7 +90,7 @@ describe('API', () => {
     });
 
     it('returns a 403 if the user does not belong to the establishment', () => {
-      this.api.setUser({ roles: [], establishment: '101' })
+      this.api.setUser({ roles: [], establishment: '101' });
       return request(this.api)
         .get('/establishment/100')
         .expect(403);
