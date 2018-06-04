@@ -11,6 +11,6 @@ COPY . /app
 
 RUN rm /app/.npmrc
 
-USER nodejs
+USER 999
 
 CMD node index.js
