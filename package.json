@@ -27,7 +27,8 @@
     "@asl/schema": "^1.13.2",
     "@asl/service": "^2.5.1",
     "express": "^4.16.2",
-    "lodash": "^4.17.5"
+    "lodash": "^4.17.5",
+    "sequelize": "^4.37.10"
   },
   "devDependencies": {
     "dotenv": "^5.0.1",
