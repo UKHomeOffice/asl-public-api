@@ -12,20 +12,20 @@ const settings = {
   host: process.env.POSTGRES_HOST || 'localhost'
 };
 
+const NOT_AUTHORISED = new Error('Not authorised');
+NOT_AUTHORISED.status = 403;
+
 describe('API', () => {
 
   beforeEach(() => {
     return Database(settings).init(data.default)
       .then(() => {
-        const user = {
-          roles: ['inspector']
-        };
         const api = Api({
           auth: false,
           log: { level: 'silent' },
           db: settings
         });
-        this.api = WithUser(api, user);
+        this.api = WithUser(api, {});
       });
   });
 
@@ -45,7 +45,7 @@ describe('API', () => {
     });
 
     it('returns a 403 id user does not have permission to view all establishments', () => {
-      this.api.setUser({ roles: [] });
+      this.api.setUser({ can: () => Promise.reject(NOT_AUTHORISED) });
       return request(this.api)
         .get('/establishments')
         .expect(403);
@@ -80,7 +80,7 @@ describe('API', () => {
     });
 
     it('returns the users establishment', () => {
-      this.api.setUser({ roles: [], establishment: '100' });
+      this.api.setUser({ establishment: '100' });
       return request(this.api)
         .get('/establishment/100')
         .expect(200)
@@ -89,8 +89,8 @@ describe('API', () => {
         });
     });
 
-    it('returns a 403 if the user does not belong to the establishment', () => {
-      this.api.setUser({ roles: [], establishment: '101' });
+    it('returns a 403 if the user is not authorised', () => {
+      this.api.setUser({ can: () => Promise.reject(NOT_AUTHORISED) });
       return request(this.api)
         .get('/establishment/100')
         .expect(403);

@@ -1,14 +1,13 @@
 const express = require('express');
-const { can } = require('@asl/service/lib/permissions');
 
 const makeDummyUser = user => (req, res, next) => {
   req.user = Object.assign({
     id: 1,
     access_token: '12345',
     is: role => user.roles.includes(role),
-    get: key => user[key]
+    get: key => user[key],
+    can: () => Promise.resolve()
   }, user);
-  req.user.can = (task, params) => can(req.user, task, params);
   next();
 };
 
