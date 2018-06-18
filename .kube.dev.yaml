@@ -2,6 +2,7 @@ name: public-api
 url: public-api.notprod.asl.homeoffice.gov.uk
 image: quay.io/ukhomeofficedigital/asl-public-api:{{.DRONE_COMMIT_SHA}}
 env:
+  PERMISSIONS_SERVICE: https://permissions.notprod.asl.homeoffice.gov.uk
   KEYCLOAK_REALM: Asl-dev
   KEYCLOAK_URL: https://sso-dev.notprod.homeoffice.gov.uk/auth
   KEYCLOAK_CLIENT: asl-dev-connect
