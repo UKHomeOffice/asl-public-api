@@ -7,6 +7,12 @@ module.exports = {
     secret: process.env.KEYCLOAK_SECRET,
     permissions: process.env.PERMISSIONS_SERVICE
   },
+  sqs: {
+    region: process.env.SQS_REGION || 'eu-west-2',
+    accessKey: process.env.SQS_ACCESS_KEY,
+    secret: process.env.SQS_SECRET,
+    url: process.env.SQS_URL
+  },
   db: {
     database: process.env.DATABASE_NAME,
     host: process.env.DATABASE_HOST,

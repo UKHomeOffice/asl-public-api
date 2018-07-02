@@ -26,6 +26,7 @@
     "@asl/mocks": "^2.3.3",
     "@asl/schema": "^1.13.2",
     "@asl/service": "^3.0.0",
+    "aws-sdk": "^2.266.1",
     "express": "^4.16.2",
     "lodash": "^4.17.5",
     "sequelize": "^4.37.10"
