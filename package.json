@@ -8,7 +8,7 @@
     "dev": "nodemon -r dotenv/config",
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "eslint .",
-    "test:unit": "mocha ./test --recursive",
+    "test:unit": "mocha ./test/specs --recursive",
     "migrate": "asl-migrate ./node_modules/@asl/mocks/data/*.csv"
   },
   "repository": {
@@ -29,7 +29,8 @@
     "aws-sdk": "^2.266.1",
     "express": "^4.16.2",
     "lodash": "^4.17.5",
-    "sequelize": "^4.37.10"
+    "sequelize": "^4.37.10",
+    "uuid-validate": "0.0.3"
   },
   "devDependencies": {
     "dotenv": "^5.0.1",
@@ -37,6 +38,7 @@
     "eslint-config-lennym": "^1.4.0",
     "mocha": "^5.1.1",
     "nodemon": "^1.17.4",
+    "sinon": "^6.0.1",
     "supertest": "^3.0.0"
   }
 }

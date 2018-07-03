@@ -1,10 +1,11 @@
 const assert = require('assert');
 const request = require('supertest');
 
-const Database = require('./helpers/db');
-const WithUser = require('./helpers/with-user');
-const Api = require('../lib/api');
-const data = require('./data');
+const Database = require('../helpers/db');
+const WithUser = require('../helpers/with-user');
+const SQS = require('../helpers/sqs');
+const Api = require('../../lib/api');
+const data = require('../data');
 
 const settings = {
   database: process.env.POSTGRES_DB || 'asl-test',
@@ -18,18 +19,21 @@ NOT_AUTHORISED.status = 403;
 describe('API', () => {
 
   beforeEach(() => {
+    this.sqs = SQS();
     return Database(settings).init(data.default)
       .then(() => {
         const api = Api({
           auth: false,
-          log: { level: 'silent' },
-          db: settings
+          log: { level: 'error' },
+          db: settings,
+          sqs: {}
         });
         this.api = WithUser(api, {});
       });
   });
 
   afterEach(() => {
+    this.sqs.teardown();
     return this.api && this.api.app.db.close();
   });
 
@@ -108,6 +112,73 @@ describe('API', () => {
               assert.equal(row.site, 'Lunar House');
             });
           });
+      });
+
+      it('adds a message to SQS on POST', () => {
+        const input = {
+          comments: 'Lorem ipsum dolor'
+        };
+        return request(this.api)
+          .post('/establishment/100/places')
+          .send(input)
+          .expect(200)
+          .expect(() => {
+            assert.equal(this.sqs.messages.length, 1);
+            const msg = this.sqs.messages[0];
+            assert.equal(msg.MessageBody.model, 'place');
+            assert.equal(msg.MessageBody.action, 'create');
+            assert.deepEqual(msg.MessageBody.data, input);
+          });
+      });
+
+      describe('/place/:id', () => {
+
+        it('returns 404 for unrecognised id', () => {
+          return request(this.api)
+            .get('/establishment/100/places/notanid')
+            .expect(404);
+        });
+
+        it('returns 404 for a different establishments place id', () => {
+          return request(this.api)
+            .get('/establishment/100/places/e859d43a-e8ab-4ae6-844a-95c978082a48')
+            .expect(404);
+        });
+
+        it('adds a message to SQS on PUT', () => {
+          const input = {
+            comments: 'Lorem ipsum dolor'
+          };
+          return request(this.api)
+            .put('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
+            .send(input)
+            .expect(200)
+            .expect(() => {
+              assert.equal(this.sqs.messages.length, 1);
+              const msg = this.sqs.messages[0];
+              assert.equal(msg.MessageBody.model, 'place');
+              assert.equal(msg.MessageBody.action, 'update');
+              assert.deepEqual(msg.MessageBody.data, input);
+            });
+        });
+
+        it('adds a message to SQS on DELETE', () => {
+          const input = {
+            comments: 'Lorem ipsum dolor'
+          };
+          return request(this.api)
+            .delete('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
+            .send(input)
+            .expect(200)
+            .expect(() => {
+              assert.equal(this.sqs.messages.length, 1);
+              const msg = this.sqs.messages[0];
+              assert.equal(msg.MessageBody.model, 'place');
+              assert.equal(msg.MessageBody.action, 'delete');
+              assert.deepEqual(msg.MessageBody.data, input);
+            });
+        });
+
       });
 
     });
