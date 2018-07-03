@@ -12,12 +12,14 @@ module.exports = models => {
         email: 'test@example.com',
         places: [
           {
+            id: '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f',
             site: 'Lunar House',
             name: 'Room 101',
             suitability: ['SA'],
             holding: ['LTH']
           },
           {
+            id: '2f404b2f-656f-4cc3-b432-5aadad052fc8',
             site: 'Lunar House',
             name: 'Room 102',
             suitability: ['SA'],
@@ -79,12 +81,14 @@ module.exports = models => {
         email: 'test@example.com',
         places: [
           {
+            id: 'e859d43a-e8ab-4ae6-844a-95c978082a48',
             site: 'Apollo House',
             name: 'Room 101',
             suitability: ['SA'],
             holding: ['LTH']
           },
           {
+            id: '4c9f9921-92ad-465c-8f94-06f05fcb7736',
             site: 'Apollo House',
             name: 'Room 102',
             suitability: ['SA'],

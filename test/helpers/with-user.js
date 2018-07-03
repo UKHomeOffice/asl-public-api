@@ -2,7 +2,7 @@ const express = require('express');
 
 const makeDummyUser = user => (req, res, next) => {
   req.user = Object.assign({
-    id: 1,
+    id: 'abc123',
     access_token: '12345',
     is: role => user.roles.includes(role),
     get: key => user[key],
