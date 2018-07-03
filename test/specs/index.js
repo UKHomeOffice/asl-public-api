@@ -126,6 +126,7 @@ describe('API', () => {
             assert.equal(this.sqs.messages.length, 1);
             const msg = this.sqs.messages[0];
             assert.equal(msg.MessageBody.model, 'place');
+            assert.equal(msg.MessageBody.user, 'abc123');
             assert.equal(msg.MessageBody.action, 'create');
             assert.deepEqual(msg.MessageBody.data, input);
           });
@@ -157,6 +158,7 @@ describe('API', () => {
               assert.equal(this.sqs.messages.length, 1);
               const msg = this.sqs.messages[0];
               assert.equal(msg.MessageBody.model, 'place');
+              assert.equal(msg.MessageBody.user, 'abc123');
               assert.equal(msg.MessageBody.action, 'update');
               assert.deepEqual(msg.MessageBody.data, input);
             });
@@ -174,6 +176,7 @@ describe('API', () => {
               assert.equal(this.sqs.messages.length, 1);
               const msg = this.sqs.messages[0];
               assert.equal(msg.MessageBody.model, 'place');
+              assert.equal(msg.MessageBody.user, 'abc123');
               assert.equal(msg.MessageBody.action, 'delete');
               assert.deepEqual(msg.MessageBody.data, input);
             });
