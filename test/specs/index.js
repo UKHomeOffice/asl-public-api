@@ -193,9 +193,10 @@ describe('API', () => {
           .get('/establishment/100/profiles')
           .expect(200)
           .expect(response => {
-            assert.equal(response.body.data.length, 1);
-            assert.equal(response.body.data[0].firstName, 'Linford');
-            assert.equal(response.body.data[0].lastName, 'Christie');
+            assert.equal(response.body.data.length, 3);
+            response.body.data.forEach(profile => {
+              assert.equal(profile.establishmentId, 100);
+            });
           });
       });
 
@@ -204,27 +205,18 @@ describe('API', () => {
           .get('/establishment/100/profiles')
           .expect(200)
           .expect(response => {
-            assert.equal(response.body.data.length, 1);
-            assert.equal(response.body.data[0].name, 'Linford Christie');
+            assert.equal(response.body.data.length, 3);
+            response.body.data.forEach(profile => {
+              assert.equal(typeof profile.name, 'string');
+            });
           });
       });
 
       describe('/profile/:id', () => {
 
-        let id;
-
-        beforeEach(() => {
-          return request(this.api)
-            .get('/establishment/100/profiles')
-            .expect(200)
-            .expect(response => {
-              id = response.body.data[0].id;
-            });
-        });
-
         it('returns the profile data for an individual profile', () => {
           return request(this.api)
-            .get(`/establishment/100/profile/${id}`)
+            .get('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9')
             .expect(200)
             .expect(profile => {
               assert.equal(profile.body.data.name, 'Linford Christie');
@@ -233,13 +225,36 @@ describe('API', () => {
 
         it('includes the PIL data if it exists', () => {
           return request(this.api)
-            .get(`/establishment/100/profile/${id}`)
+            .get('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9')
             .expect(200)
             .expect(profile => {
               assert.equal(profile.body.data.pil.licenceNumber, 'ABC123');
             });
         });
 
+        it('returns a NACWO role for NACWOs without places', () => {
+          return request(this.api)
+            .get('/establishment/100/profile/a942ffc7-e7ca-4d76-a001-0b5048a057d9')
+            .expect(200)
+            .expect(profile => {
+              assert.deepEqual(profile.body.data.roles.map(r => r.type), ['nacwo']);
+            });
+        });
+
+      });
+
+    });
+
+    describe('/roles', () => {
+
+      it('returns NACWOs who do not have places assigned', () => {
+        return request(this.api)
+          .get('/establishment/100/roles?type=nacwo')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 1);
+            assert.equal(response.body.data[0].type, 'nacwo');
+          });
       });
 
     });
