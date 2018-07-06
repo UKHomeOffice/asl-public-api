@@ -107,9 +107,21 @@ describe('API', () => {
           .get('/establishment/100/places')
           .expect(200)
           .expect(response => {
+            assert(response.body.data.length > 0);
+            response.body.data.forEach(row => {
+              assert.equal(row.establishmentId, 100);
+            });
+          });
+      });
+
+      it('does not include deleted places', () => {
+        return request(this.api)
+          .get('/establishment/100/places')
+          .expect(200)
+          .expect(response => {
             assert.equal(response.body.data.length, 2);
             response.body.data.forEach(row => {
-              assert.equal(row.site, 'Lunar House');
+              assert.notEqual(row.name, 'Deleted room');
             });
           });
       });
@@ -144,6 +156,12 @@ describe('API', () => {
           return request(this.api)
             .get('/establishment/100/places/e859d43a-e8ab-4ae6-844a-95c978082a48')
             .expect(404);
+        });
+
+        it('does not return 404 for a deleted room', () => {
+          return request(this.api)
+            .get('/establishment/100/places/a50331bb-c1d0-4068-87ca-b5a41143b0d0')
+            .expect(200);
         });
 
         it('adds a message to SQS on PUT', () => {
