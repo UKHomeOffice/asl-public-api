@@ -128,7 +128,7 @@ describe('API', () => {
             assert.equal(msg.MessageBody.model, 'place');
             assert.equal(msg.MessageBody.user, 'abc123');
             assert.equal(msg.MessageBody.action, 'create');
-            assert.deepEqual(msg.MessageBody.data, input);
+            assert.deepEqual(msg.MessageBody.data, { ...input, establishment: '100' });
           });
       });
 
@@ -160,7 +160,7 @@ describe('API', () => {
               assert.equal(msg.MessageBody.model, 'place');
               assert.equal(msg.MessageBody.user, 'abc123');
               assert.equal(msg.MessageBody.action, 'update');
-              assert.deepEqual(msg.MessageBody.data, input);
+              assert.deepEqual(msg.MessageBody.data, { ...input, establishment: '100' });
             });
         });
 
@@ -178,7 +178,7 @@ describe('API', () => {
               assert.equal(msg.MessageBody.model, 'place');
               assert.equal(msg.MessageBody.user, 'abc123');
               assert.equal(msg.MessageBody.action, 'delete');
-              assert.deepEqual(msg.MessageBody.data, input);
+              assert.deepEqual(msg.MessageBody.data, { ...input, establishment: '100' });
             });
         });
 
