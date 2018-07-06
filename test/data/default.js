@@ -24,6 +24,14 @@ module.exports = models => {
             name: 'Room 102',
             suitability: ['SA'],
             holding: ['STH']
+          },
+          {
+            id: 'a50331bb-c1d0-4068-87ca-b5a41143b0d0',
+            site: 'Lunar House',
+            name: 'Deleted room',
+            suitability: ['SA'],
+            holding: ['STH'],
+            deleted: '2018-01-01'
           }
         ],
         profiles: [
