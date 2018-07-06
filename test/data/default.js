@@ -28,6 +28,7 @@ module.exports = models => {
         ],
         profiles: [
           {
+            id: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
             title: 'Dr',
             firstName: 'Linford',
             lastName: 'Christie',
@@ -67,9 +68,28 @@ module.exports = models => {
               address: '1 Some Road',
               postcode: 'A1 1AA',
               email: 'test@example.com',
-              telephone: '01234567890'
+              telephone: '01234567890',
+              establishmentId: 100
             }
-          }, { include: Profile });
+          }, { include: Profile })
+            .then(() => establishment);
+        })
+        .then(establishment => {
+          return establishment.createRole({
+            type: 'nacwo',
+            profile: {
+              id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9',
+              title: 'Dr',
+              firstName: 'Clive',
+              lastName: 'Nacwo',
+              address: '1 Some Road',
+              postcode: 'A1 1AA',
+              email: 'test@example.com',
+              telephone: '01234567890',
+              establishmentId: 100
+            }
+          }, { include: Profile })
+            .then(() => establishment);
         });
     })
     .then(() => {
