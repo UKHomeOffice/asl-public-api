@@ -24,7 +24,7 @@
   "dependencies": {
     "@asl/migrator": "^1.8.3",
     "@asl/mocks": "^2.3.3",
-    "@asl/schema": "^1.13.2",
+    "@asl/schema": "^1.14.0",
     "@asl/service": "^3.0.0",
     "aws-sdk": "^2.266.1",
     "express": "^4.16.2",
