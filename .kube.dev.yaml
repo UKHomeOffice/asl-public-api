@@ -3,6 +3,7 @@ url: public-api.notprod.asl.homeoffice.gov.uk
 image: quay.io/ukhomeofficedigital/asl-public-api:{{.DRONE_COMMIT_SHA}}
 env:
   PERMISSIONS_SERVICE: https://permissions.notprod.asl.homeoffice.gov.uk
+  WORKFLOW_SERVICE: https://workflow.notprod.asl.homeoffice.gov.uk
   KEYCLOAK_REALM: Asl-dev
   KEYCLOAK_URL: https://sso-dev.notprod.homeoffice.gov.uk/auth
   KEYCLOAK_CLIENT: asl-dev-connect
@@ -30,17 +31,5 @@ env:
     secret: true
     name: asl-dev-rds
     key: port
-  SQS_ACCESS_KEY:
-    secret: true
-    name: asl-changerequests-dev-sqs
-    key: access_key_id
-  SQS_SECRET:
-    secret: true
-    name: asl-changerequests-dev-sqs
-    key: secret_access_key
-  SQS_URL:
-    secret: true
-    name: asl-changerequests-dev-sqs
-    key: sqs_queue_url
 nginx:
   ADD_NGINX_SERVER_CFG: add_header Cache-Control private;

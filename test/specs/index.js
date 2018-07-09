@@ -3,7 +3,7 @@ const request = require('supertest');
 
 const Database = require('../helpers/db');
 const WithUser = require('../helpers/with-user');
-const SQS = require('../helpers/sqs');
+const Workflow = require('../helpers/workflow');
 const Api = require('../../lib/api');
 const data = require('../data');
 
@@ -19,22 +19,26 @@ NOT_AUTHORISED.status = 403;
 describe('API', () => {
 
   beforeEach(() => {
-    this.sqs = SQS();
     return Database(settings).init(data.default)
-      .then(() => {
+      .then(() => Workflow())
+      .then(workflow => {
+        this.workflow = workflow;
         const api = Api({
           auth: false,
           log: { level: 'error' },
           db: settings,
-          sqs: {}
+          sqs: {},
+          workflow: workflow.url
         });
         this.api = WithUser(api, {});
       });
   });
 
   afterEach(() => {
-    this.sqs.teardown();
-    return this.api && this.api.app.db.close();
+    return this.workflow.teardown()
+      .then(() => {
+        return this.api && this.api.app.db.close();
+      });
   });
 
   describe('/establishments', () => {
@@ -126,7 +130,7 @@ describe('API', () => {
           });
       });
 
-      it('adds a message to SQS on POST', () => {
+      it('sends a message to Workflow on POST', () => {
         const input = {
           comments: 'Lorem ipsum dolor'
         };
@@ -135,12 +139,13 @@ describe('API', () => {
           .send(input)
           .expect(200)
           .expect(() => {
-            assert.equal(this.sqs.messages.length, 1);
-            const msg = this.sqs.messages[0];
-            assert.equal(msg.MessageBody.model, 'place');
-            assert.equal(msg.MessageBody.user, 'abc123');
-            assert.equal(msg.MessageBody.action, 'create');
-            assert.deepEqual(msg.MessageBody.data, { ...input, establishment: '100' });
+            assert.equal(this.workflow.handler.callCount, 1);
+            const req = this.workflow.handler.firstCall.args[0];
+            const body = req.body;
+            assert.equal(req.method, 'POST');
+            assert.equal(body.model, 'place');
+            assert.equal(body.action, 'create');
+            assert.deepEqual(body.data, { ...input, establishment: '100' });
           });
       });
 
@@ -173,12 +178,14 @@ describe('API', () => {
             .send(input)
             .expect(200)
             .expect(() => {
-              assert.equal(this.sqs.messages.length, 1);
-              const msg = this.sqs.messages[0];
-              assert.equal(msg.MessageBody.model, 'place');
-              assert.equal(msg.MessageBody.user, 'abc123');
-              assert.equal(msg.MessageBody.action, 'update');
-              assert.deepEqual(msg.MessageBody.data, { ...input, establishment: '100' });
+              assert.equal(this.workflow.handler.callCount, 1);
+              const req = this.workflow.handler.firstCall.args[0];
+              const body = req.body;
+              assert.equal(req.method, 'POST');
+              assert.equal(body.model, 'place');
+              assert.equal(body.action, 'update');
+              assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
+              assert.deepEqual(body.data, { ...input, establishment: '100' });
             });
         });
 
@@ -191,12 +198,14 @@ describe('API', () => {
             .send(input)
             .expect(200)
             .expect(() => {
-              assert.equal(this.sqs.messages.length, 1);
-              const msg = this.sqs.messages[0];
-              assert.equal(msg.MessageBody.model, 'place');
-              assert.equal(msg.MessageBody.user, 'abc123');
-              assert.equal(msg.MessageBody.action, 'delete');
-              assert.deepEqual(msg.MessageBody.data, { ...input, establishment: '100' });
+              assert.equal(this.workflow.handler.callCount, 1);
+              const req = this.workflow.handler.firstCall.args[0];
+              const body = req.body;
+              assert.equal(req.method, 'POST');
+              assert.equal(body.model, 'place');
+              assert.equal(body.action, 'delete');
+              assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
+              assert.deepEqual(body.data, { ...input, establishment: '100' });
             });
         });
 
