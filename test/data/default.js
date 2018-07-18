@@ -15,7 +15,7 @@ module.exports = models => {
             id: '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f',
             site: 'Lunar House',
             name: 'Room 101',
-            suitability: ['SA'],
+            suitability: ['SA', 'LA'],
             holding: ['LTH']
           },
           {

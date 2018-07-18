@@ -111,8 +111,8 @@ describe('API', () => {
           .get('/establishment/100/places')
           .expect(200)
           .expect(response => {
-            assert(response.body.data.length > 0);
-            response.body.data.forEach(row => {
+            assert(response.body.data.rows.length > 0);
+            response.body.data.rows.forEach(row => {
               assert.equal(row.establishmentId, 100);
             });
           });
@@ -123,10 +123,37 @@ describe('API', () => {
           .get('/establishment/100/places')
           .expect(200)
           .expect(response => {
-            assert.equal(response.body.data.length, 2);
-            response.body.data.forEach(row => {
+            assert.equal(response.body.data.rows.length, 2);
+            response.body.data.rows.forEach(row => {
               assert.notEqual(row.name, 'Deleted room');
             });
+          });
+      });
+
+      it('filters by site', () => {
+        return request(this.api)
+          .get('/establishment/100/places?site=Lunar%20House')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.rows.length, 2);
+          });
+      });
+
+      it('filters by suitability', () => {
+        return request(this.api)
+          .get('/establishment/100/places?suitability%5B%24contains%5D%5B0%5D=SA&suitability%5B%24contains%5D%5B1%5D=LA')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.rows.length, 1);
+          });
+      });
+
+      it('filters by holding', () => {
+        return request(this.api)
+          .get('/establishment/100/places?holding%5B%24contains%5D%5B0%5D=LTH')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.rows.length, 1);
           });
       });
 
@@ -232,10 +259,64 @@ describe('API', () => {
           .get('/establishment/100/profiles')
           .expect(200)
           .expect(response => {
-            assert.equal(response.body.data.length, 3);
-            response.body.data.forEach(profile => {
+            assert.equal(response.body.data.rows.length, 3);
+            response.body.data.rows.forEach(profile => {
               assert.equal(typeof profile.name, 'string');
             });
+          });
+      });
+
+      it('can search on full name', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles?search=Linford+Christie')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.rows.length, 1);
+          });
+      });
+
+      it('can search on full name', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles?search=Linford+Christina')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.rows.length, 0);
+          });
+      });
+
+      it('can search on a single name', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles?search=Linford')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.rows.length, 1);
+          });
+      });
+
+      it('can search on a single name', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles?search=Linfordia')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.rows.length, 0);
+          });
+      });
+
+      it('can search on a role type', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles?roles=nacwo')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.rows.length, 1);
+          });
+      });
+
+      it('can search on a role type and name', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles?roles=pelh&search=noddy')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.rows.length, 1);
           });
       });
 
