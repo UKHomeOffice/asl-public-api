@@ -42,7 +42,7 @@ module.exports = models => {
             lastName: 'Christie',
             address: '1 Some Road',
             postcode: 'A1 1AA',
-            email: 'test@example.com',
+            email: 'test1@example.com',
             telephone: '01234567890',
             pil: {
               status: 'active',
@@ -51,6 +51,26 @@ module.exports = models => {
               licenceNumber: 'ABC123',
               conditions: 'Conditions'
             }
+          },
+          {
+            id: 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88',
+            title: 'Dr',
+            firstName: 'Noddy',
+            lastName: 'Holder',
+            address: '1 Some Road',
+            postcode: 'A1 1AA',
+            email: 'test2@example.com',
+            telephone: '01234567890'
+          },
+          {
+            id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9',
+            title: 'Dr',
+            firstName: 'Clive',
+            lastName: 'Nacwo',
+            address: '1 Some Road',
+            postcode: 'A1 1AA',
+            email: 'test3@example.com',
+            telephone: '01234567890'
           }
         ]
       }, {
@@ -67,37 +87,19 @@ module.exports = models => {
         ]
       })
         .then(establishment => {
-          return establishment.createRole({
-            type: 'pelh',
-            profile: {
-              title: 'Dr',
-              firstName: 'Noddy',
-              lastName: 'Holder',
-              address: '1 Some Road',
-              postcode: 'A1 1AA',
-              email: 'test@example.com',
-              telephone: '01234567890',
-              establishmentId: 100
-            }
-          }, { include: Profile })
-            .then(() => establishment);
-        })
-        .then(establishment => {
-          return establishment.createRole({
-            type: 'nacwo',
-            profile: {
-              id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9',
-              title: 'Dr',
-              firstName: 'Clive',
-              lastName: 'Nacwo',
-              address: '1 Some Road',
-              postcode: 'A1 1AA',
-              email: 'test@example.com',
-              telephone: '01234567890',
-              establishmentId: 100
-            }
-          }, { include: Profile })
-            .then(() => establishment);
+          return Promise.resolve()
+            .then(() => {
+              return establishment.createRole({
+                type: 'pelh',
+                profileId: 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88'
+              });
+            })
+            .then(() => {
+              return establishment.createRole({
+                type: 'nacwo',
+                profileId: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9'
+              });
+            });
         });
     })
     .then(() => {
@@ -130,7 +132,7 @@ module.exports = models => {
             lastName: 'Jackson',
             address: '1 Some Road',
             postcode: 'A1 1AA',
-            email: 'test@example.com',
+            email: 'test4@example.com',
             telephone: '01234567890'
           }
         ]
