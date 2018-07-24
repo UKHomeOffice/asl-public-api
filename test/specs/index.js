@@ -222,7 +222,7 @@ describe('API', () => {
           .expect(response => {
             assert.equal(response.body.data.length, 3);
             response.body.data.forEach(profile => {
-              assert.equal(profile.establishmentId, 100);
+              assert.equal(profile.permission.establishmentId, 100);
             });
           });
       });
