@@ -24,12 +24,10 @@
   "dependencies": {
     "@asl/migrator": "^1.10.0",
     "@asl/mocks": "^2.4.1",
-    "@asl/schema": "^2.1.0",
+    "@asl/schema": "^3.0.1",
     "@asl/service": "^3.0.0",
     "express": "^4.16.3",
     "lodash": "^4.17.5",
-    "objection": "^1.2.0",
-    "sequelize": "^5.0.0-beta.10",
     "uuid-validate": "0.0.3"
   },
   "devDependencies": {

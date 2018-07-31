@@ -5,9 +5,22 @@ module.exports = settings => {
   return {
     init: (populate) => {
       const schema = Schema(settings);
-      return schema.sync({ force: true })
+      return Promise.all([
+        'Project',
+        'Permission',
+        'Authorisation',
+        'PIL',
+        'Place',
+        'Role',
+        'TrainingModule',
+        'Profile',
+        'Establishment'
+      ].map(model => {
+        return schema[model].query()
+          .delete();
+      }))
         .then(() => populate && populate(schema))
-        .finally(() => schema.close());
+        .finally(() => schema.destroy());
     }
   };
 
