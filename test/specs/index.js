@@ -9,7 +9,7 @@ const data = require('../data');
 
 const settings = {
   database: process.env.POSTGRES_DB || 'asl-test',
-  username: process.env.POSTGRES_USER,
+  user: process.env.POSTGRES_USER,
   host: process.env.POSTGRES_HOST || 'localhost'
 };
 
