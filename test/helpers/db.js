@@ -20,7 +20,11 @@ module.exports = settings => {
           .delete();
       }))
         .then(() => populate && populate(schema))
-        .finally(() => schema.destroy());
+        .then(() => schema.destroy())
+        .catch(err => {
+          schema.destroy();
+          throw err;
+        });
     }
   };
 
