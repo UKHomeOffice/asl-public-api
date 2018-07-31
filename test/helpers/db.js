@@ -5,7 +5,7 @@ module.exports = settings => {
   return {
     init: (populate) => {
       const schema = Schema(settings);
-      return Promise.all([
+      const tables = [
         'Project',
         'Permission',
         'Authorisation',
@@ -15,10 +15,10 @@ module.exports = settings => {
         'TrainingModule',
         'Profile',
         'Establishment'
-      ].map(model => {
-        return schema[model].query()
-          .delete();
-      }))
+      ];
+      return tables.reduce((p, table) => {
+        return p.then(() => schema[table].query().delete());
+      }, Promise.resolve())
         .then(() => populate && populate(schema))
         .then(() => schema.destroy())
         .catch(err => {
