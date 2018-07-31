@@ -9,7 +9,7 @@ const data = require('../data');
 
 const settings = {
   database: process.env.POSTGRES_DB || 'asl-test',
-  username: process.env.POSTGRES_USER,
+  user: process.env.POSTGRES_USER,
   host: process.env.POSTGRES_HOST || 'localhost'
 };
 
@@ -37,7 +37,7 @@ describe('API', () => {
   afterEach(() => {
     return this.workflow.teardown()
       .then(() => {
-        return this.api && this.api.app.db.close();
+        return this.api && this.api.app.db.destroy();
       });
   });
 
@@ -127,6 +127,33 @@ describe('API', () => {
             response.body.data.forEach(row => {
               assert.notEqual(row.name, 'Deleted room');
             });
+          });
+      });
+
+      it('filters by site', () => {
+        return request(this.api)
+          .get('/establishment/100/places?site=Lunar%20House')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 2);
+          });
+      });
+
+      it('filters by suitability', () => {
+        return request(this.api)
+          .get('/establishment/100/places?filters%5Bsuitability%5D%5B0%5D=LA')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 1);
+          });
+      });
+
+      it('filters by holding', () => {
+        return request(this.api)
+          .get('/establishment/100/places?filters%5Bholding%5D%5B0%5D=LTH')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 1);
           });
       });
 
@@ -222,7 +249,9 @@ describe('API', () => {
           .expect(response => {
             assert.equal(response.body.data.length, 3);
             response.body.data.forEach(profile => {
-              assert.equal(profile.permission.establishmentId, 100);
+              profile.establishments.forEach(establishment => {
+                assert.equal(establishment.id, 100);
+              });
             });
           });
       });
@@ -236,6 +265,60 @@ describe('API', () => {
             response.body.data.forEach(profile => {
               assert.equal(typeof profile.name, 'string');
             });
+          });
+      });
+
+      it('can search on full name', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles?search=Linford+Christie')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 1);
+          });
+      });
+
+      it('can search on full name', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles?search=Linford+Christina')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 0);
+          });
+      });
+
+      it('can search on a single name', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles?search=Linford')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 1);
+          });
+      });
+
+      it('can search on a single name', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles?search=Linfordia')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 0);
+          });
+      });
+
+      it('can search on a role type', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles?filters%5Broles%5D%5B0%5D=nacwo')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 1);
+          });
+      });
+
+      it('can search on a role type and name', () => {
+        return request(this.api)
+          .get('/establishment/100/profiles?filters%5Broles%5D%5B0%5D=pelh&search=noddy')
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 1);
           });
       });
 
