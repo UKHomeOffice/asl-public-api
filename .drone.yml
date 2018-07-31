@@ -9,6 +9,7 @@ pipeline:
       - POSTGRES_HOST=database
       - DATABASE_NAME=asl-test
       - DATABASE_HOST=database
+      - DATABASE_USERNAME=asl-test
     commands:
       - npm install
       - npm test
