@@ -17,7 +17,7 @@ module.exports = settings => {
         'Establishment'
       ];
       return tables.reduce((p, table) => {
-        return p.then(() => schema[table].query().hardDelete());
+        return p.then(() => schema[table].queryWithDeleted().hardDelete());
       }, Promise.resolve())
         .then(() => populate && populate(schema))
         .then(() => schema.destroy())
