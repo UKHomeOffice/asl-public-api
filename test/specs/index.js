@@ -190,12 +190,6 @@ describe('API', () => {
             .expect(404);
         });
 
-        it('does not return 404 for a deleted room', () => {
-          return request(this.api)
-            .get('/establishment/100/places/a50331bb-c1d0-4068-87ca-b5a41143b0d0')
-            .expect(200);
-        });
-
         it('adds a message to SQS on PUT', () => {
           const input = {
             comments: 'Lorem ipsum dolor'
