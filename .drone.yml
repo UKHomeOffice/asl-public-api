@@ -11,8 +11,19 @@ pipeline:
       - DATABASE_HOST=database
       - DATABASE_USERNAME=asl-test
     commands:
-      - npm install
+      - npm install -g npm@6
+      - npm ci
       - npm test
+    when:
+      event: [push, pull_request, tag]
+
+  audit:
+    image: node:8
+    secrets:
+      - npm_auth_token
+    commands:
+      - npm install -g npm@6
+      - npx @lennym/ciaudit
     when:
       event: [push, pull_request, tag]
 
