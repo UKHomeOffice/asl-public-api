@@ -34,7 +34,7 @@ pipeline:
     environment:
       - DOCKER_HOST=tcp://172.17.0.1:2375
     commands:
-      - docker build --build-arg NPM_AUTH_USERNAME=$${NPM_AUTH_USERNAME} --build-arg NPM_AUTH_TOKEN=$${NPM_AUTH_TOKEN} -t asl .
+      - docker build --build-arg NPM_AUTH_USERNAME=$${NPM_AUTH_USERNAME} --build-arg NPM_AUTH_TOKEN=$${NPM_AUTH_TOKEN} -t asl-public-api .
     when:
       branch: master
       event: [push, tag]
@@ -47,7 +47,7 @@ pipeline:
       - DOCKER_HOST=tcp://172.17.0.1:2375
     commands:
       - docker login -u="ukhomeofficedigital+asl" -p=$${DOCKER_PASSWORD} quay.io
-      - docker tag asl quay.io/ukhomeofficedigital/asl-public-api:$${DRONE_COMMIT_SHA}
+      - docker tag asl-public-api quay.io/ukhomeofficedigital/asl-public-api:$${DRONE_COMMIT_SHA}
       - docker push quay.io/ukhomeofficedigital/asl-public-api:$${DRONE_COMMIT_SHA}
     when:
       branch: master
