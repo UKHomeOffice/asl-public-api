@@ -1,5 +1,6 @@
 const assert = require('assert');
 const request = require('supertest');
+const { stringify } = require('qs');
 
 const Database = require('../helpers/db');
 const WithUser = require('../helpers/with-user');
@@ -131,8 +132,13 @@ describe('API', () => {
       });
 
       it('filters by site', () => {
+        const query = stringify({
+          filters: {
+            site: ['Lunar House']
+          }
+        });
         return request(this.api)
-          .get('/establishment/100/places?site=Lunar%20House')
+          .get(`/establishment/100/places?${query}`)
           .expect(200)
           .expect(response => {
             assert.equal(response.body.data.length, 2);
@@ -140,8 +146,13 @@ describe('API', () => {
       });
 
       it('filters by suitability', () => {
+        const query = stringify({
+          filters: {
+            suitability: ['LA']
+          }
+        });
         return request(this.api)
-          .get('/establishment/100/places?filters%5Bsuitability%5D%5B0%5D=LA')
+          .get(`/establishment/100/places?${query}`)
           .expect(200)
           .expect(response => {
             assert.equal(response.body.data.length, 1);
@@ -149,8 +160,13 @@ describe('API', () => {
       });
 
       it('filters by holding', () => {
+        const query = stringify({
+          filters: {
+            holding: ['LTH']
+          }
+        });
         return request(this.api)
-          .get('/establishment/100/places?filters%5Bholding%5D%5B0%5D=LTH')
+          .get(`/establishment/100/places?${query}`)
           .expect(200)
           .expect(response => {
             assert.equal(response.body.data.length, 1);
@@ -268,9 +284,14 @@ describe('API', () => {
           });
       });
 
-      it('can search on full name', () => {
+      it('can filter on a role type', () => {
+        const query = stringify({
+          filters: {
+            roles: ['nacwo']
+          }
+        });
         return request(this.api)
-          .get('/establishment/100/profiles?search=Linford+Christie')
+          .get(`/establishment/100/profiles?${query}`)
           .expect(200)
           .expect(response => {
             assert.equal(response.body.data.length, 1);
@@ -278,44 +299,74 @@ describe('API', () => {
       });
 
       it('can search on full name', () => {
+        const query = stringify({ search: 'Linford Christie' });
         return request(this.api)
-          .get('/establishment/100/profiles?search=Linford+Christina')
-          .expect(200)
-          .expect(response => {
-            assert.equal(response.body.data.length, 0);
-          });
-      });
-
-      it('can search on a single name', () => {
-        return request(this.api)
-          .get('/establishment/100/profiles?search=Linford')
+          .get(`/establishment/100/profiles?${query}`)
           .expect(200)
           .expect(response => {
             assert.equal(response.body.data.length, 1);
           });
       });
 
-      it('can search on a single name', () => {
+      it('can search on full name', () => {
+        const query = stringify({ search: 'Linford Christina' });
         return request(this.api)
-          .get('/establishment/100/profiles?search=Linfordia')
+          .get(`/establishment/100/profiles?${query}`)
           .expect(200)
           .expect(response => {
             assert.equal(response.body.data.length, 0);
           });
       });
 
-      it('can search on a role type', () => {
+      it('can search on firstName', () => {
+        const query = stringify({ search: 'Linford' });
         return request(this.api)
-          .get('/establishment/100/profiles?filters%5Broles%5D%5B0%5D=nacwo')
+          .get(`/establishment/100/profiles?${query}`)
           .expect(200)
           .expect(response => {
             assert.equal(response.body.data.length, 1);
           });
       });
 
-      it('can search on a role type and name', () => {
+      it('can search on firstName', () => {
+        const query = stringify({ search: 'Linfordia' });
         return request(this.api)
-          .get('/establishment/100/profiles?filters%5Broles%5D%5B0%5D=pelh&search=noddy')
+          .get(`/establishment/100/profiles?${query}`)
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 0);
+          });
+      });
+
+      it('can search on lastName', () => {
+        const query = stringify({ search: 'Christie' });
+        return request(this.api)
+          .get(`/establishment/100/profiles?${query}`)
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 1);
+          });
+      });
+
+      it('can search on lastName', () => {
+        const query = stringify({ search: 'Christina' });
+        return request(this.api)
+          .get(`/establishment/100/profiles?${query}`)
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 0);
+          });
+      });
+
+      it('can filter on a role type and search name', () => {
+        const query = stringify({
+          filters: {
+            roles: ['pelh']
+          },
+          search: 'noddy'
+        });
+        return request(this.api)
+          .get(`/establishment/100/profiles?${query}`)
           .expect(200)
           .expect(response => {
             assert.equal(response.body.data.length, 1);
