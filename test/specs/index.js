@@ -257,7 +257,7 @@ describe('API', () => {
           .get('/establishment/100/profiles')
           .expect(200)
           .expect(response => {
-            assert.equal(response.body.data.length, 3);
+            assert.equal(response.body.data.length, 4);
             response.body.data.forEach(profile => {
               profile.establishments.forEach(establishment => {
                 assert.equal(establishment.id, 100);
@@ -271,7 +271,7 @@ describe('API', () => {
           .get('/establishment/100/profiles')
           .expect(200)
           .expect(response => {
-            assert.equal(response.body.data.length, 3);
+            assert(response.body.data.length > 0);
             response.body.data.forEach(profile => {
               assert.equal(typeof profile.name, 'string');
             });
@@ -288,7 +288,11 @@ describe('API', () => {
           .get(`/establishment/100/profiles?${query}`)
           .expect(200)
           .expect(response => {
-            assert.equal(response.body.data.length, 1);
+            assert.equal(response.body.data.length, 2);
+            response.body.data.forEach(profile => {
+              assert.equal(profile.roles.length, 1);
+              assert.equal(profile.roles[0].type, 'nacwo');
+            });
           });
       });
 
@@ -364,6 +368,7 @@ describe('API', () => {
           .expect(200)
           .expect(response => {
             assert.equal(response.body.data.length, 1);
+            assert.equal(response.body.data[0].name, 'Noddy Holder');
           });
       });
 
@@ -407,8 +412,9 @@ describe('API', () => {
           .get('/establishment/100/roles?type=nacwo')
           .expect(200)
           .expect(response => {
-            assert.equal(response.body.data.length, 1);
+            assert.equal(response.body.data.length, 2);
             assert.equal(response.body.data[0].type, 'nacwo');
+            assert.equal(response.body.data[1].type, 'nacwo');
           });
       });
 

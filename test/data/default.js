@@ -1,6 +1,6 @@
 module.exports = models => {
 
-  const { Establishment, Place, Profile, PIL, Role } = models;
+  const { Establishment, Role } = models;
 
   return Promise.resolve()
     .then(() => {
@@ -71,18 +71,16 @@ module.exports = models => {
             postcode: 'A1 1AA',
             email: 'test3@example.com',
             telephone: '01234567890'
-          }
-        ]
-      }, {
-        include: [
-          Place,
+          },
           {
-            model: Profile,
-            as: 'profiles',
-            include: {
-              model: PIL,
-              as: 'pil'
-            }
+            id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d0',
+            title: 'Dr',
+            firstName: 'Noddy',
+            lastName: 'Nacwo',
+            address: '1 Some Road',
+            postcode: 'A1 1AA',
+            email: 'test4@example.com',
+            telephone: '01234567890'
           }
         ]
       })
@@ -100,6 +98,13 @@ module.exports = models => {
                 establishmentId: establishment.id,
                 type: 'nacwo',
                 profileId: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9'
+              });
+            })
+            .then(() => {
+              return Role.query().insert({
+                establishmentId: establishment.id,
+                type: 'nacwo',
+                profileId: 'a942ffc7-e7ca-4d76-a001-0b5048a057d0'
               });
             });
         });
@@ -134,14 +139,9 @@ module.exports = models => {
             lastName: 'Jackson',
             address: '1 Some Road',
             postcode: 'A1 1AA',
-            email: 'test4@example.com',
+            email: 'test5@example.com',
             telephone: '01234567890'
           }
-        ]
-      }, {
-        include: [
-          Place,
-          { model: Profile, as: 'profiles' }
         ]
       });
     });
