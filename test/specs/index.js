@@ -84,7 +84,7 @@ describe('API', () => {
         .get('/establishment/100')
         .expect(200)
         .expect(response => {
-          assert.equal(response.body.data.pelh.name, 'Noddy Holder');
+          assert.equal(response.body.data.pelh.name, 'Colin Jackson');
         });
     });
 
@@ -257,7 +257,7 @@ describe('API', () => {
           .get('/establishment/100/profiles')
           .expect(200)
           .expect(response => {
-            assert.equal(response.body.data.length, 4);
+            assert.equal(response.body.data.length, 5);
             response.body.data.forEach(profile => {
               profile.establishments.forEach(establishment => {
                 assert.equal(establishment.id, 100);
@@ -361,14 +361,44 @@ describe('API', () => {
           filters: {
             roles: ['pelh']
           },
-          search: 'noddy'
+          search: 'colin'
         });
         return request(this.api)
           .get(`/establishment/100/profiles?${query}`)
           .expect(200)
           .expect(response => {
             assert.equal(response.body.data.length, 1);
-            assert.equal(response.body.data[0].name, 'Noddy Holder');
+            assert.equal(response.body.data[0].name, 'Colin Jackson');
+          });
+      });
+
+      it('returns only the ELH for the requested establishment', () => {
+        const query = stringify({
+          filters: {
+            roles: ['pelh']
+          }
+        });
+        return request(this.api)
+          .get(`/establishment/100/profiles?${query}`)
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 1);
+            assert.equal(response.body.data[0].roles.length, 1);
+          });
+      });
+
+      it('returns only the PELH for the requested establishment', () => {
+        const query = stringify({
+          filters: {
+            roles: ['pelh']
+          }
+        });
+        return request(this.api)
+          .get(`/establishment/101/profiles?${query}`)
+          .expect(200)
+          .expect(response => {
+            assert.equal(response.body.data.length, 1);
+            assert.equal(response.body.data[0].roles.length, 1);
           });
       });
 
