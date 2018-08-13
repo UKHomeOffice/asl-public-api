@@ -7,6 +7,7 @@ module.exports = models => {
       return Profile.query().insertGraph([
         {
           id: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
+          userId: 'abc123',
           title: 'Dr',
           firstName: 'Linford',
           lastName: 'Christie',

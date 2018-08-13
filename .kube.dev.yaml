@@ -31,5 +31,16 @@ env:
     secret: true
     name: asl-dev-rds
     key: port
+  REDIS_HOST: public-api-redis
+  REDIS_PASSWORD:
+    secret: true
+    name: asl-dev-redis
+    key: pass
+  RATE_LIMIT_TOTAL: 1000
 nginx:
   ADD_NGINX_SERVER_CFG: add_header Cache-Control private;
+name: public-api-redis
+  recipe: redis
+  clients: public-api
+  passwordName: asl-dev-redis
+  passwordKey: pass
