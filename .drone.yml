@@ -10,6 +10,7 @@ pipeline:
       - DATABASE_NAME=asl-test
       - DATABASE_HOST=database
       - DATABASE_USERNAME=asl-test
+      - REDIS_HOST=redis
     commands:
       - npm install -g npm@6
       - npm ci
@@ -114,6 +115,8 @@ services:
     image: postgres
     environment:
       - POSTGRES_USER=asl-test
+  redis:
+    image: redis
 
 matrix:
   NPM_AUTH_USERNAME:

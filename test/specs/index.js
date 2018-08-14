@@ -45,12 +45,17 @@ describe('API', () => {
   describe('rate limiting', () => {
 
     beforeEach(() => {
-      this.client = redis.createClient();
+      this.client = redis.createClient({
+        host: process.env.REDIS_HOST || 'localhost'
+      });
       this.client.del('ratelimit:/establishments:get:user.id:abc123');
       const api = Api({
         auth: false,
         log: { level: 'error' },
         db: settings,
+        redis: {
+          host: process.env.REDIS_HOST || 'localhost'
+        },
         limiter: { total: 1 }
       });
       this.rateLimitedApi = WithUser(api, {});
