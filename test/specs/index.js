@@ -1,6 +1,7 @@
 const assert = require('assert');
 const request = require('supertest');
 const { stringify } = require('qs');
+const redis = require('redis');
 
 const Database = require('../helpers/db');
 const WithUser = require('../helpers/with-user');
@@ -28,7 +29,6 @@ describe('API', () => {
           auth: false,
           log: { level: 'error' },
           db: settings,
-          sqs: {},
           workflow: workflow.url
         });
         this.api = WithUser(api, {});
@@ -40,6 +40,52 @@ describe('API', () => {
       .then(() => {
         return this.api && this.api.app.db.destroy();
       });
+  });
+
+  describe('rate limiting', () => {
+
+    beforeEach(() => {
+      this.client = redis.createClient({
+        host: process.env.REDIS_HOST || 'localhost'
+      });
+      this.client.del('ratelimit:/establishments:get:user.id:abc123');
+      const api = Api({
+        auth: false,
+        log: { level: 'error' },
+        db: settings,
+        redis: {
+          host: process.env.REDIS_HOST || 'localhost'
+        },
+        limiter: { total: 1 }
+      });
+      this.rateLimitedApi = WithUser(api, {});
+    });
+
+    afterEach(() => {
+      this.client.end(true);
+      return this.rateLimitedApi && this.rateLimitedApi.app.db.destroy();
+    });
+
+    it('will reject the second request made by a user', () => {
+      return request(this.rateLimitedApi)
+        .get('/establishments')
+        .expect(200)
+        .then(() => {
+          return request(this.rateLimitedApi)
+            .get('/establishments')
+            .expect(429);
+        });
+    });
+    it('will not reject requests to a users profile - /me', () => {
+      return request(this.rateLimitedApi)
+        .get('/me')
+        .expect(200)
+        .then(() => {
+          return request(this.rateLimitedApi)
+            .get('/me')
+            .expect(200);
+        });
+    });
   });
 
   describe('/establishments', () => {

@@ -9,7 +9,7 @@
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "eslint .",
     "pretest:unit": "npm run migrate",
-    "test:unit": "mocha ./test/specs --recursive",
+    "test:unit": "mocha ./test/specs --recursive --exit",
     "migrate": "DATABASE_NAME=asl-test knex migrate:latest --knexfile ./node_modules/@asl/schema/knexfile.js",
     "rollback": "DATABASE_NAME=asl-test knex migrate:rollback"
   },
@@ -27,7 +27,9 @@
     "@asl/schema": "^3.2.0",
     "@asl/service": "^3.0.0",
     "express": "^4.16.3",
+    "express-limiter": "^1.6.1",
     "lodash": "^4.17.5",
+    "redis": "^2.8.0",
     "uuid-validate": "0.0.3"
   },
   "devDependencies": {
