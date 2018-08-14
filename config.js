@@ -14,5 +14,13 @@ module.exports = {
     password: process.env.DATABASE_PASSWORD,
     port: process.env.DATABASE_PORT,
     user: process.env.DATABASE_USERNAME
+  },
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+    password: process.env.REDIS_PASSWORD
+  },
+  limiter: {
+    total: process.env.RATE_LIMIT_TOTAL
   }
 };
