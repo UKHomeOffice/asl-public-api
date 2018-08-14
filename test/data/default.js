@@ -104,6 +104,20 @@ module.exports = models => {
                 holding: JSON.stringify(['STH']),
                 deleted: '2018-01-01'
               }
+            ],
+            projects: [
+              {
+                title: 'Test project 1',
+                licenceHolderId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
+                expiryDate: '2040-01-01T12:00:00Z',
+                licenceNumber: 'abc123'
+              },
+              {
+                title: 'Test project 3',
+                licenceHolderId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
+                expiryDate: '2010-01-01T12:00:00Z',
+                licenceNumber: 'abc456'
+              }
             ]
           },
           {
@@ -126,6 +140,14 @@ module.exports = models => {
                 name: 'Room 102',
                 suitability: JSON.stringify(['SA']),
                 holding: JSON.stringify(['STH'])
+              }
+            ],
+            projects: [
+              {
+                title: 'Test project 2',
+                licenceHolderId: 'ae28fb31-d867-4371-9b4f-79019e71232e',
+                expiryDate: '2040-01-01T12:00:00Z',
+                licenceNumber: 'abc789'
               }
             ]
           }]);
