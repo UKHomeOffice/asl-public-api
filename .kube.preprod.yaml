@@ -1,57 +1,59 @@
-name: public-api
-url: public-api.preprod.asl.homeoffice.gov.uk
-image: quay.io/ukhomeofficedigital/asl-public-api:{{.DRONE_COMMIT_SHA}}
-env:
-  PERMISSIONS_SERVICE: https://permissions.notprod.asl.homeoffice.gov.uk
-  KEYCLOAK_REALM: Asl-dev
-  KEYCLOAK_URL: https://sso-dev.notprod.homeoffice.gov.uk/auth
-  KEYCLOAK_CLIENT: asl-dev-connect
-  KEYCLOAK_SECRET:
-    secret: true
-    name: asl-preprod-auth
-    key: secret
-  DATABASE_HOST:
-    secret: true
-    name: asl-preprod-rds
-    key: endpoint
-  DATABASE_NAME:
-    secret: true
-    name: asl-preprod-rds
-    key: db_name
-  DATABASE_USERNAME:
-    secret: true
-    name: asl-preprod-rds
-    key: username
-  DATABASE_PASSWORD:
-    secret: true
-    name: asl-preprod-rds
-    key: password
-  DATABASE_PORT:
-    secret: true
-    name: asl-preprod-rds
-    key: port
-  SQS_ACCESS_KEY:
-    secret: true
-    name: asl-changerequests-preprod-sqs
-    key: access_key_id
-  SQS_SECRET:
-    secret: true
-    name: asl-changerequests-preprod-sqs
-    key: secret_access_key
-  SQS_URL:
-    secret: true
-    name: asl-changerequests-preprod-sqs
-    key: sqs_queue_url
-  REDIS_HOST: public-api-redis
-  REDIS_PASSWORD:
-    secret: true
-    name: asl-dev-redis
-    key: pass
-  RATE_LIMIT_TOTAL: 1000
-nginx:
-  ADD_NGINX_SERVER_CFG: add_header Cache-Control private;
-name: public-api-redis
-  recipe: redis
-  clients: public-api
-  passwordName: asl-dev-redis
-  passwordKey: pass
+---
+- name: public-api
+  url: public-api.preprod.asl.homeoffice.gov.uk
+  image: quay.io/ukhomeofficedigital/asl-public-api:{{.DRONE_COMMIT_SHA}}
+  env:
+    PERMISSIONS_SERVICE: https://permissions.notprod.asl.homeoffice.gov.uk
+    KEYCLOAK_REALM: Asl-dev
+    KEYCLOAK_URL: https://sso-dev.notprod.homeoffice.gov.uk/auth
+    KEYCLOAK_CLIENT: asl-dev-connect
+    KEYCLOAK_SECRET:
+      secret: true
+      name: asl-preprod-auth
+      key: secret
+    DATABASE_HOST:
+      secret: true
+      name: asl-preprod-rds
+      key: endpoint
+    DATABASE_NAME:
+      secret: true
+      name: asl-preprod-rds
+      key: db_name
+    DATABASE_USERNAME:
+      secret: true
+      name: asl-preprod-rds
+      key: username
+    DATABASE_PASSWORD:
+      secret: true
+      name: asl-preprod-rds
+      key: password
+    DATABASE_PORT:
+      secret: true
+      name: asl-preprod-rds
+      key: port
+    SQS_ACCESS_KEY:
+      secret: true
+      name: asl-changerequests-preprod-sqs
+      key: access_key_id
+    SQS_SECRET:
+      secret: true
+      name: asl-changerequests-preprod-sqs
+      key: secret_access_key
+    SQS_URL:
+      secret: true
+      name: asl-changerequests-preprod-sqs
+      key: sqs_queue_url
+    REDIS_HOST: public-api-redis
+    REDIS_PASSWORD:
+      secret: true
+      name: asl-dev-redis
+      key: pass
+    RATE_LIMIT_TOTAL: 1000
+  nginx:
+    ADD_NGINX_SERVER_CFG: add_header Cache-Control private;
+
+- name: public-api-redis
+    recipe: redis
+    clients: public-api
+    passwordName: asl-dev-redis
+    passwordKey: pass
