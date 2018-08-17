@@ -24,11 +24,12 @@
   },
   "homepage": "https://github.com/UKHomeOffice/asl-public-api#readme",
   "dependencies": {
-    "@asl/schema": "^3.2.1",
+    "@asl/schema": "^3.3.1",
     "@asl/service": "^3.0.0",
     "express": "^4.16.3",
     "express-limiter": "^1.6.1",
     "lodash": "^4.17.5",
+    "objection": "^1.2.2",
     "redis": "^2.8.0",
     "uuid-validate": "0.0.3"
   },

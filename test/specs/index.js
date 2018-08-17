@@ -11,7 +11,7 @@ const data = require('../data');
 
 const settings = {
   database: process.env.POSTGRES_DB || 'asl-test',
-  user: process.env.POSTGRES_USER,
+  user: process.env.POSTGRES_USER || 'postgres',
   host: process.env.POSTGRES_HOST || 'localhost'
 };
 
@@ -221,7 +221,10 @@ describe('API', () => {
 
       it('sends a message to Workflow on POST', () => {
         const input = {
-          comments: 'Lorem ipsum dolor'
+          site: 'Lunar House 3rd floor',
+          name: '83',
+          suitability: ['LA', 'EQ', 'DOG'],
+          holding: ['NOH']
         };
         return request(this.api)
           .post('/establishment/100/places')
