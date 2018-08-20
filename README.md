@@ -58,7 +58,7 @@ The following services must be available in order to run:
 
 ### Database setup
 
-Scripts for setting up a local database with dev data are available in the [`asl-schema` project](https://github.com/ukhomeoffice/asl-schema). First clone that repo and install the dependencies. Then run the following commands:
+Scripts for setting up a local database with dev data are available in the [`asl-schema` project](https://github.com/ukhomeoffice/asl-schema). First clone that repo and install the dependencies. Then run the following commands in the schema project directory:
 
 To setup the inital table schemas:
 
@@ -72,7 +72,7 @@ To seed the database with a development dataset:
 npm run seed
 ```
 
-_Note: these scripts will require the database described by `DATABASE_NAME` to be created before they can run._
+_Note: these scripts will require the database described by `DATABASE_NAME` to be created before they can run. If running against services run with [`asl-conductor`](https://github.com/ukhomeoffice/asl-conductor) then this will be done automatically._
 
 ### Testing
 
@@ -92,7 +92,7 @@ The configuration for the database used for the test runner can be set with the 
 * `POSTGRES_USER` - default `undefined`
 * `POSTGRES_HOST` - default `localhost`
 
-_Note: you may need to create the database `asl-test` locally before running tests for the first time._
+_Note: you may need to create the database `asl-test` locally before running tests for the first time. If running against services run with [`asl-conductor`](https://github.com/ukhomeoffice/asl-conductor) then this will be done automatically._
 
 #### Mocking permissions
 
