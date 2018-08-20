@@ -1,45 +1,47 @@
-name: public-api
-url: public-api.notprod.asl.homeoffice.gov.uk
-image: quay.io/ukhomeofficedigital/asl-public-api:{{.DRONE_COMMIT_SHA}}
-env:
-  PERMISSIONS_SERVICE: https://permissions.notprod.asl.homeoffice.gov.uk
-  WORKFLOW_SERVICE: https://workflow.notprod.asl.homeoffice.gov.uk
-  KEYCLOAK_REALM: Asl-dev
-  KEYCLOAK_URL: https://sso-dev.notprod.homeoffice.gov.uk/auth
-  KEYCLOAK_CLIENT: asl-dev-connect
-  KEYCLOAK_SECRET:
-    secret: true
-    name: asl-dev-auth
-    key: secret
-  DATABASE_HOST:
-    secret: true
-    name: asl-dev-rds
-    key: endpoint
-  DATABASE_NAME:
-    secret: true
-    name: asl-dev-rds
-    key: db_name
-  DATABASE_USERNAME:
-    secret: true
-    name: asl-dev-rds
-    key: username
-  DATABASE_PASSWORD:
-    secret: true
-    name: asl-dev-rds
-    key: password
-  DATABASE_PORT:
-    secret: true
-    name: asl-dev-rds
-    key: port
-  REDIS_HOST: public-api-redis
-  REDIS_PASSWORD:
-    secret: true
-    name: asl-dev-redis
-    key: pass
-  RATE_LIMIT_TOTAL: 1000
-nginx:
-  ADD_NGINX_SERVER_CFG: add_header Cache-Control private;
-name: public-api-redis
+---
+- name: public-api
+  url: public-api.notprod.asl.homeoffice.gov.uk
+  image: quay.io/ukhomeofficedigital/asl-public-api:{{.DRONE_COMMIT_SHA}}
+  env:
+    PERMISSIONS_SERVICE: https://permissions.notprod.asl.homeoffice.gov.uk
+    WORKFLOW_SERVICE: https://workflow.notprod.asl.homeoffice.gov.uk
+    KEYCLOAK_REALM: Asl-dev
+    KEYCLOAK_URL: https://sso-dev.notprod.homeoffice.gov.uk/auth
+    KEYCLOAK_CLIENT: asl-dev-connect
+    KEYCLOAK_SECRET:
+      secret: true
+      name: asl-dev-auth
+      key: secret
+    DATABASE_HOST:
+      secret: true
+      name: asl-dev-rds
+      key: endpoint
+    DATABASE_NAME:
+      secret: true
+      name: asl-dev-rds
+      key: db_name
+    DATABASE_USERNAME:
+      secret: true
+      name: asl-dev-rds
+      key: username
+    DATABASE_PASSWORD:
+      secret: true
+      name: asl-dev-rds
+      key: password
+    DATABASE_PORT:
+      secret: true
+      name: asl-dev-rds
+      key: port
+    REDIS_HOST: public-api-redis
+    REDIS_PASSWORD:
+      secret: true
+      name: asl-dev-redis
+      key: pass
+    RATE_LIMIT_TOTAL: 1000
+  nginx:
+    ADD_NGINX_SERVER_CFG: add_header Cache-Control private;
+
+- name: public-api-redis
   recipe: redis
   clients: public-api
   passwordName: asl-dev-redis
