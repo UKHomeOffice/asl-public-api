@@ -112,7 +112,7 @@ describe('API', () => {
 
     it('returns a 404 error for unknown establishment id', () => {
       return request(this.api)
-        .get('/establishment/nope')
+        .get('/establishment/99999')
         .expect(404);
     });
 

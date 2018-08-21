@@ -13,7 +13,7 @@ module.exports = {
     host: process.env.DATABASE_HOST,
     password: process.env.DATABASE_PASSWORD,
     port: process.env.DATABASE_PORT,
-    user: process.env.DATABASE_USERNAME
+    user: process.env.DATABASE_USERNAME || 'postgres'
   },
   redis: {
     host: process.env.REDIS_HOST,
