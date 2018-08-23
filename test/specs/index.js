@@ -9,9 +9,11 @@ const Workflow = require('../helpers/workflow');
 const Api = require('../../lib/api');
 const data = require('../data');
 
+require('dotenv').config();
+
 const settings = {
   database: process.env.POSTGRES_DB || 'asl-test',
-  user: process.env.POSTGRES_USER || 'postgres',
+  user: process.env.POSTGRES_USER,
   host: process.env.POSTGRES_HOST || 'localhost'
 };
 
