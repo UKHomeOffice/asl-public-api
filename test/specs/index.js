@@ -9,6 +9,8 @@ const Workflow = require('../helpers/workflow');
 const Api = require('../../lib/api');
 const data = require('../data');
 
+require('dotenv').config();
+
 const settings = {
   database: process.env.POSTGRES_DB || 'asl-test',
   user: process.env.POSTGRES_USER,
@@ -112,7 +114,7 @@ describe('API', () => {
 
     it('returns a 404 error for unknown establishment id', () => {
       return request(this.api)
-        .get('/establishment/nope')
+        .get('/establishment/99999')
         .expect(404);
     });
 
@@ -221,7 +223,10 @@ describe('API', () => {
 
       it('sends a message to Workflow on POST', () => {
         const input = {
-          comments: 'Lorem ipsum dolor'
+          site: 'Lunar House 3rd floor',
+          name: '83',
+          suitability: ['LA', 'DOG'],
+          holding: ['NOH']
         };
         return request(this.api)
           .post('/establishment/100/places')
@@ -238,6 +243,20 @@ describe('API', () => {
           });
       });
 
+      it('returns 400 for invalid or missing data', () => {
+        const input = {
+          // requires "name"
+          site: 'Lunar House 3rd floor',
+          suitability: ['LA', 'DOG'],
+          holding: ['NOH']
+        };
+
+        return request(this.api)
+          .post('/establishment/100/places')
+          .send(input)
+          .expect(400);
+      });
+
       describe('/place/:id', () => {
 
         it('returns 404 for unrecognised id', () => {
@@ -252,9 +271,25 @@ describe('API', () => {
             .expect(404);
         });
 
+        it('returns 400 for invalid or missing data', () => {
+          const input = {
+            site: 'Lunar House 3rd floor',
+            name: '83',
+            suitability: ['FAKE'],
+            holding: ['NOH']
+          };
+          return request(this.api)
+            .put('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
+            .send(input)
+            .expect(400);
+        });
+
         it('adds a message to SQS on PUT', () => {
           const input = {
-            comments: 'Lorem ipsum dolor'
+            site: 'Lunar House 3rd floor',
+            name: '83',
+            suitability: ['LA', 'DOG'],
+            holding: ['NOH']
           };
           return request(this.api)
             .put('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
