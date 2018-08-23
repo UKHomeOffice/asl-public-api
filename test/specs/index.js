@@ -243,6 +243,7 @@ describe('API', () => {
 
       it('returns 400 for invalid or missing data', () => {
         const input = {
+          // requires "name"
           site: 'Lunar House 3rd floor',
           suitability: ['LA', 'DOG'],
           holding: ['NOH']
