@@ -95,7 +95,7 @@ module.exports = models => {
                 name: 'Deleted room',
                 suitability: ['SA'],
                 holding: ['STH'],
-                deleted: '2018-01-01'
+                deleted: '2018-01-01T14:00:00Z'
               }
             ],
             projects: [
@@ -115,7 +115,7 @@ module.exports = models => {
             pils: [
               {
                 status: 'active',
-                issueDate: '2017-01-01',
+                issueDate: '2017-01-01T00:00:00Z',
                 revocationDate: null,
                 licenceNumber: 'ABC123',
                 conditions: 'Conditions',
