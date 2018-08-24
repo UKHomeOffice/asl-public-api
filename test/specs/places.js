@@ -6,8 +6,9 @@ const apiHelper = require('../helpers/api');
 describe('/places', () => {
   before(() => {
     return apiHelper.create()
-      .then(() => {
-        this.api = apiHelper.api;
+      .then((api) => {
+        this.api = api.api;
+        this.workflow = api.workflow;
       });
   });
 
@@ -117,84 +118,76 @@ describe('/places', () => {
       .expect(400);
   });
 
-});
+  describe('/place/:id', () => {
 
-describe('/place/:id', () => {
-  before(() => {
-    apiHelper.create();
-    this.api = apiHelper.api;
-  });
+    it('returns 404 for unrecognised id', () => {
+      return request(this.api)
+        .get('/establishment/100/places/notanid')
+        .expect(404);
+    });
 
-  after(() => {
-    apiHelper.destroy();
-  });
+    it('returns 404 for a different establishments place id', () => {
+      return request(this.api)
+        .get('/establishment/100/places/e859d43a-e8ab-4ae6-844a-95c978082a48')
+        .expect(404);
+    });
 
-  it('returns 404 for unrecognised id', () => {
-    return request(this.api)
-      .get('/establishment/100/places/notanid')
-      .expect(404);
-  });
+    it('returns 400 for invalid or missing data', () => {
+      const input = {
+        site: 'Lunar House 3rd floor',
+        name: '83',
+        suitability: ['FAKE'],
+        holding: ['NOH']
+      };
+      return request(this.api)
+        .put('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
+        .send(input)
+        .expect(400);
+    });
 
-  it('returns 404 for a different establishments place id', () => {
-    return request(this.api)
-      .get('/establishment/100/places/e859d43a-e8ab-4ae6-844a-95c978082a48')
-      .expect(404);
-  });
+    it('adds a message to SQS on PUT', () => {
+      const input = {
+        site: 'Lunar House 3rd floor',
+        name: '83',
+        suitability: ['LA', 'DOG'],
+        holding: ['NOH']
+      };
+      return request(this.api)
+        .put('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
+        .send(input)
+        .expect(200)
+        .expect(() => {
+          assert.equal(this.workflow.handler.callCount, 1);
+          const req = this.workflow.handler.firstCall.args[0];
+          const body = req.body;
+          assert.equal(req.method, 'POST');
+          assert.equal(body.model, 'place');
+          assert.equal(body.action, 'update');
+          assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
+          assert.deepEqual(body.data, { ...input, establishment: '100' });
+        });
+    });
 
-  it('returns 400 for invalid or missing data', () => {
-    const input = {
-      site: 'Lunar House 3rd floor',
-      name: '83',
-      suitability: ['FAKE'],
-      holding: ['NOH']
-    };
-    return request(this.api)
-      .put('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
-      .send(input)
-      .expect(400);
-  });
+    it('adds a message to SQS on DELETE', () => {
+      const input = {
+        comments: 'Lorem ipsum dolor'
+      };
+      return request(this.api)
+        .delete('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
+        .send(input)
+        .expect(200)
+        .expect(() => {
+          assert.equal(this.workflow.handler.callCount, 1);
+          const req = this.workflow.handler.firstCall.args[0];
+          const body = req.body;
+          assert.equal(req.method, 'POST');
+          assert.equal(body.model, 'place');
+          assert.equal(body.action, 'delete');
+          assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
+          assert.deepEqual(body.data, { ...input, establishment: '100' });
+        });
+    });
 
-  it('adds a message to SQS on PUT', () => {
-    const input = {
-      site: 'Lunar House 3rd floor',
-      name: '83',
-      suitability: ['LA', 'DOG'],
-      holding: ['NOH']
-    };
-    return request(this.api)
-      .put('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
-      .send(input)
-      .expect(200)
-      .expect(() => {
-        assert.equal(this.workflow.handler.callCount, 1);
-        const req = this.workflow.handler.firstCall.args[0];
-        const body = req.body;
-        assert.equal(req.method, 'POST');
-        assert.equal(body.model, 'place');
-        assert.equal(body.action, 'update');
-        assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
-        assert.deepEqual(body.data, { ...input, establishment: '100' });
-      });
-  });
-
-  it('adds a message to SQS on DELETE', () => {
-    const input = {
-      comments: 'Lorem ipsum dolor'
-    };
-    return request(this.api)
-      .delete('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
-      .send(input)
-      .expect(200)
-      .expect(() => {
-        assert.equal(this.workflow.handler.callCount, 1);
-        const req = this.workflow.handler.firstCall.args[0];
-        const body = req.body;
-        assert.equal(req.method, 'POST');
-        assert.equal(body.model, 'place');
-        assert.equal(body.action, 'delete');
-        assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
-        assert.deepEqual(body.data, { ...input, establishment: '100' });
-      });
   });
 
 });

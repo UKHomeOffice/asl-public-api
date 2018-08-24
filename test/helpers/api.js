@@ -17,14 +17,16 @@ module.exports = {
     return Database(settings).init(data.default)
       .then(() => Workflow())
       .then(workflow => {
-        this.workflow = workflow;
         const api = Api({
           auth: false,
           log: { level: 'error' },
           db: settings,
           workflow: workflow.url
         });
-        this.api = WithUser(api, {});
+        return {
+          workflow,
+          api: WithUser(api, {})
+        };
       });
   },
 

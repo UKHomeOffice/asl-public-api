@@ -5,8 +5,9 @@ const apiHelper = require('../helpers/api');
 describe('/roles', () => {
   before(() => {
     return apiHelper.create()
-      .then(() => {
-        this.api = apiHelper.api;
+      .then((api) => {
+        this.api = api.api;
+        this.workflow = api.workflow;
       });
   });
 

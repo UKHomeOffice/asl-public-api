@@ -8,8 +8,9 @@ NOT_AUTHORISED.status = 403;
 describe('/establishments', () => {
   before(() => {
     return apiHelper.create()
-      .then(() => {
-        this.api = apiHelper.api;
+      .then((api) => {
+        this.api = api.api;
+        this.workflow = api.workflow;
       });
   });
 
@@ -33,59 +34,49 @@ describe('/establishments', () => {
       .expect(403);
   });
 
-});
+  describe('/establishment/:establishment', () => {
 
-describe('/establishment/:establishment', () => {
-  before(() => {
-    return apiHelper.create()
-      .then(() => {
-        this.api = apiHelper.api;
-      });
-  });
+    it('returns a 404 error for unknown establishment id', () => {
+      return request(this.api)
+        .get('/establishment/99999')
+        .expect(404);
+    });
 
-  after(() => {
-    return apiHelper.destroy();
-  });
+    it('returns the establishment details when provided a valid id', () => {
+      return request(this.api)
+        .get('/establishment/100')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.name, 'University of Croydon');
+        });
+    });
 
-  it('returns a 404 error for unknown establishment id', () => {
-    return request(this.api)
-      .get('/establishment/99999')
-      .expect(404);
-  });
+    it('includes the details fo the licence holder as `pelh`', () => {
+      return request(this.api)
+        .get('/establishment/100')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.pelh.name, 'Colin Jackson');
+        });
+    });
 
-  it('returns the establishment details when provided a valid id', () => {
-    return request(this.api)
-      .get('/establishment/100')
-      .expect(200)
-      .expect(response => {
-        assert.equal(response.body.data.name, 'University of Croydon');
-      });
-  });
+    it('returns the users establishment', () => {
+      this.api.setUser({ establishment: '100' });
+      return request(this.api)
+        .get('/establishment/100')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.name, 'University of Croydon');
+        });
+    });
 
-  it('includes the details fo the licence holder as `pelh`', () => {
-    return request(this.api)
-      .get('/establishment/100')
-      .expect(200)
-      .expect(response => {
-        assert.equal(response.body.data.pelh.name, 'Colin Jackson');
-      });
-  });
+    it('returns a 403 if the user is not authorised', () => {
+      this.api.setUser({ can: () => Promise.reject(NOT_AUTHORISED) });
+      return request(this.api)
+        .get('/establishment/100')
+        .expect(403);
+    });
 
-  it('returns the users establishment', () => {
-    this.api.setUser({ establishment: '100' });
-    return request(this.api)
-      .get('/establishment/100')
-      .expect(200)
-      .expect(response => {
-        assert.equal(response.body.data.name, 'University of Croydon');
-      });
-  });
-
-  it('returns a 403 if the user is not authorised', () => {
-    this.api.setUser({ can: () => Promise.reject(NOT_AUTHORISED) });
-    return request(this.api)
-      .get('/establishment/100')
-      .expect(403);
   });
 
 });
