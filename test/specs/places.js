@@ -4,7 +4,7 @@ const { stringify } = require('qs');
 const apiHelper = require('../helpers/api');
 
 describe('/places', () => {
-  before(() => {
+  beforeEach(() => {
     return apiHelper.create()
       .then((api) => {
         this.api = api.api;
@@ -12,7 +12,7 @@ describe('/places', () => {
       });
   });
 
-  after(() => {
+  afterEach(() => {
     return apiHelper.destroy();
   });
 

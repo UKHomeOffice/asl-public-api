@@ -6,7 +6,7 @@ const NOT_AUTHORISED = new Error('Not authorised');
 NOT_AUTHORISED.status = 403;
 
 describe('/establishments', () => {
-  before(() => {
+  beforeEach(() => {
     return apiHelper.create()
       .then((api) => {
         this.api = api.api;
@@ -14,7 +14,7 @@ describe('/establishments', () => {
       });
   });
 
-  after(() => {
+  afterEach(() => {
     return apiHelper.destroy();
   });
 
