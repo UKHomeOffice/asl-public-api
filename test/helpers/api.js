@@ -23,9 +23,11 @@ module.exports = {
           db: settings,
           workflow: workflow.url
         });
+        this.workflow = workflow;
+        this.api = WithUser(api, {});
         return {
           workflow,
-          api: WithUser(api, {})
+          api: this.api
         };
       });
   },
