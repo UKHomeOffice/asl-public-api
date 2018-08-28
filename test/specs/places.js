@@ -104,6 +104,20 @@ describe('/places', () => {
       });
   });
 
+  it('can pass comments property without failing validation', () => {
+    const input = {
+      site: 'Lunar House 3rd floor',
+      name: '83',
+      suitability: ['LA', 'DOG'],
+      holding: ['NOH'],
+      comments: 'this should not fail validation'
+    };
+    return request(this.api)
+      .post('/establishment/100/places')
+      .send(input)
+      .expect(200);
+  });
+
   it('returns 400 for invalid or missing data', () => {
     const input = {
       // requires "name"
