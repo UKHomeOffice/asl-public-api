@@ -8,7 +8,7 @@ require('dotenv').config();
 
 const settings = {
   database: process.env.POSTGRES_DB || 'asl-test',
-  user: process.env.POSTGRES_USER,
+  user: process.env.POSTGRES_USER || 'postgres',
   host: process.env.POSTGRES_HOST || 'localhost'
 };
 
