@@ -4,8 +4,6 @@ const Database = require('../helpers/db');
 const WithUser = require('../helpers/with-user');
 const Workflow = require('../helpers/workflow');
 
-require('dotenv').config();
-
 const settings = {
   database: process.env.POSTGRES_DB || 'asl-test',
   user: process.env.POSTGRES_USER,
