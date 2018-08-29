@@ -21,6 +21,6 @@ module.exports = {
     password: process.env.REDIS_PASSWORD
   },
   limiter: {
-    total: process.env.RATE_LIMIT_TOTAL
+    total: parseInt(process.env.RATE_LIMIT_TOTAL, 10) || 0
   }
 };

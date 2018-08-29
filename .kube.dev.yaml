@@ -37,7 +37,7 @@
       secret: true
       name: asl-dev-redis
       key: pass
-    RATE_LIMIT_TOTAL: 1000
+    RATE_LIMIT_TOTAL: '"1000"'
   nginx:
     ADD_NGINX_SERVER_CFG: add_header Cache-Control private;
 
