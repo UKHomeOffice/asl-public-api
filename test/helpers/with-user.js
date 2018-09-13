@@ -6,7 +6,7 @@ const makeDummyUser = user => (req, res, next) => {
     access_token: '12345',
     is: role => user.roles.includes(role),
     get: key => user[key],
-    can: () => Promise.resolve()
+    can: () => Promise.resolve({ json: {} })
   }, user);
   next();
 };
