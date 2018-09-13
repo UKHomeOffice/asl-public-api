@@ -1,38 +1,31 @@
-const Api = require('../../lib/api');
+const apiHelper = require('../helpers/api');
 const redis = require('redis');
-const WithUser = require('../helpers/with-user');
 const request = require('supertest');
 
 require('dotenv').config();
 
-const settings = {
-  database: process.env.POSTGRES_DB || 'asl-test',
-  user: process.env.POSTGRES_USER || 'postgres',
-  host: process.env.POSTGRES_HOST || 'localhost'
-};
-
 describe('rate limiting', () => {
 
-  beforeEach(() => {
+  beforeEach(done => {
     this.client = redis.createClient({
       host: process.env.REDIS_HOST || 'localhost'
     });
-    this.client.del('ratelimit:/establishments:get:user.id:abc123');
-    const api = Api({
-      auth: false,
-      log: { level: 'error' },
-      db: settings,
+    const options = {
       redis: {
         host: process.env.REDIS_HOST || 'localhost'
       },
       limiter: { total: 1 }
-    });
-    this.rateLimitedApi = WithUser(api, {});
+    };
+    apiHelper.create(options)
+      .then(api => {
+        this.rateLimitedApi = api.api;
+        this.client.del('ratelimit:user.id:abc123', done);
+      });
   });
 
   afterEach(() => {
     this.client.end(true);
-    return this.rateLimitedApi && this.rateLimitedApi.app.db.destroy();
+    return apiHelper.destroy();
   });
 
   it('will reject the second request made by a user', () => {
@@ -42,6 +35,29 @@ describe('rate limiting', () => {
       .then(() => {
         return request(this.rateLimitedApi)
           .get('/establishments')
+          .expect(429);
+      });
+  });
+
+  it('will reject the second request made by a user to a different url', () => {
+    this.rateLimitedApi.setUser({ establishment: '100' });
+    return request(this.rateLimitedApi)
+      .get('/establishments')
+      .expect(200)
+      .then(() => {
+        return request(this.rateLimitedApi)
+          .get('/establishment/100')
+          .expect(429);
+      });
+  });
+
+  it('will reject the second request made by a user with a different method', () => {
+    return request(this.rateLimitedApi)
+      .get('/establishments')
+      .expect(200)
+      .then(() => {
+        return request(this.rateLimitedApi)
+          .post('/establishment')
           .expect(429);
       });
   });
