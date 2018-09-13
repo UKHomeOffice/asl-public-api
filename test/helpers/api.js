@@ -11,16 +11,16 @@ const settings = {
 };
 
 module.exports = {
-  create: () => {
+  create: (options = {}) => {
     return Database(settings).init(data.default)
       .then(() => Workflow())
       .then(workflow => {
-        const api = Api({
+        const api = Api(Object.assign({
           auth: false,
           log: { level: 'error' },
           db: settings,
           workflow: workflow.url
-        });
+        }, options));
         this.workflow = workflow;
         this.api = WithUser(api, {});
         return {
