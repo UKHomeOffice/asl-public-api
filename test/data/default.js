@@ -194,5 +194,23 @@ module.exports = models => {
             ]
           }], { relate: true });
         });
+    })
+    .then(() => {
+      return Profile.query().insertGraph([
+        {
+          userId: 'def456',
+          title: 'Dr',
+          firstName: 'Inspector',
+          lastName: 'Morse',
+          address: '1 Some Road',
+          postcode: 'A1 1AA',
+          email: 'inspector@example.com',
+          telephone: '01234567890',
+          asru_user: true,
+          asru_admin: false,
+          asru_inspector: true,
+          asru_licensing: false
+        }
+      ]);
     });
 };
