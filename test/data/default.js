@@ -14,7 +14,12 @@ module.exports = models => {
           address: '1 Some Road',
           postcode: 'A1 1AA',
           email: 'test1@example.com',
-          telephone: '01234567890'
+          telephone: '01234567890',
+          trainingModules: [
+            {
+              id: 'c3032cc0-7dc7-40bc-be7e-97edc4ea1072'
+            }
+          ]
         },
         {
           id: 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88',
