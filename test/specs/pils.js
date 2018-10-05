@@ -4,7 +4,7 @@ const apiHelper = require('../helpers/api');
 
 describe('/pils', () => {
 
-  before(() => {
+  beforeEach(() => {
     return apiHelper.create()
       .then((api) => {
         this.api = api.api;
@@ -12,8 +12,34 @@ describe('/pils', () => {
       });
   });
 
-  after(() => {
+  afterEach(() => {
     return apiHelper.destroy();
+  });
+
+  describe('/pil', () => {
+    it('sends a message to workflow on POST', () => {
+      const input = {
+        licence_number: 'AB-123',
+        procedures: ['A', 'B']
+      };
+      return request(this.api)
+        .post('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9/pil')
+        .send(input)
+        .expect(200)
+        .expect(() => {
+          assert.equal(this.workflow.handler.callCount, 1);
+          const req = this.workflow.handler.firstCall.args[0];
+          const body = req.body;
+          assert.equal(req.method, 'POST');
+          assert.equal(body.model, 'pil');
+          assert.equal(body.action, 'create');
+          assert.deepEqual(body.data, {
+            ...input,
+            establishment: '100',
+            profile: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9'
+          });
+        });
+    });
   });
 
   describe('/pil/:id', () => {
@@ -36,6 +62,31 @@ describe('/pils', () => {
         .expect(200)
         .expect(pil => {
           assert.equal(pil.body.data.licence_number, 'AB-123');
+        });
+    });
+
+    it('sends a message to workflow on PUT', () => {
+      const input = {
+        procedures: ['C']
+      };
+      return request(this.api)
+        .put('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9/pil/9fbe0218-995d-47d3-88e7-641fc046d7d1')
+        .send(input)
+        .expect(200)
+        .expect(() => {
+          assert.equal(this.workflow.handler.callCount, 1);
+          const req = this.workflow.handler.firstCall.args[0];
+          const body = req.body;
+          assert.equal(req.method, 'POST');
+          assert.equal(body.model, 'pil');
+          assert.equal(body.action, 'update');
+          assert.equal(body.id, '9fbe0218-995d-47d3-88e7-641fc046d7d1');
+          assert.deepEqual(body.data, {
+            ...input,
+            establishment: '100',
+            profile: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
+            procedures: ['C']
+          });
         });
     });
 
