@@ -182,7 +182,7 @@ describe('/profiles', () => {
         .get('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9')
         .expect(200)
         .expect(profile => {
-          assert.equal(profile.body.data.pil.licence_number, 'AB-123');
+          assert.equal(profile.body.data.pil.licenceNumber, 'AB-123');
         });
     });
 

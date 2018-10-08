@@ -19,7 +19,7 @@ describe('/pils', () => {
   describe('/pil', () => {
     it('sends a message to workflow on POST', () => {
       const input = {
-        licence_number: 'AB-123',
+        licenceNumber: 'AB-123',
         procedures: ['A', 'B']
       };
       return request(this.api)
@@ -61,7 +61,7 @@ describe('/pils', () => {
         .get('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9/pil/9fbe0218-995d-47d3-88e7-641fc046d7d1')
         .expect(200)
         .expect(pil => {
-          assert.equal(pil.body.data.licence_number, 'AB-123');
+          assert.equal(pil.body.data.licenceNumber, 'AB-123');
         });
     });
 

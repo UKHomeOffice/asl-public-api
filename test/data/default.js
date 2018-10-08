@@ -193,26 +193,26 @@ module.exports = models => {
           return PIL.query().insertGraph([
             {
               id: '9fbe0218-995d-47d3-88e7-641fc046d7d1',
-              profile_id: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
-              establishment_id: 100,
-              licence_number: 'AB-123',
+              profileId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
+              establishmentId: 100,
+              licenceNumber: 'AB-123',
               procedures: ['A', 'B']
             },
             {
               id: '247912b2-e5c6-487d-b717-f8136491f7b8',
-              profile_id: 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88',
-              establishment_id: 100,
-              licence_number: 'D-456',
+              profileId: 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88',
+              establishmentId: 100,
+              licenceNumber: 'D-456',
               procedures: ['D'],
-              cat_d_notes: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+              notesCatD: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
             },
             {
               id: 'ba3f4fdf-27e4-461e-a251-3188faa35df5',
-              profile_id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9',
-              establishment_id: 100,
-              licence_number: 'F-789',
+              profileId: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9',
+              establishmentId: 100,
+              licenceNumber: 'F-789',
               procedures: ['F'],
-              cat_f_notes: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+              notesCatF: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
             }
           ]);
         });
