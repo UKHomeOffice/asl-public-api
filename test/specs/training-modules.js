@@ -29,13 +29,13 @@ describe('Training Modules', () => {
           ]
         }
       ],
-      pass_date: '2018-01-01',
-      not_applicable: false,
-      accrediting_body: 'University of Croydon',
-      other_accrediting_body: null,
-      certificate_number: 'abc-123',
+      passDate: '2018-01-01',
+      notApplicable: false,
+      accreditingBody: 'University of Croydon',
+      otherAccreditingBody: null,
+      certificateNumber: 'abc-123',
       exemption: false,
-      exemption_description: null
+      exemptionDescription: null
     };
 
     return request(this.api)
