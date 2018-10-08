@@ -204,7 +204,7 @@ module.exports = models => {
               establishmentId: 100,
               licenceNumber: 'D-456',
               procedures: ['D'],
-              catDNotes: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+              notesCatD: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
             },
             {
               id: 'ba3f4fdf-27e4-461e-a251-3188faa35df5',
@@ -212,7 +212,7 @@ module.exports = models => {
               establishmentId: 100,
               licenceNumber: 'F-789',
               procedures: ['F'],
-              catFNotes: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+              notesCatF: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
             }
           ]);
         });
