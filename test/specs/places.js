@@ -100,7 +100,7 @@ describe('/places', () => {
         assert.equal(req.method, 'POST');
         assert.equal(body.model, 'place');
         assert.equal(body.action, 'create');
-        assert.deepEqual(body.data, { ...input, establishment: '100' });
+        assert.deepEqual(body.data, { ...input, establishmentId: '100' });
       });
   });
 
@@ -178,7 +178,7 @@ describe('/places', () => {
           assert.equal(body.model, 'place');
           assert.equal(body.action, 'update');
           assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
-          assert.deepEqual(body.data, { ...input, establishment: '100' });
+          assert.deepEqual(body.data, { ...input, establishmentId: '100' });
         });
     });
 
@@ -198,7 +198,7 @@ describe('/places', () => {
           assert.equal(body.model, 'place');
           assert.equal(body.action, 'delete');
           assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
-          assert.deepEqual(body.data, { ...input, establishment: '100' });
+          assert.deepEqual(body.data, { ...input, establishmentId: '100' });
         });
     });
 
