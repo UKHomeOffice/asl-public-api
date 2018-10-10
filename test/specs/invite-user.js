@@ -33,7 +33,7 @@ describe('Invite User', () => {
         assert.equal(req.method, 'POST');
         assert.equal(body.model, 'invitation');
         assert.equal(body.action, 'create');
-        assert.deepEqual(body.data, { ...input, establishment: '100' });
+        assert.deepEqual(body.data, { ...input, establishmentId: '100' });
       });
   });
 

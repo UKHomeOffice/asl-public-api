@@ -35,8 +35,8 @@ describe('/pils', () => {
           assert.equal(body.action, 'create');
           assert.deepEqual(body.data, {
             ...input,
-            establishment: '100',
-            profile: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9'
+            establishmentId: '100',
+            profileId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9'
           });
         });
     });
@@ -83,8 +83,8 @@ describe('/pils', () => {
           assert.equal(body.id, '9fbe0218-995d-47d3-88e7-641fc046d7d1');
           assert.deepEqual(body.data, {
             ...input,
-            establishment: '100',
-            profile: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
+            establishmentId: '100',
+            profileId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
             procedures: ['C']
           });
         });
