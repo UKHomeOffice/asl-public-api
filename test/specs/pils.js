@@ -2,6 +2,11 @@ const assert = require('assert');
 const request = require('supertest');
 const apiHelper = require('../helpers/api');
 
+const PROFILE_1 = 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9';
+const PROFILE_2 = 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88';
+
+const PIL_1 = '9fbe0218-995d-47d3-88e7-641fc046d7d1';
+
 describe('/pils', () => {
 
   beforeEach(() => {
@@ -23,7 +28,7 @@ describe('/pils', () => {
         procedures: ['A', 'B']
       };
       return request(this.api)
-        .post('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9/pil')
+        .post(`/establishment/100/profile/${PROFILE_1}/pil`)
         .send(input)
         .expect(200)
         .expect(() => {
@@ -36,7 +41,7 @@ describe('/pils', () => {
           assert.deepEqual(body.data, {
             ...input,
             establishmentId: '100',
-            profileId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9'
+            profileId: PROFILE_1
           });
         });
     });
@@ -46,19 +51,19 @@ describe('/pils', () => {
 
     it('returns 404 for unrecognised id', () => {
       return request(this.api)
-        .get('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9/pil/notanid')
+        .get(`/establishment/100/profile/${PROFILE_1}/pil/notanid`)
         .expect(404);
     });
 
     it('returns 404 for a different profiles pil id', () => {
       return request(this.api)
-        .get('/establishment/100/profile/b2b8315b-82c0-4b2d-bc13-eb13e605ee88/pil/9fbe0218-995d-47d3-88e7-641fc046d7d1')
+        .get(`/establishment/100/profile/${PROFILE_2}/pil/${PIL_1}`)
         .expect(404);
     });
 
     it('returns the data for an individual pil', () => {
       return request(this.api)
-        .get('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9/pil/9fbe0218-995d-47d3-88e7-641fc046d7d1')
+        .get(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
         .expect(200)
         .expect(pil => {
           assert.equal(pil.body.data.licenceNumber, 'AB-123');
@@ -70,7 +75,7 @@ describe('/pils', () => {
         procedures: ['C']
       };
       return request(this.api)
-        .put('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9/pil/9fbe0218-995d-47d3-88e7-641fc046d7d1')
+        .put(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
         .send(input)
         .expect(200)
         .expect(() => {
@@ -80,11 +85,11 @@ describe('/pils', () => {
           assert.equal(req.method, 'POST');
           assert.equal(body.model, 'pil');
           assert.equal(body.action, 'update');
-          assert.equal(body.id, '9fbe0218-995d-47d3-88e7-641fc046d7d1');
+          assert.equal(body.id, PIL_1);
           assert.deepEqual(body.data, {
             ...input,
             establishmentId: '100',
-            profileId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
+            profileId: PROFILE_1,
             procedures: ['C']
           });
         });

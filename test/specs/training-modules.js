@@ -2,7 +2,6 @@ const assert = require('assert');
 const request = require('supertest');
 const apiHelper = require('../helpers/api');
 
-const PROFILE_ID = 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9';
 const TRAINING_ID = 'c3032cc0-7dc7-40bc-be7e-97edc4ea1072';
 
 describe('Training Modules', () => {
@@ -39,7 +38,7 @@ describe('Training Modules', () => {
     };
 
     return request(this.api)
-      .post(`/establishment/100/profiles/${PROFILE_ID}/training`)
+      .post('/me/training')
       .send(input)
       .expect(200)
       .expect(() => {
@@ -55,7 +54,7 @@ describe('Training Modules', () => {
 
   it('sends a message to workflow on DELETE', () => {
     return request(this.api)
-      .delete(`/establishment/100/profiles/${PROFILE_ID}/training/${TRAINING_ID}`)
+      .delete(`/me/training/${TRAINING_ID}`)
       .expect(200)
       .expect(() => {
         assert.equal(this.workflow.handler.callCount, 1);
