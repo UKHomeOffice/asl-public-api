@@ -215,7 +215,11 @@ describe('/places', () => {
     });
 
     it('adds a message to SQS on DELETE', () => {
-      const input = {};
+      const input = {
+        meta: {
+          comments: 'Lorem ipsum dolor'
+        }
+      };
       return request(this.api)
         .delete('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
         .send(input)
@@ -228,7 +232,7 @@ describe('/places', () => {
           assert.equal(body.model, 'place');
           assert.equal(body.action, 'delete');
           assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
-          assert.deepEqual(body.data, { ...input, establishmentId: '100' });
+          assert.deepEqual(body.data, { establishmentId: '100' });
         });
     });
 
