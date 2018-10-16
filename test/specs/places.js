@@ -84,8 +84,7 @@ describe('/places', () => {
 
   it('sends a message to Workflow on POST', () => {
     const input = {
-      data:
-      {
+      data: {
         site: 'Lunar House 3rd floor',
         name: '83',
         suitability: ['LA', 'DOG'],
@@ -110,8 +109,7 @@ describe('/places', () => {
 
   it('can pass comments property without failing validation', () => {
     const input = {
-      data:
-      {
+      data: {
         site: 'Lunar House 3rd floor',
         name: '83',
         suitability: ['LA', 'DOG'],
@@ -132,8 +130,7 @@ describe('/places', () => {
 
   it('returns 400 for invalid or missing data', () => {
     const input = {
-      data:
-      {
+      data: {
         site: 'Lunar House 3rd floor',
         // requires name
         suitability: ['LA', 'DOG'],
@@ -167,8 +164,7 @@ describe('/places', () => {
 
     it('returns 400 for invalid or missing data', () => {
       const input = {
-        data:
-        {
+        data: {
           site: 'Lunar House 3rd floor',
           name: '83',
           suitability: ['FAKE'],
@@ -188,8 +184,7 @@ describe('/places', () => {
 
     it('adds a message to SQS on PUT', () => {
       const input = {
-        data:
-        {
+        data: {
           site: 'Lunar House 3rd floor',
           name: '83',
           suitability: ['LA', 'DOG'],
