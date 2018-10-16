@@ -89,7 +89,6 @@ describe('/places', () => {
         name: '83',
         suitability: ['LA', 'DOG'],
         holding: ['NOH']
-
       }
     };
     return request(this.api)
@@ -114,7 +113,6 @@ describe('/places', () => {
         name: '83',
         suitability: ['LA', 'DOG'],
         holding: ['NOH']
-
       },
       meta:
       {
@@ -189,7 +187,6 @@ describe('/places', () => {
           name: '83',
           suitability: ['LA', 'DOG'],
           holding: ['NOH']
-
         }
       };
 
