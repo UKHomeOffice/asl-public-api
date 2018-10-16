@@ -84,10 +84,12 @@ describe('/places', () => {
 
   it('sends a message to Workflow on POST', () => {
     const input = {
-      site: 'Lunar House 3rd floor',
-      name: '83',
-      suitability: ['LA', 'DOG'],
-      holding: ['NOH']
+      data: {
+        site: 'Lunar House 3rd floor',
+        name: '83',
+        suitability: ['LA', 'DOG'],
+        holding: ['NOH']
+      }
     };
     return request(this.api)
       .post('/establishment/100/places')
@@ -100,17 +102,23 @@ describe('/places', () => {
         assert.equal(req.method, 'POST');
         assert.equal(body.model, 'place');
         assert.equal(body.action, 'create');
-        assert.deepEqual(body.data, { ...input, establishmentId: '100' });
+        assert.deepEqual(body.data, { ...input.data, establishmentId: '100' });
       });
   });
 
   it('can pass comments property without failing validation', () => {
     const input = {
-      site: 'Lunar House 3rd floor',
-      name: '83',
-      suitability: ['LA', 'DOG'],
-      holding: ['NOH'],
-      comments: 'this should not fail validation'
+      data: {
+        site: 'Lunar House 3rd floor',
+        name: '83',
+        suitability: ['LA', 'DOG'],
+        holding: ['NOH']
+      },
+      meta:
+      {
+        changesToRestrictions: 'changes',
+        comments: 'comments'
+      }
     };
     return request(this.api)
       .post('/establishment/100/places')
@@ -120,12 +128,18 @@ describe('/places', () => {
 
   it('returns 400 for invalid or missing data', () => {
     const input = {
-      // requires "name"
-      site: 'Lunar House 3rd floor',
-      suitability: ['LA', 'DOG'],
-      holding: ['NOH']
+      data: {
+        site: 'Lunar House 3rd floor',
+        // requires name
+        suitability: ['LA', 'DOG'],
+        holding: ['NOH']
+      },
+      meta:
+      {
+        changesToRestrictions: 'changes',
+        comments: 'comments'
+      }
     };
-
     return request(this.api)
       .post('/establishment/100/places')
       .send(input)
@@ -148,10 +162,17 @@ describe('/places', () => {
 
     it('returns 400 for invalid or missing data', () => {
       const input = {
-        site: 'Lunar House 3rd floor',
-        name: '83',
-        suitability: ['FAKE'],
-        holding: ['NOH']
+        data: {
+          site: 'Lunar House 3rd floor',
+          name: '83',
+          suitability: ['FAKE'],
+          holding: ['NOH']
+        },
+        meta:
+        {
+          changesToRestrictions: 'changes',
+          comments: 'comments'
+        }
       };
       return request(this.api)
         .put('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
@@ -161,11 +182,14 @@ describe('/places', () => {
 
     it('adds a message to SQS on PUT', () => {
       const input = {
-        site: 'Lunar House 3rd floor',
-        name: '83',
-        suitability: ['LA', 'DOG'],
-        holding: ['NOH']
+        data: {
+          site: 'Lunar House 3rd floor',
+          name: '83',
+          suitability: ['LA', 'DOG'],
+          holding: ['NOH']
+        }
       };
+
       return request(this.api)
         .put('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
         .send(input)
@@ -178,13 +202,15 @@ describe('/places', () => {
           assert.equal(body.model, 'place');
           assert.equal(body.action, 'update');
           assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
-          assert.deepEqual(body.data, { ...input, establishmentId: '100' });
+          assert.deepEqual(body.data, { ...input.data, establishmentId: '100' });
         });
     });
 
     it('adds a message to SQS on DELETE', () => {
       const input = {
-        comments: 'Lorem ipsum dolor'
+        meta: {
+          comments: 'Lorem ipsum dolor'
+        }
       };
       return request(this.api)
         .delete('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
@@ -198,7 +224,7 @@ describe('/places', () => {
           assert.equal(body.model, 'place');
           assert.equal(body.action, 'delete');
           assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
-          assert.deepEqual(body.data, { ...input, establishmentId: '100' });
+          assert.deepEqual(body.data, { establishmentId: '100' });
         });
     });
 
