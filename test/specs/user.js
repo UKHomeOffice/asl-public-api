@@ -17,13 +17,31 @@ describe('/me', () => {
     return apiHelper.destroy();
   });
 
-  it('returns the logged in user on GET', () => {
-    return request(this.api)
-      .get('/me')
-      .expect(200)
-      .expect(response => {
-        assert.deepEqual(response.body.data.id, PROFILE_ID);
-      });
+  describe('GET', () => {
+
+    it('returns the logged in user', () => {
+      return request(this.api)
+        .get('/me')
+        .expect(200)
+        .expect(response => {
+          assert.deepEqual(response.body.data.id, PROFILE_ID);
+        });
+    });
+
+    it('includes a list of allowed actions', () => {
+      const actions = {
+        global: [],
+        100: ['establishment.read']
+      };
+      this.api.setUser({ allowedActions: () => Promise.resolve(actions) });
+      return request(this.api)
+        .get('/me')
+        .expect(200)
+        .expect(response => {
+          assert.deepEqual(response.body.meta.allowedActions, actions);
+        });
+    });
+
   });
 
   it('posts to workflow on PUT', () => {
