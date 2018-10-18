@@ -23,6 +23,7 @@ module.exports = models => {
         },
         {
           id: 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88',
+          userId: 'basic',
           title: 'Dr',
           firstName: 'Noddy',
           lastName: 'Holder',
