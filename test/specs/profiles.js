@@ -16,6 +16,11 @@ describe('/profiles', () => {
     return apiHelper.destroy();
   });
 
+  beforeEach(() => {
+    // reset user for each test
+    this.api.setUser();
+  });
+
   it('returns only the profiles related to the current establishment', () => {
     return request(this.api)
       .get('/establishment/100/profiles')
@@ -166,6 +171,32 @@ describe('/profiles', () => {
       });
   });
 
+  describe('with basic permissions', () => {
+
+    beforeEach(() => {
+      this.api.setUser({
+        id: 'basic',
+        can: task => Promise.resolve(task !== 'profile.read.all')
+      });
+    });
+
+    it('returns only named users and the current logged-in user', () => {
+      return request(this.api)
+        .get(`/establishment/100/profiles`)
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.length, 4, 'The full set of users is not returned');
+          assert(response.body.data.find(p => p.userId === 'basic'), 'The currently logged in user is included in the list');
+          response.body.data.forEach(profile => {
+            const isNamedPerson = profile.roles.length > 0;
+            const isLoggedInUser = profile.userId === 'basic';
+            assert(isNamedPerson || isLoggedInUser);
+          });
+        });
+    });
+
+  });
+
   describe('/profile/:id', () => {
 
     it('returns the profile data for an individual profile', () => {
@@ -193,6 +224,41 @@ describe('/profiles', () => {
         .expect(profile => {
           assert.deepEqual(profile.body.data.roles.map(r => r.type), ['nacwo']);
         });
+    });
+
+    describe('with basic permissions', () => {
+
+      beforeEach(() => {
+        this.api.setUser({
+          id: 'basic',
+          can: task => Promise.resolve(task !== 'profile.read.all')
+        });
+      });
+
+      it('can access the profile of the current logged-in user', () => {
+        return request(this.api)
+          .get('/establishment/100/profile/b2b8315b-82c0-4b2d-bc13-eb13e605ee88')
+          .expect(200)
+          .expect(profile => {
+            assert.equal(profile.body.data.name, 'Noddy Holder');
+          });
+      });
+
+      it('can access the profile of a named person', () => {
+        return request(this.api)
+          .get('/establishment/100/profile/a942ffc7-e7ca-4d76-a001-0b5048a057d9')
+          .expect(200)
+          .expect(profile => {
+            assert.equal(profile.body.data.name, 'Clive Nacwo');
+          });
+      });
+
+      it('cannot access the profile of people who do not have named roles', () => {
+        return request(this.api)
+          .get('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9')
+          .expect(404);
+      });
+
     });
 
   });
