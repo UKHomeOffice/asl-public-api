@@ -13,7 +13,7 @@ module.exports = () => {
   app.use(handler);
 
   app.use((req, res) => {
-    res.json({ state: { id: '67e1e643-dace-44e0-af8c-940c997a5ae3' } });
+    res.json({});
   });
 
   return new Promise((resolve, reject) => {
