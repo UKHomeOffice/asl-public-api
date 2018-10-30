@@ -15,7 +15,7 @@ module.exports = models => {
           postcode: 'A1 1AA',
           email: 'test1@example.com',
           telephone: '01234567890',
-          trainingModules: [
+          certificates: [
             {
               id: 'c3032cc0-7dc7-40bc-be7e-97edc4ea1072'
             }
