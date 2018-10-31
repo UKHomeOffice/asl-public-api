@@ -12,7 +12,8 @@ module.exports = settings => {
         'PIL',
         'Place',
         'Role',
-        'TrainingModule',
+        'Exemption',
+        'Certificate',
         'Profile',
         'Establishment'
       ];
