@@ -15,6 +15,7 @@ module.exports = settings => {
         'Exemption',
         'Certificate',
         'Profile',
+        'Invitation',
         'Establishment'
       ];
       return tables.reduce((p, table) => {
