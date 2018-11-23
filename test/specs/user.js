@@ -49,6 +49,8 @@ describe('/me', () => {
         .expect(response => {
           assert.equal(response.body.data.invitations.length, 1);
           assert.equal(response.body.data.invitations[0].email, 'test1@example.com');
+          assert.equal(response.body.data.invitations[0].establishment.name, 'Marvell Pharmaceuticals');
+          assert.deepEqual(Object.keys(response.body.data.invitations[0].establishment), ['name']);
         });
     });
 
