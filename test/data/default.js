@@ -1,6 +1,6 @@
 module.exports = models => {
 
-  const { Establishment, Profile, PIL } = models;
+  const { Establishment, Profile, PIL, Invitation } = models;
 
   return Promise.resolve()
     .then(() => {
@@ -214,6 +214,22 @@ module.exports = models => {
               licenceNumber: 'F-789',
               procedures: ['F'],
               notesCatF: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            }
+          ]);
+        })
+        .then(() => {
+          return Invitation.query().insertGraph([
+            {
+              email: 'test1@example.com',
+              establishmentId: 101,
+              role: 'basic',
+              token: 'abcdef'
+            },
+            {
+              email: 'test2@example.com',
+              establishmentId: 101,
+              role: 'admin',
+              token: 'abcdef'
             }
           ]);
         });

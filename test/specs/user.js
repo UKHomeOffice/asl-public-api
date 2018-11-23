@@ -42,6 +42,16 @@ describe('/me', () => {
         });
     });
 
+    it('includes a list of open invitations for the user', () => {
+      return request(this.api)
+        .get('/me')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.invitations.length, 1);
+          assert.equal(response.body.data.invitations[0].email, 'test1@example.com');
+        });
+    });
+
   });
 
   it('posts to workflow on PUT', () => {
