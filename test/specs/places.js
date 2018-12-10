@@ -168,8 +168,7 @@ describe('/places', () => {
           suitability: ['FAKE'],
           holding: ['NOH']
         },
-        meta:
-        {
+        meta: {
           changesToRestrictions: 'changes',
           comments: 'comments'
         }
