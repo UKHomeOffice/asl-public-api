@@ -63,7 +63,7 @@ describe('/me', () => {
 
     return request(this.api)
       .put('/me')
-      .send(input)
+      .send({ data: input })
       .expect(200)
       .expect(() => {
         assert.equal(this.workflow.handler.callCount, 1);
@@ -74,5 +74,17 @@ describe('/me', () => {
         assert.equal(body.action, 'update');
         assert.deepEqual(body.data, input);
       });
+  });
+
+  it('throws a 400 error if sent invalid parameters', () => {
+    const data = {
+      asruUser: true,
+      firstName: 'Sterling'
+    };
+
+    return request(this.api)
+      .put('/me')
+      .send({ data })
+      .expect(400);
   });
 });

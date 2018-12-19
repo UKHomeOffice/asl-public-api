@@ -24,7 +24,7 @@ describe('Invite User', () => {
     };
     return request(this.api)
       .post('/establishment/100/invite-user')
-      .send(input)
+      .send({ data: input })
       .expect(200)
       .expect(() => {
         assert.equal(this.workflow.handler.callCount, 1);
@@ -45,7 +45,7 @@ describe('Invite User', () => {
     };
     return request(this.api)
       .post('/establishment/100/invite-user')
-      .send(input)
+      .send({ data: input })
       .expect(400)
       .expect(response => {
         assert(
@@ -63,7 +63,7 @@ describe('Invite User', () => {
     };
     return request(this.api)
       .post('/establishment/100/invite-user')
-      .send(input)
+      .send({ data: input })
       .expect(400)
       .expect(response => {
         assert(

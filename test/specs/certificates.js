@@ -38,7 +38,7 @@ describe('Certificates', () => {
 
     return request(this.api)
       .post(`/establishment/${ESTABSLISHMENT_ID}/profile/${PROFILE_ID}/certificate`)
-      .send(input)
+      .send({ data: input })
       .expect(200)
       .expect(() => {
         assert.equal(this.workflow.handler.callCount, 1);

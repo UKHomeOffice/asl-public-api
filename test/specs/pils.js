@@ -23,13 +23,9 @@ describe('/pils', () => {
 
   describe('/pil', () => {
     it('sends a message to workflow on POST', () => {
-      const input = {
-        licenceNumber: 'AB-123',
-        procedures: ['A', 'B']
-      };
       return request(this.api)
         .post(`/establishment/100/profile/${PROFILE_1}/pil`)
-        .send(input)
+        .send({ data: {} })
         .expect(200)
         .expect(() => {
           assert.equal(this.workflow.handler.callCount, 1);
@@ -39,11 +35,20 @@ describe('/pils', () => {
           assert.equal(body.model, 'pil');
           assert.equal(body.action, 'create');
           assert.deepEqual(body.data, {
-            ...input,
             establishmentId: '100',
             profileId: PROFILE_1
           });
         });
+    });
+
+    it('throws a 400 error if extra parameters are sent', () => {
+      const input = {
+        status: 'active'
+      };
+      return request(this.api)
+        .post(`/establishment/100/profile/${PROFILE_1}/pil`)
+        .send({ data: input })
+        .expect(400);
     });
   });
 
@@ -76,7 +81,7 @@ describe('/pils', () => {
       };
       return request(this.api)
         .put(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
-        .send(input)
+        .send({ data: input })
         .expect(200)
         .expect(() => {
           assert.equal(this.workflow.handler.callCount, 1);
@@ -93,6 +98,17 @@ describe('/pils', () => {
             procedures: ['C']
           });
         });
+    });
+
+    it('throws a 400 error if extra parameters are sent', () => {
+      const input = {
+        procedures: ['C'],
+        status: 'active'
+      };
+      return request(this.api)
+        .put(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
+        .send({ data: input })
+        .expect(400);
     });
 
   });
