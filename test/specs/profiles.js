@@ -226,6 +226,27 @@ describe('/profiles', () => {
         });
     });
 
+    it('does not include establishments except the one in scope', () => {
+      return request(this.api)
+        // get a profile that exists in multiple establishments
+        .get('/establishment/100/profile/ae28fb31-d867-4371-9b4f-79019e71232f')
+        .expect(200)
+        .expect(profile => {
+          assert.equal(profile.body.data.establishments.length, 1);
+          assert.equal(profile.body.data.establishments[0].name, 'University of Croydon');
+        })
+        .then(() => {
+          return request(this.api)
+            // request the same profile within the scope of the other establishment
+            .get('/establishment/101/profile/ae28fb31-d867-4371-9b4f-79019e71232f')
+            .expect(200)
+            .expect(profile => {
+              assert.equal(profile.body.data.establishments.length, 1);
+              assert.equal(profile.body.data.establishments[0].name, 'Marvell Pharmaceuticals');
+            });
+        });
+    });
+
     describe('with basic permissions', () => {
 
       beforeEach(() => {
