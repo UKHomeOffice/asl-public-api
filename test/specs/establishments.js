@@ -56,7 +56,7 @@ describe('/establishments', () => {
         .get('/establishment/100')
         .expect(200)
         .expect(response => {
-          assert.equal(response.body.data.pelh.name, 'Colin Jackson');
+          assert.equal(response.body.data.roles.find(r => r.type === 'pelh').profile.name, 'Colin Jackson');
         });
     });
 
