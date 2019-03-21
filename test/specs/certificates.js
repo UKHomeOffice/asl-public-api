@@ -23,7 +23,7 @@ describe('Certificates', () => {
     const input = {
       modules: [
         {
-          module: 'Module 1',
+          module: 'L',
           species: [
             'rats',
             'mice'
