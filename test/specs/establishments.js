@@ -51,7 +51,7 @@ describe('/establishments', () => {
         });
     });
 
-    it('includes the details fo the licence holder as `pelh`', () => {
+    it('includes the details for the licence holder as `pelh`', () => {
       return request(this.api)
         .get('/establishment/100')
         .expect(200)
