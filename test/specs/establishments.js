@@ -51,12 +51,12 @@ describe('/establishments', () => {
         });
     });
 
-    it('includes the details fo the licence holder as `pelh`', () => {
+    it('includes the details for the licence holder as `pelh`', () => {
       return request(this.api)
         .get('/establishment/100')
         .expect(200)
         .expect(response => {
-          assert.equal(response.body.data.pelh.name, 'Colin Jackson');
+          assert.equal(response.body.data.roles.find(r => r.type === 'pelh').profile.name, 'Colin Jackson');
         });
     });
 
