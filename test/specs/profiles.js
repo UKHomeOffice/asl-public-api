@@ -35,18 +35,6 @@ describe('/profiles', () => {
       });
   });
 
-  it('returns a list that includes the `name` virtual property', () => {
-    return request(this.api)
-      .get('/establishment/100/profiles')
-      .expect(200)
-      .expect(response => {
-        assert(response.body.data.length > 0);
-        response.body.data.forEach(profile => {
-          assert.equal(typeof profile.name, 'string');
-        });
-      });
-  });
-
   it('can filter on a role type', () => {
     const query = stringify({
       filters: {
@@ -137,7 +125,8 @@ describe('/profiles', () => {
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 1);
-        assert.equal(response.body.data[0].name, 'Colin Jackson');
+        assert.equal(response.body.data[0].firstName, 'Colin');
+        assert.equal(response.body.data[0].lastName, 'Jackson');
       });
   });
 
@@ -204,7 +193,8 @@ describe('/profiles', () => {
         .get('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9')
         .expect(200)
         .expect(profile => {
-          assert.equal(profile.body.data.name, 'Linford Christie');
+          assert.equal(profile.body.data.firstName, 'Linford');
+          assert.equal(profile.body.data.lastName, 'Christie');
         });
     });
 
@@ -261,7 +251,8 @@ describe('/profiles', () => {
           .get('/establishment/100/profile/b2b8315b-82c0-4b2d-bc13-eb13e605ee88')
           .expect(200)
           .expect(profile => {
-            assert.equal(profile.body.data.name, 'Noddy Holder');
+            assert.equal(profile.body.data.firstName, 'Noddy');
+            assert.equal(profile.body.data.lastName, 'Holder');
           });
       });
 
@@ -270,7 +261,8 @@ describe('/profiles', () => {
           .get('/establishment/100/profile/a942ffc7-e7ca-4d76-a001-0b5048a057d9')
           .expect(200)
           .expect(profile => {
-            assert.equal(profile.body.data.name, 'Clive Nacwo');
+            assert.equal(profile.body.data.firstName, 'Clive');
+            assert.equal(profile.body.data.lastName, 'Nacwo');
           });
       });
 
