@@ -75,40 +75,42 @@ describe('/pils', () => {
         });
     });
 
-    it('sends a message to workflow on PUT', () => {
-      const input = {
-        procedures: ['C']
-      };
-      return request(this.api)
-        .put(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
-        .send({ data: input })
-        .expect(200)
-        .expect(() => {
-          assert.equal(this.workflow.handler.callCount, 1);
-          const req = this.workflow.handler.firstCall.args[0];
-          const body = req.body;
-          assert.equal(req.method, 'POST');
-          assert.equal(body.model, 'pil');
-          assert.equal(body.action, 'update');
-          assert.equal(body.id, PIL_1);
-          assert.deepEqual(body.data, {
-            ...input,
-            establishmentId: '100',
-            profileId: PROFILE_1,
-            procedures: ['C']
+    describe('grant', () => {
+      it('sends a message to workflow on PUT', () => {
+        const input = {
+          procedures: ['C']
+        };
+        return request(this.api)
+          .put(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}/grant`)
+          .send({ data: input })
+          .expect(200)
+          .expect(() => {
+            assert.equal(this.workflow.handler.callCount, 1);
+            const req = this.workflow.handler.firstCall.args[0];
+            const body = req.body;
+            assert.equal(req.method, 'POST');
+            assert.equal(body.model, 'pil');
+            assert.equal(body.action, 'grant');
+            assert.equal(body.id, PIL_1);
+            assert.deepEqual(body.data, {
+              ...input,
+              establishmentId: '100',
+              profileId: PROFILE_1,
+              procedures: ['C']
+            });
           });
-        });
-    });
+      });
 
-    it('throws a 400 error if extra parameters are sent', () => {
-      const input = {
-        procedures: ['C'],
-        status: 'active'
-      };
-      return request(this.api)
-        .put(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
-        .send({ data: input })
-        .expect(400);
+      it('throws a 400 error if extra parameters are sent', () => {
+        const input = {
+          procedures: ['C'],
+          status: 'active'
+        };
+        return request(this.api)
+          .put(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}/grant`)
+          .send({ data: input })
+          .expect(400);
+      });
     });
 
   });
