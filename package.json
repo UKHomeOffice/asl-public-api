@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/UKHomeOffice/asl-public-api#readme",
   "dependencies": {
-    "@asl/schema": "^7.15.10",
+    "@asl/schema": "^7.15.11",
     "@asl/service": "^7.6.2",
     "express": "^4.16.3",
     "lodash": "^4.17.15",
