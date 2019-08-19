@@ -73,7 +73,7 @@ describe('Invite User', () => {
       });
   });
 
-  it('rejects with an error if an invite with the same email already exists', () => {
+  it('rejects with an error if a profile with the same email already exists at the establishment', () => {
     const user = {
       firstName: 'Linford',
       lastName: 'Christie',
@@ -93,7 +93,7 @@ describe('Invite User', () => {
       });
   });
 
-  it('rejects with an error if an invite with the same email already exists (case-insensitive)', () => {
+  it('rejects with an error if a profile with the same email already exists at the establishment (case-insensitive)', () => {
     const user = {
       firstName: 'Linford',
       lastName: 'Christie',
