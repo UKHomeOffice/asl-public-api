@@ -220,7 +220,7 @@ module.exports = models => {
         .then(() => {
           return Invitation.query().insertGraph([
             {
-              email: 'test1@example.com',
+              email: 'TEST1@example.com', // test that case does not have to match profile.email
               establishmentId: 101,
               role: 'basic',
               token: 'abcdef'
