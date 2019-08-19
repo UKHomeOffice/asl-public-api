@@ -72,4 +72,44 @@ describe('Invite User', () => {
         );
       });
   });
+
+  it('rejects with an error if a profile with the same email already exists at the establishment', () => {
+    const user = {
+      firstName: 'Linford',
+      lastName: 'Christie',
+      email: 'TEST1@example.com',
+      role: 'basic'
+    };
+
+    return request(this.api)
+      .post('/establishment/100/invite-user')
+      .send({ data: user })
+      .expect(400)
+      .expect(response => {
+        assert(
+          JSON.parse(response.error.text).message
+            .match(/This user is already associated/)
+        );
+      });
+  });
+
+  it('rejects with an error if a profile with the same email already exists at the establishment (case-insensitive)', () => {
+    const user = {
+      firstName: 'Linford',
+      lastName: 'Christie',
+      email: 'TeSt1@ExAmPlE.cOm',
+      role: 'basic'
+    };
+
+    return request(this.api)
+      .post('/establishment/100/invite-user')
+      .send({ data: user })
+      .expect(400)
+      .expect(response => {
+        assert(
+          JSON.parse(response.error.text).message
+            .match(/This user is already associated/)
+        );
+      });
+  });
 });

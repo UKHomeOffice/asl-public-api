@@ -48,7 +48,10 @@ describe('/me', () => {
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.invitations.length, 1);
-          assert.equal(response.body.data.invitations[0].email, 'test1@example.com');
+
+          // match is case-insensitive but returned email has case preserved
+          assert.equal(response.body.data.invitations[0].email, 'TEST1@example.com');
+
           assert.equal(response.body.data.invitations[0].establishment.name, 'Marvell Pharmaceuticals');
           assert.deepEqual(Object.keys(response.body.data.invitations[0].establishment), ['name']);
         });
