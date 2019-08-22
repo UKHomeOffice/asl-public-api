@@ -1,6 +1,6 @@
 module.exports = models => {
 
-  const { Establishment, Profile, PIL, Invitation } = models;
+  const { Establishment, Profile, PIL, Invitation, Project, ProjectVersion } = models;
 
   return Promise.resolve()
     .then(() => {
@@ -230,6 +230,73 @@ module.exports = models => {
               establishmentId: 101,
               role: 'admin',
               token: 'abcdef'
+            }
+          ]);
+        })
+        .then(() => {
+          return Project.query().insert([
+            {
+              id: 'ba3f4fdf-27e4-461e-a251-111111111111',
+              title: 'Test project',
+              status: 'inactive',
+              establishmentId: 101,
+              schemaVersion: 1
+            },
+            {
+              id: 'ba3f4fdf-27e4-461e-a251-333333333333',
+              title: 'Test legacy project',
+              status: 'inactive',
+              establishmentId: 101,
+              schemaVersion: 0
+            }
+          ]);
+        })
+        .then(() => {
+          return ProjectVersion.query().insert([
+            {
+              projectId: 'ba3f4fdf-27e4-461e-a251-111111111111',
+              id: 'ba3f4fdf-27e4-461e-a251-222222222222',
+              data: {
+                protocols: [
+                  {
+                    species: [
+                      {
+                        geneticallyAltered: true
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              projectId: 'ba3f4fdf-27e4-461e-a251-333333333333',
+              id: 'ba3f4fdf-27e4-461e-a251-444444444444',
+              data: {
+                protocols: [
+                  {
+                    species: [
+                      {
+                        'genetically-altered': true,
+                        lifeStage: 'Adult'
+                      },
+                      {
+                        geneticallyAltered: true,
+                        'genetically-altered': false,
+                        lifeStage: 'Adult'
+                      }
+                    ]
+                  },
+                  {
+                    species: [
+                      {
+                        geneticallyAltered: true,
+                        'life-stages': 'Embryo',
+                        lifeStage: 'Adult'
+                      }
+                    ]
+                  }
+                ]
+              }
             }
           ]);
         });
