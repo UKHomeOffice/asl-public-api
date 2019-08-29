@@ -106,16 +106,42 @@ module.exports = models => {
             ],
             projects: [
               {
-                title: 'Test project 1',
+                id: 'bf22f7cd-cf85-42ef-93da-02b709df67be',
+                title: 'Draft project',
                 licenceHolderId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
                 expiryDate: '2040-01-01T12:00:00Z',
-                licenceNumber: 'abc123'
+                licenceNumber: 'abc123',
+                status: 'inactive'
               },
               {
-                title: 'Test project 3',
+                id: '33628b46-da08-4e60-9b15-b031f5000f0c',
+                title: 'Expired project',
                 licenceHolderId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
                 expiryDate: '2010-01-01T12:00:00Z',
-                licenceNumber: 'abc456'
+                licenceNumber: 'abc456',
+                status: 'expired'
+              },
+              {
+                id: 'd2f9777d-2d9d-4ea2-a9c2-c5ed592fd98d',
+                title: 'Active project',
+                licenceHolderId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
+                expiryDate: '2040-01-01T12:00:00Z',
+                licenceNumber: 'abc111',
+                status: 'active',
+                version: [
+                  {
+                    status: 'draft',
+                    data: {}
+                  }
+                ]
+              },
+              {
+                id: '3d112756-5d0b-4303-838e-34046aa98e30',
+                title: 'Revoked project',
+                licenceHolderId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
+                expiryDate: '2030-01-01T12:00:00Z',
+                licenceNumber: 'abc000',
+                status: 'revoked'
               }
             ]
           },
@@ -143,6 +169,7 @@ module.exports = models => {
             ],
             projects: [
               {
+                id: '4f76232a-7794-45da-a0ef-c7eafc15fa1e',
                 title: 'Test project 2',
                 licenceHolderId: 'ae28fb31-d867-4371-9b4f-79019e71232e',
                 expiryDate: '2040-01-01T12:00:00Z',
