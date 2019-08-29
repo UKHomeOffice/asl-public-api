@@ -13,7 +13,7 @@ module.exports = () => {
   app.use(handler);
 
   app.use((req, res) => {
-    res.json({});
+    res.json({ data: {} });
   });
 
   return new Promise((resolve, reject) => {
