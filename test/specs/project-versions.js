@@ -15,6 +15,15 @@ describe('/projects', () => {
     return apiHelper.destroy();
   });
 
+  it('checks that version id and project id correspond', () => {
+    return request(this.api)
+      .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-111111111111/project-version/ba3f4fdf-27e4-461e-a251-444444444444')
+      .expect(404)
+      .expect(response => {
+        assert(!response.body.data, 'Response should contain no data');
+      });
+  });
+
   it('maps cameCase species fields to hyphen-separated - bugfix', () => {
     return request(this.api)
       .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-333333333333/project-version/ba3f4fdf-27e4-461e-a251-444444444444')
