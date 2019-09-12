@@ -324,6 +324,18 @@ module.exports = models => {
                   }
                 ]
               }
+            },
+            {
+              projectId: 'ba3f4fdf-27e4-461e-a251-333333333333',
+              id: 'ed0687a2-1a52-4cc8-b100-588a04255c59',
+              data: {
+                conditions: [
+                  {
+                    key: 'custom',
+                    edited: 'This is a custom condition'
+                  }
+                ]
+              }
             }
           ]);
         });
