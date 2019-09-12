@@ -38,6 +38,17 @@ describe('/projects', () => {
       });
   });
 
+  it('maps the custom conditions prop named "edited" to "content" to fix a migration issue', () => {
+    return request(this.api)
+      .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-333333333333/project-version/ed0687a2-1a52-4cc8-b100-588a04255c59')
+      .expect(200)
+      .expect(response => {
+        const conditions = response.body.data.data.conditions;
+        assert.equal(conditions[0].content, 'This is a custom condition', 'Should copy the edited prop to the content prop');
+        assert.equal(conditions[0].edited, undefined, 'Should delete the edited prop from the condition');
+      });
+  });
+
   it('does not map any fields on schema version 1 licences - bugfix', () => {
     return request(this.api)
       .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-111111111111/project-version/ba3f4fdf-27e4-461e-a251-222222222222')
