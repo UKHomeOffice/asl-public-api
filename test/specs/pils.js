@@ -126,7 +126,7 @@ describe('/pils', () => {
           species: ['Mice', 'Rats'],
           establishment: {
             from: { id: 100, name: 'University of Croydon' },
-            to: { id: 999, name: 'Nonexistent Pharma' }
+            to: { id: 999, name: 'Invisible Pharma' }
           }
         };
 

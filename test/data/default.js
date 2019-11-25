@@ -177,6 +177,10 @@ module.exports = models => {
                 licenceNumber: 'abc789'
               }
             ]
+          },
+          {
+            id: 999,
+            name: 'Invisible Pharma'
           }]);
         })
         .then(() => {
