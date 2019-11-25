@@ -117,7 +117,7 @@ describe('/pils', () => {
 
     describe('transfer', () => {
       beforeEach(() => {
-        this.api.setUser(); // I wanna set Colin here
+        this.api.setUser({ id: 'multi-establishment' }); // Colin is linked with Croydon and Marvell Pharma
       });
 
       it('throws a 400 error if a transfer is attempted to an establishment the profile does not have visibility of', () => {
@@ -126,7 +126,7 @@ describe('/pils', () => {
           species: ['Mice', 'Rats'],
           establishment: {
             from: { id: 100, name: 'University of Croydon' },
-            to: { id: 999, name: 'Invisible Pharma' }
+            to: { id: 999, name: 'Nonexistent Pharma' }
           }
         };
 
@@ -158,17 +158,15 @@ describe('/pils', () => {
             const req = this.workflow.handler.firstCall.args[0];
             const body = req.body;
 
-            console.log(body);
-
             assert.equal(req.method, 'POST');
             assert.equal(body.model, 'pil');
             assert.equal(body.action, 'transfer');
+            assert.equal(body.changedBy, PROFILE_3);
             assert.equal(body.id, PIL_2);
             assert.deepEqual(body.data, {
               ...input,
               establishmentId: '101',
-              profileId: PROFILE_3,
-              procedures: ['C']
+              profileId: PROFILE_3
             });
           });
       });

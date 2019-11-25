@@ -54,6 +54,7 @@ module.exports = models => {
         },
         {
           id: 'ae28fb31-d867-4371-9b4f-79019e71232f',
+          userId: 'multi-establishment',
           title: 'Professor',
           firstName: 'Colin',
           lastName: 'Jackson',
