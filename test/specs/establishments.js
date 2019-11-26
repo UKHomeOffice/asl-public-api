@@ -23,7 +23,7 @@ describe('/establishments', () => {
       .get('/establishments')
       .expect(200)
       .expect(response => {
-        assert.equal(response.body.data.length, 2);
+        assert.equal(response.body.data.length, 3);
       });
   });
 

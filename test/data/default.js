@@ -54,6 +54,7 @@ module.exports = models => {
         },
         {
           id: 'ae28fb31-d867-4371-9b4f-79019e71232f',
+          userId: 'multi-establishment',
           title: 'Professor',
           firstName: 'Colin',
           lastName: 'Jackson',
@@ -176,6 +177,10 @@ module.exports = models => {
                 licenceNumber: 'abc789'
               }
             ]
+          },
+          {
+            id: 999,
+            name: 'Invisible Pharma'
           }]);
         })
         .then(() => {
@@ -241,6 +246,14 @@ module.exports = models => {
               licenceNumber: 'F-789',
               procedures: ['F'],
               notesCatF: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            },
+            {
+              id: '117298fa-f98f-4a98-992d-d29b60703866',
+              profileId: 'ae28fb31-d867-4371-9b4f-79019e71232f', // Colin is at both establishments
+              establishmentId: 100,
+              licenceNumber: 'C-987',
+              procedures: ['C'],
+              species: ['Mice', 'Rats']
             }
           ]);
         })
