@@ -212,7 +212,8 @@ module.exports = models => {
             id: 101,
             profiles: [
               { id: 'ae28fb31-d867-4371-9b4f-79019e71232f' },
-              { id: 'ae28fb31-d867-4371-9b4f-79019e71232e' }
+              { id: 'ae28fb31-d867-4371-9b4f-79019e71232e' },
+              { id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9' }
             ],
             roles: [
               {
