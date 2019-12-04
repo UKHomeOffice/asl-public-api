@@ -63,6 +63,15 @@ describe('/establishments', () => {
         });
     });
 
+    it('includes a count of the places at the establishment', () => {
+      return request(this.api)
+        .get('/establishment/100')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.placesCount, 3);
+        });
+    });
+
     it('returns the users establishment', () => {
       this.api.setUser({ establishment: '100' });
       return request(this.api)
@@ -78,6 +87,31 @@ describe('/establishments', () => {
       return request(this.api)
         .get('/establishment/100')
         .expect(403);
+    });
+
+    describe('grant', () => {
+      it('sends a message to workflow on PUT', () => {
+        const inactiveEstId = 999;
+
+        const meta = {
+          comments: 'Hey there'
+        };
+
+        return request(this.api)
+          .put(`/establishment/${inactiveEstId}/grant`)
+          .send({ data: {}, meta })
+          .expect(200)
+          .expect(() => {
+            assert.equal(this.workflow.handler.callCount, 1);
+            const req = this.workflow.handler.firstCall.args[0];
+            const body = req.body;
+            assert.equal(req.method, 'POST');
+            assert.equal(body.model, 'establishment');
+            assert.equal(body.action, 'grant');
+            assert.equal(body.id, inactiveEstId);
+            assert.deepEqual(body.meta, meta);
+          });
+      });
     });
 
   });
