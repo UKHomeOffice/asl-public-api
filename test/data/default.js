@@ -230,7 +230,8 @@ module.exports = models => {
               profileId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
               establishmentId: 100,
               licenceNumber: 'AB-123',
-              procedures: ['A', 'B']
+              procedures: ['A', 'B'],
+              updatedAt: '2020-01-01T12:00:00Z'
             },
             {
               id: '247912b2-e5c6-487d-b717-f8136491f7b8',
@@ -238,7 +239,8 @@ module.exports = models => {
               establishmentId: 100,
               licenceNumber: 'D-456',
               procedures: ['D'],
-              notesCatD: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+              notesCatD: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+              updatedAt: '2020-01-01T12:00:00Z'
             },
             {
               id: 'ba3f4fdf-27e4-461e-a251-3188faa35df5',
@@ -246,7 +248,8 @@ module.exports = models => {
               establishmentId: 100,
               licenceNumber: 'F-789',
               procedures: ['F'],
-              notesCatF: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+              notesCatF: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+              updatedAt: '2020-01-01T12:00:00Z'
             },
             {
               id: '117298fa-f98f-4a98-992d-d29b60703866',
@@ -254,7 +257,9 @@ module.exports = models => {
               establishmentId: 100,
               licenceNumber: 'C-987',
               procedures: ['C'],
-              species: ['Mice', 'Rats']
+              species: ['Mice', 'Rats'],
+              updatedAt: '2020-01-01T12:00:00Z',
+              reviewDate: '2024-12-01T12:00:00Z'
             }
           ]);
         })
