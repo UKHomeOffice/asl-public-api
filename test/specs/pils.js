@@ -78,12 +78,12 @@ describe('/pils', () => {
         });
     });
 
-    it('defaults the reviewDate to the last updated date if it is not present', () => {
+    it('defaults the reviewDate to the last updated date + 5 years if it is not present', () => {
       return request(this.api)
         .get(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
         .expect(200)
         .expect(pil => {
-          assert.equal(pil.body.data.reviewDate, pil.body.data.updatedAt);
+          assert.equal(pil.body.data.reviewDate, '2025-01-01T12:00:00.000Z');
         });
     });
 
@@ -92,7 +92,7 @@ describe('/pils', () => {
         .get(`/establishment/100/profile/${PROFILE_3}/pil/${PIL_2}`)
         .expect(200)
         .expect(pil => {
-          assert.equal(pil.body.data.reviewDate, '2019-12-01T12:00:00.000Z');
+          assert.equal(pil.body.data.reviewDate, '2024-12-01T12:00:00.000Z');
         });
     });
 
