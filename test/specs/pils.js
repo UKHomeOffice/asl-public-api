@@ -79,7 +79,7 @@ describe('/pils', () => {
     });
 
     describe('establishmentName permissions', () => {
-      it('includes the establishmentName property if the requesting user has permissions for the holding establishment', () => {
+      it('includes the establishment if the requesting user has permissions for the holding establishment', () => {
         const can = sinon.stub().resolves(true);
         can.withArgs('establishment.read', { establishment: 100 }).resolves(true);
         this.api.setUser({ can });
@@ -87,11 +87,11 @@ describe('/pils', () => {
           .get(`/establishment/101/profile/${PROFILE_1}/pil/${PIL_1}`)
           .expect(200)
           .expect(pil => {
-            assert.equal(pil.body.data.establishmentName, 'University of Croydon');
+            assert.ok(pil.body.data.establishment);
           });
       });
 
-      it('does not include the establishmentName property if the requesting user doesn\'t have permissions for the holding establishment', () => {
+      it('does not include the establishment if the requesting user doesn\'t have permissions for the holding establishment', () => {
         const can = sinon.stub().resolves(true);
         can.withArgs('establishment.read', { establishment: 100 }).resolves(false);
         this.api.setUser({ can });
@@ -99,7 +99,7 @@ describe('/pils', () => {
           .get(`/establishment/101/profile/${PROFILE_1}/pil/${PIL_1}`)
           .expect(200)
           .expect(pil => {
-            assert.equal(pil.body.data.establishmentName, undefined);
+            assert.equal(pil.body.data.establishment, undefined);
           });
       });
     });
