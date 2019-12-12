@@ -254,7 +254,8 @@ module.exports = models => {
               establishmentId: 100,
               licenceNumber: 'C-987',
               procedures: ['C'],
-              species: ['Mice', 'Rats']
+              species: ['Mice', 'Rats'],
+              reviewDate: '2019-12-01T12:00:00Z'
             }
           ]);
         })

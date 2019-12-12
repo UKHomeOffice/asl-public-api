@@ -78,6 +78,24 @@ describe('/pils', () => {
         });
     });
 
+    it('defaults the reviewDate to the last updated date if it is not present', () => {
+      return request(this.api)
+        .get(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
+        .expect(200)
+        .expect(pil => {
+          assert.equal(pil.body.data.reviewDate, pil.body.data.updatedAt);
+        });
+    });
+
+    it('uses the reviewDate from the model if it is present', () => {
+      return request(this.api)
+        .get(`/establishment/100/profile/${PROFILE_3}/pil/${PIL_2}`)
+        .expect(200)
+        .expect(pil => {
+          assert.equal(pil.body.data.reviewDate, '2019-12-01T12:00:00.000Z');
+        });
+    });
+
     describe('establishmentName permissions', () => {
       it('includes the establishment if the requesting user has permissions for the holding establishment', () => {
         const can = sinon.stub().resolves(true);
