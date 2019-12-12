@@ -1,5 +1,6 @@
 const assert = require('assert');
 const request = require('supertest');
+const sinon = require('sinon');
 const apiHelper = require('../helpers/api');
 
 const PROFILE_1 = 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9';
@@ -75,6 +76,32 @@ describe('/pils', () => {
         .expect(pil => {
           assert.equal(pil.body.data.licenceNumber, 'AB-123');
         });
+    });
+
+    describe('establishmentName permissions', () => {
+      it('includes the establishment if the requesting user has permissions for the holding establishment', () => {
+        const can = sinon.stub().resolves(true);
+        can.withArgs('establishment.read', { establishment: 100 }).resolves(true);
+        this.api.setUser({ can });
+        return request(this.api)
+          .get(`/establishment/101/profile/${PROFILE_1}/pil/${PIL_1}`)
+          .expect(200)
+          .expect(pil => {
+            assert.ok(pil.body.data.establishment);
+          });
+      });
+
+      it('does not include the establishment if the requesting user doesn\'t have permissions for the holding establishment', () => {
+        const can = sinon.stub().resolves(true);
+        can.withArgs('establishment.read', { establishment: 100 }).resolves(false);
+        this.api.setUser({ can });
+        return request(this.api)
+          .get(`/establishment/101/profile/${PROFILE_1}/pil/${PIL_1}`)
+          .expect(200)
+          .expect(pil => {
+            assert.equal(pil.body.data.establishment, undefined);
+          });
+      });
     });
 
     describe('grant', () => {
