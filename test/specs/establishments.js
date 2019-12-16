@@ -27,11 +27,11 @@ describe('/establishments', () => {
       });
   });
 
-  it('returns a 403 id user does not have permission to view all establishments', () => {
+  it('returns a 404 if user does not have permission to view all establishments', () => {
     this.api.setUser({ can: () => Promise.reject(NOT_AUTHORISED) });
     return request(this.api)
       .get('/establishments')
-      .expect(403);
+      .expect(404);
   });
 
   describe('/establishment/:establishment', () => {
@@ -82,11 +82,11 @@ describe('/establishments', () => {
         });
     });
 
-    it('returns a 403 if the user is not authorised', () => {
+    it('returns a 404 if the user is not authorised', () => {
       this.api.setUser({ can: () => Promise.reject(NOT_AUTHORISED) });
       return request(this.api)
         .get('/establishment/100')
-        .expect(403);
+        .expect(404);
     });
 
     describe('grant', () => {
