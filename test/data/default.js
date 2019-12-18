@@ -266,12 +266,14 @@ module.exports = models => {
         .then(() => {
           return Invitation.query().insertGraph([
             {
+              id: 'f5bd5c7d-0cfc-4e3b-bbab-1ad59de9af1e',
               email: 'TEST1@example.com', // test that case does not have to match profile.email
               establishmentId: 101,
               role: 'basic',
               token: 'abcdef'
             },
             {
+              id: 'b75a466f-a3fb-483e-9d1f-c35d80d85da3',
               email: 'test2@example.com',
               establishmentId: 101,
               role: 'admin',
