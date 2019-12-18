@@ -33,6 +33,16 @@ describe('/establishment/:id/invitations', () => {
         });
     });
 
+    it('returns a 404 for an invalid uuid', () => {
+      return request(this.api)
+        .delete('/establishment/101/invitations/123')
+        .expect(404)
+        .expect(response => {
+          assert.equal(response.body.message, 'Not found');
+          assert.equal(this.workflow.handler.callCount, 0);
+        });
+    });
+
     it('returns a 404 if no invitation is found', () => {
       return request(this.api)
         .delete(`/establishment/101/invitations/${uuid()}`)
@@ -70,6 +80,16 @@ describe('/establishment/:id/invitations', () => {
         });
     });
 
+    it('returns a 404 for an invalid uuid', () => {
+      return request(this.api)
+        .put('/establishment/101/invitations/123/cancel')
+        .expect(404)
+        .expect(response => {
+          assert.equal(response.body.message, 'Not found');
+          assert.equal(this.workflow.handler.callCount, 0);
+        });
+    });
+
     it('returns a 404 if no invitation is found', () => {
       return request(this.api)
         .put(`/establishment/101/invitations/${uuid()}/cancel`)
@@ -104,6 +124,16 @@ describe('/establishment/:id/invitations', () => {
           assert.equal(req.body.model, 'invitation');
           assert.equal(req.body.id, INVITATION_ID);
           assert.equal(req.body.action, 'resend');
+        });
+    });
+
+    it('returns a 404 for an invalid uuid', () => {
+      return request(this.api)
+        .put('/establishment/101/invitations/123/resend')
+        .expect(404)
+        .expect(response => {
+          assert.equal(response.body.message, 'Not found');
+          assert.equal(this.workflow.handler.callCount, 0);
         });
     });
 
