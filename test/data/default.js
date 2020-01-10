@@ -230,14 +230,25 @@ module.exports = models => {
               profileId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
               establishmentId: 100,
               licenceNumber: 'AB-123',
+              status: 'active',
+              issueDate: '2016-01-01T12:00:00Z',
               procedures: ['A', 'B'],
-              updatedAt: '2020-01-01T12:00:00Z'
+              updatedAt: '2020-01-01T12:00:00Z',
+              pilTransfers: [
+                {
+                  fromEstablishmentId: 101,
+                  toEstablishmentId: 100,
+                  createdAt: '2019-01-01T12:00:00Z'
+                }
+              ]
             },
             {
               id: '247912b2-e5c6-487d-b717-f8136491f7b8',
               profileId: 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88',
               establishmentId: 100,
               licenceNumber: 'D-456',
+              status: 'active',
+              issueDate: '2016-01-01T12:00:00Z',
               procedures: ['D'],
               notesCatD: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
               updatedAt: '2020-01-01T12:00:00Z'
@@ -247,6 +258,8 @@ module.exports = models => {
               profileId: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9',
               establishmentId: 100,
               licenceNumber: 'F-789',
+              status: 'active',
+              issueDate: '2016-01-01T12:00:00Z',
               procedures: ['F'],
               notesCatF: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
               updatedAt: '2020-01-01T12:00:00Z'
@@ -256,6 +269,8 @@ module.exports = models => {
               profileId: 'ae28fb31-d867-4371-9b4f-79019e71232f', // Colin is at both establishments
               establishmentId: 100,
               licenceNumber: 'C-987',
+              status: 'active',
+              issueDate: '2016-01-01T12:00:00Z',
               procedures: ['C'],
               species: ['Mice', 'Rats'],
               updatedAt: '2020-01-01T12:00:00Z',
