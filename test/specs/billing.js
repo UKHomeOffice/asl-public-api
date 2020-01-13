@@ -5,7 +5,7 @@ const apiHelper = require('../helpers/api');
 const PIL_1 = '9fbe0218-995d-47d3-88e7-641fc046d7d1';
 const PIL_2 = '117298fa-f98f-4a98-992d-d29b60703866';
 
-describe.only('/billing', () => {
+describe('/billing', () => {
 
   before(() => {
     return apiHelper.create()
@@ -53,6 +53,34 @@ describe.only('/billing', () => {
         assert.equal(response.body.data.pils, 4 * 275);
         assert.equal(response.body.data.pel, 826);
         assert.equal(response.body.data.total, (4 * 275) + 826);
+      });
+  });
+
+  it('returns a PEL fee of zero if the establishment was inactive', () => {
+    return request(this.api)
+      .get('/establishment/101/billing?year=2018')
+      .expect(200)
+      .expect(response => {
+        assert.equal(response.body.data.pel, 0);
+        assert.equal(response.body.data.total, response.body.data.pils);
+      });
+  });
+
+  it('returns a PEL fee of zero if the establishment was revoked before the billing period', () => {
+    return request(this.api)
+      .get('/establishment/1000/billing?year=2019')
+      .expect(200)
+      .expect(response => {
+        assert.equal(response.body.data.pel, 0);
+      });
+  });
+
+  it('returns a PEL fee if the establishment was revoked during the billing period', () => {
+    return request(this.api)
+      .get('/establishment/1001/billing?year=2019')
+      .expect(200)
+      .expect(response => {
+        assert.equal(response.body.data.pel, 826);
       });
   });
 

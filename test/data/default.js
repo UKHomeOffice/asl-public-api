@@ -77,6 +77,7 @@ module.exports = models => {
         .then(() => {
           return Establishment.query().insertGraph([{
             id: 100,
+            issueDate: '2018-01-01T12:00:00Z',
             name: 'University of Croydon',
             country: 'england',
             address: '100 High Street',
@@ -148,6 +149,7 @@ module.exports = models => {
           },
           {
             id: 101,
+            issueDate: '2020-01-01T12:00:00Z',
             name: 'Marvell Pharmaceuticals',
             country: 'england',
             address: '101 High Street',
@@ -181,6 +183,20 @@ module.exports = models => {
           {
             id: 999,
             name: 'Invisible Pharma'
+          },
+          {
+            id: 1000,
+            name: 'Invisible Pharma 2',
+            issueDate: '2017-01-01T12:00:00Z',
+            revocationDate: '2018-01-01T12:00:00Z',
+            status: 'revoked'
+          },
+          {
+            id: 1001,
+            name: 'Invisible Pharma 3',
+            issueDate: '2017-01-01T12:00:00Z',
+            revocationDate: '2020-01-01T12:00:00Z',
+            status: 'revoked'
           }]);
         })
         .then(() => {
