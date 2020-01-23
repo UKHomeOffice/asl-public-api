@@ -75,6 +75,21 @@ module.exports = models => {
         }
       ])
         .then(() => {
+          return Profile.query().insertGraph([
+            {
+              id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d2',
+              userId: 'licensing',
+              firstName: 'Li Sen',
+              lastName: 'Xing',
+              email: 'lisenxing@example.com',
+              asruUser: true,
+              asruLicensing: true,
+              asruInspector: false,
+              asruAdmin: false
+            }
+          ]);
+        })
+        .then(() => {
           return Establishment.query().insertGraph([{
             id: 100,
             issueDate: '2018-01-01T12:00:00Z',
