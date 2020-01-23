@@ -218,9 +218,7 @@ describe('/pils', () => {
       });
 
       it('can be initiated by an ASRU user', () => {
-        const can = sinon.stub().resolves(true);
-        can.withArgs('pil.transfer', { pilId: PIL_2 }).resolves(true);
-        this.api.setUser({ id: 'licensing', can });
+        this.api.setUser({ id: 'licensing' });
 
         const input = {
           procedures: ['C'],
