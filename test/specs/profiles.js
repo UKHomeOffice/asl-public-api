@@ -244,10 +244,11 @@ describe('/profiles', () => {
         // get a profile that exists in multiple establishments
         .get('/establishment/100/profile/ae28fb31-d867-4371-9b4f-79019e71232f')
         .expect(200)
-        .expect(profile => {
-          assert.equal(profile.body.data.establishments.length, 2);
-          assert.equal(profile.body.data.establishments[0].name, 'University of Croydon');
-          assert.equal(profile.body.data.establishments[1].name, 'Marvell Pharmaceuticals');
+        .expect(response => {
+          const profile = response.body.data;
+          assert.equal(profile.establishments.length, 2);
+          assert(profile.establishments.find(e => e.name === 'University of Croydon'));
+          assert(profile.establishments.find(e => e.name === 'Marvell Pharmaceuticals'));
         });
     });
 
