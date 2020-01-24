@@ -6,6 +6,7 @@ const apiHelper = require('../helpers/api');
 const PROFILE_1 = 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9';
 const PROFILE_2 = 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88';
 const PROFILE_3 = 'ae28fb31-d867-4371-9b4f-79019e71232f';
+const LICENSING_ID = 'a942ffc7-e7ca-4d76-a001-0b5048a057d2';
 
 const PIL_1 = '9fbe0218-995d-47d3-88e7-641fc046d7d1';
 const PIL_2 = '117298fa-f98f-4a98-992d-d29b60703866';
@@ -207,6 +208,40 @@ describe('/pils', () => {
             assert.equal(body.model, 'pil');
             assert.equal(body.action, 'transfer');
             assert.equal(body.changedBy, PROFILE_3);
+            assert.equal(body.id, PIL_2);
+            assert.deepEqual(body.data, {
+              ...input,
+              establishmentId: '101',
+              profileId: PROFILE_3
+            });
+          });
+      });
+
+      it('can be initiated by an ASRU user', () => {
+        this.api.setUser({ id: 'licensing' });
+
+        const input = {
+          procedures: ['C'],
+          species: ['Mice', 'Rats'],
+          establishment: {
+            from: { id: 100, name: 'University of Croydon' },
+            to: { id: 101, name: 'Marvell Pharmaceutical' }
+          }
+        };
+
+        return request(this.api)
+          .put(`/establishment/100/profile/${PROFILE_3}/pil/${PIL_2}/transfer`)
+          .send({ data: input })
+          .expect(200)
+          .expect(() => {
+            assert.equal(this.workflow.handler.callCount, 1);
+            const req = this.workflow.handler.firstCall.args[0];
+            const body = req.body;
+
+            assert.equal(req.method, 'POST');
+            assert.equal(body.model, 'pil');
+            assert.equal(body.action, 'transfer');
+            assert.equal(body.changedBy, LICENSING_ID);
             assert.equal(body.id, PIL_2);
             assert.deepEqual(body.data, {
               ...input,

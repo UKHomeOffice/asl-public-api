@@ -237,6 +237,21 @@ describe('/profiles', () => {
         });
     });
 
+    it('scoping does not apply when ASRU are viewing a profile', () => {
+      this.api.setUser({ id: 'licensing' });
+
+      return request(this.api)
+        // get a profile that exists in multiple establishments
+        .get('/establishment/100/profile/ae28fb31-d867-4371-9b4f-79019e71232f')
+        .expect(200)
+        .expect(response => {
+          const profile = response.body.data;
+          assert.equal(profile.establishments.length, 2);
+          assert(profile.establishments.find(e => e.name === 'University of Croydon'));
+          assert(profile.establishments.find(e => e.name === 'Marvell Pharmaceuticals'));
+        });
+    });
+
     describe('with basic permissions', () => {
 
       beforeEach(() => {
