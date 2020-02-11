@@ -346,6 +346,19 @@ module.exports = models => {
           ]);
         })
         .then(() => {
+          return Project.query().insert({
+            id: 'db6cf8e1-7a1f-41c0-96f7-ef1a4dadcaa8',
+            title: 'Asru initiated amendment',
+            status: 'active',
+            establishmentId: 100,
+            schemaVersion: 1,
+            createdAt: '2019-09-04T13:32:45.886Z',
+            issueDate: '2019-04-23T00:00:00.000Z',
+            updatedAt: '2019-09-04T13:32:45.886Z',
+            expiryDate: '2024-04-23T00:00:00.000Z'
+          });
+        })
+        .then(() => {
           return ProjectVersion.query().insert([
             {
               projectId: 'ba3f4fdf-27e4-461e-a251-111111111111',
@@ -403,6 +416,31 @@ module.exports = models => {
                   }
                 ]
               }
+            }
+          ]);
+        })
+        .then(() => {
+          return ProjectVersion.query().insert([
+            {
+              projectId: 'db6cf8e1-7a1f-41c0-96f7-ef1a4dadcaa8',
+              status: 'granted',
+              createdAt: '2019-09-04T13:32:45.886Z',
+              updatedAt: '2019-09-04T13:32:45.886Z',
+              asruVersion: false
+            },
+            {
+              projectId: 'db6cf8e1-7a1f-41c0-96f7-ef1a4dadcaa8',
+              status: 'draft',
+              createdAt: '2019-09-05T13:32:45.886Z',
+              updatedAt: '2019-09-05T13:32:45.886Z',
+              asruVersion: true
+            },
+            {
+              projectId: 'db6cf8e1-7a1f-41c0-96f7-ef1a4dadcaa8',
+              status: 'draft',
+              createdAt: '2019-09-06T13:32:45.886Z',
+              updatedAt: '2019-09-06T13:32:45.886Z',
+              asruVersion: true
             }
           ]);
         });
