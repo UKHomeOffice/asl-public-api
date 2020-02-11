@@ -5,9 +5,10 @@ const apiHelper = require('../helpers/api');
 const INACTIVE_PROJECT_ID = 'bf22f7cd-cf85-42ef-93da-02b709df67be';
 const ACTIVE_PROJECT_ID = 'd2f9777d-2d9d-4ea2-a9c2-c5ed592fd98d';
 const LICENCE_HOLDER_ID = 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9';
+const ASRU_AMENDMENT_PROJECT_ID = 'db6cf8e1-7a1f-41c0-96f7-ef1a4dadcaa8';
 
 describe('/projects', () => {
-  before(() => {
+  beforeEach(() => {
     return apiHelper.create()
       .then((api) => {
         this.api = api.api;
@@ -15,7 +16,7 @@ describe('/projects', () => {
       });
   });
 
-  after(() => {
+  afterEach(() => {
     return apiHelper.destroy();
   });
 
@@ -57,6 +58,33 @@ describe('/projects', () => {
           assert.equal(body.action, 'revoke');
           assert.equal(body.id, ACTIVE_PROJECT_ID);
           assert.deepEqual(body.data, { establishmentId: 100, licenceHolderId: LICENCE_HOLDER_ID });
+        });
+    });
+  });
+
+  describe('DELETE /:id/draft-amendments', () => {
+    it('throws an error if called by an establishment user and draft version is asruVersion', () => {
+      return request(this.api)
+        .delete(`/establishment/100/projects/${ASRU_AMENDMENT_PROJECT_ID}/draft-amendments`)
+        .expect(400)
+        .expect(response => {
+          assert.equal(JSON.parse(response.error.text).message, 'Cannot delete amendment as initiated by ASRU');
+        });
+    });
+
+    it('calls workflow if user can delete amendment', () => {
+      this.api.setUser({ id: 'licensing' });
+      return request(this.api)
+        .delete(`/establishment/100/projects/${ASRU_AMENDMENT_PROJECT_ID}/draft-amendments`)
+        .expect(200)
+        .expect(() => {
+          assert.equal(this.workflow.handler.callCount, 1);
+          const req = this.workflow.handler.firstCall.args[0];
+          const body = req.body;
+          assert.equal(req.method, 'POST');
+          assert.equal(body.model, 'project');
+          assert.equal(body.action, 'delete-amendments');
+          assert.equal(body.id, ASRU_AMENDMENT_PROJECT_ID);
         });
     });
   });
