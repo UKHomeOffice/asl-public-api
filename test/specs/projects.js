@@ -1,5 +1,6 @@
 const assert = require('assert');
 const request = require('supertest');
+const moment = require('moment');
 const apiHelper = require('../helpers/api');
 
 const INACTIVE_PROJECT_ID = 'bf22f7cd-cf85-42ef-93da-02b709df67be';
@@ -87,6 +88,46 @@ describe('/projects', () => {
           assert.equal(body.id, ASRU_AMENDMENT_PROJECT_ID);
         });
     });
+  });
+
+  describe('GET /:id', () => {
+
+    it('does not include RA date on draft projects', () => {
+      return request(this.api)
+        .get('/establishment/101/projects/ba3f4fdf-27e4-461e-a251-333333333333')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.raDate, undefined);
+        });
+    });
+
+    it('does not include RA date on projects without RA', () => {
+      return request(this.api)
+        .get('/establishment/101/projects/ba3f4fdf-27e4-461e-a251-444444444444')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.raDate, undefined);
+        });
+    });
+
+    it('includes RA date on granted projects with RA condition', () => {
+      return request(this.api)
+        .get('/establishment/101/projects/ba3f4fdf-27e4-461e-a251-555555555555')
+        .expect(200)
+        .expect(response => {
+          assert.equal(moment(response.body.data.raDate).format('YYYY-MM-DD'), '2025-07-01');
+        });
+    });
+
+    it('calculates RA date from revocation date on revoked projects', () => {
+      return request(this.api)
+        .get('/establishment/101/projects/ba3f4fdf-27e4-461e-a251-666666666666')
+        .expect(200)
+        .expect(response => {
+          assert.equal(moment(response.body.data.raDate).format('YYYY-MM-DD'), '2024-07-01');
+        });
+    });
+
   });
 
 });

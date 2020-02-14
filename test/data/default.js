@@ -333,6 +333,8 @@ module.exports = models => {
               id: 'ba3f4fdf-27e4-461e-a251-111111111111',
               title: 'Test project',
               status: 'inactive',
+              expiryDate: null,
+              revocationDate: null,
               establishmentId: 101,
               schemaVersion: 1
             },
@@ -340,6 +342,35 @@ module.exports = models => {
               id: 'ba3f4fdf-27e4-461e-a251-333333333333',
               title: 'Test legacy project',
               status: 'inactive',
+              expiryDate: null,
+              revocationDate: null,
+              establishmentId: 101,
+              schemaVersion: 0
+            },
+            {
+              id: 'ba3f4fdf-27e4-461e-a251-444444444444',
+              title: 'Non-RA project',
+              status: 'active',
+              expiryDate: '2025-01-01T12:00:00Z',
+              revocationDate: null,
+              establishmentId: 101,
+              schemaVersion: 0
+            },
+            {
+              id: 'ba3f4fdf-27e4-461e-a251-555555555555',
+              title: 'RA project',
+              status: 'active',
+              expiryDate: '2025-01-01T12:00:00Z',
+              revocationDate: null,
+              establishmentId: 101,
+              schemaVersion: 0
+            },
+            {
+              id: 'ba3f4fdf-27e4-461e-a251-666666666666',
+              title: 'Revoked RA project',
+              status: 'revoked',
+              expiryDate: '2025-01-01T12:00:00Z',
+              revocationDate: '2024-01-01T12:00:00Z',
               establishmentId: 101,
               schemaVersion: 0
             }
@@ -362,6 +393,7 @@ module.exports = models => {
           return ProjectVersion.query().insert([
             {
               projectId: 'ba3f4fdf-27e4-461e-a251-111111111111',
+              status: 'submitted',
               id: 'ba3f4fdf-27e4-461e-a251-222222222222',
               data: {
                 protocols: [
@@ -377,6 +409,7 @@ module.exports = models => {
             },
             {
               projectId: 'ba3f4fdf-27e4-461e-a251-333333333333',
+              status: 'submitted',
               id: 'ba3f4fdf-27e4-461e-a251-444444444444',
               data: {
                 protocols: [
@@ -407,6 +440,7 @@ module.exports = models => {
             },
             {
               projectId: 'ba3f4fdf-27e4-461e-a251-333333333333',
+              status: 'submitted',
               id: 'ed0687a2-1a52-4cc8-b100-588a04255c59',
               data: {
                 conditions: [
@@ -414,6 +448,30 @@ module.exports = models => {
                     key: 'custom',
                     edited: 'This is a custom condition'
                   }
+                ]
+              }
+            },
+            {
+              projectId: 'ba3f4fdf-27e4-461e-a251-444444444444',
+              status: 'granted',
+              id: 'ed0687a2-1a52-4cc8-b100-588a04255c60',
+              data: {}
+            },
+            {
+              projectId: 'ba3f4fdf-27e4-461e-a251-555555555555',
+              status: 'granted',
+              id: 'ed0687a2-1a52-4cc8-b100-588a04255c61',
+              data: {
+                retrospectiveAssessment: true
+              }
+            },
+            {
+              projectId: 'ba3f4fdf-27e4-461e-a251-666666666666',
+              status: 'granted',
+              id: 'ed0687a2-1a52-4cc8-b100-588a04255c62',
+              data: {
+                species: [
+                  'marmosets'
                 ]
               }
             }

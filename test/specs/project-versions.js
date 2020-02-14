@@ -70,4 +70,46 @@ describe('/projects', () => {
       });
   });
 
+  describe('retrospective assessment', () => {
+
+    it('sets properties to false if RA is not required', () => {
+      return request(this.api)
+        .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-444444444444/project-version/ed0687a2-1a52-4cc8-b100-588a04255c60')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.retrospectiveAssessment, false);
+          assert.equal(response.body.data.retrospectiveAssessmentRequired, false);
+        });
+    });
+
+    it('includes retrospectiveAssessment property when RA applies', () => {
+      return request(this.api)
+        .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-555555555555/project-version/ed0687a2-1a52-4cc8-b100-588a04255c61')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.retrospectiveAssessment, true);
+        });
+    });
+
+    it('set retrospectiveAssessmentRequired property to false when RA was manually added', () => {
+      return request(this.api)
+        .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-555555555555/project-version/ed0687a2-1a52-4cc8-b100-588a04255c61')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.retrospectiveAssessmentRequired, false);
+        });
+    });
+
+    it('sets retrospectiveAssessmentRequired property to true when RA is a result of project data', () => {
+      return request(this.api)
+        .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-666666666666/project-version/ed0687a2-1a52-4cc8-b100-588a04255c62')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.retrospectiveAssessment, true);
+          assert.equal(response.body.data.retrospectiveAssessmentRequired, true);
+        });
+    });
+
+  });
+
 });
