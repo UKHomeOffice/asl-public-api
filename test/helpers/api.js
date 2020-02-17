@@ -7,7 +7,8 @@ const Workflow = require('../helpers/workflow');
 const settings = {
   database: process.env.POSTGRES_DB || 'asl-test',
   user: process.env.POSTGRES_USER || 'postgres',
-  host: process.env.POSTGRES_HOST || 'localhost'
+  host: process.env.POSTGRES_HOST || 'localhost',
+  password: process.env.POSTGRES_PASSWORD
 };
 
 module.exports = {

@@ -95,6 +95,7 @@ The configuration for the database used for the test runner can be set with the 
 * `POSTGRES_DB` - default `asl-test`
 * `POSTGRES_USER` - default `undefined`
 * `POSTGRES_HOST` - default `localhost`
+* `POSTGRES_PASSWORD` - default `undefined`
 
 _Note: you may need to create the database `asl-test` locally before running tests for the first time. If running against services run with [`asl-conductor`](https://github.com/ukhomeoffice/asl-conductor) then this will be done automatically._
 

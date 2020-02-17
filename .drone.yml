@@ -7,9 +7,11 @@ pipeline:
     environment:
       - POSTGRES_USER=asl-test
       - POSTGRES_HOST=database
+      - POSTGRES_PASSWORD=test-password
       - DATABASE_NAME=asl-test
       - DATABASE_HOST=database
       - DATABASE_USERNAME=asl-test
+      - DATABASE_PASSWORD=test-password
       - REDIS_HOST=redis
     commands:
       - npm ci
@@ -78,6 +80,7 @@ services:
     image: postgres
     environment:
       - POSTGRES_USER=asl-test
+      - POSTGRES_PASSWORD=test-password
   redis:
     image: redis
 
