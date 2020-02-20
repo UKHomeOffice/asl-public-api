@@ -4,6 +4,7 @@ const apiHelper = require('../helpers/api');
 
 const PIL_1 = '9fbe0218-995d-47d3-88e7-641fc046d7d1';
 const PIL_2 = '117298fa-f98f-4a98-992d-d29b60703866';
+const PIL_3 = '117298fa-f98f-4a98-992d-d29b60703867';
 
 describe('/billing', () => {
 
@@ -166,6 +167,17 @@ describe('/billing', () => {
         .expect(response => {
           const transfered = response.body.data.find(pil => pil.id === PIL_1);
           assert.equal(transfered.endDate, '2019-01-01T12:00:00.000Z'); // end date is transfer date
+        });
+    });
+
+    it('does not set end date on PILs that remain active at the establishment', () => {
+      return request(this.api)
+        .get('/establishment/101/billing/pils?year=2018')
+        .expect(200)
+        .expect(response => {
+          console.log(response.body.data);
+          const pil = response.body.data.find(pil => pil.id === PIL_3);
+          assert.equal(pil.endDate, null); // end date is null
         });
     });
 

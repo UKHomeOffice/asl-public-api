@@ -306,6 +306,18 @@ module.exports = models => {
               species: ['Mice', 'Rats'],
               updatedAt: '2020-01-01T12:00:00Z',
               reviewDate: '2024-12-01T12:00:00Z'
+            },
+            {
+              id: '117298fa-f98f-4a98-992d-d29b60703867',
+              profileId: 'ae28fb31-d867-4371-9b4f-79019e71232e',
+              establishmentId: 101,
+              licenceNumber: 'C-988',
+              status: 'active',
+              issueDate: '2016-01-01T12:00:00Z',
+              revocationDate: '2015-01-01T12:00:00Z', // PIL was revoked then re-activated
+              procedures: ['C'],
+              species: ['Mice', 'Rats'],
+              updatedAt: '2020-01-01T12:00:00Z'
             }
           ]);
         })
