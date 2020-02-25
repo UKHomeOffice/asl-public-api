@@ -34,6 +34,7 @@ module.exports = models => {
         },
         {
           id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9',
+          userId: 'nacwo',
           title: 'Dr',
           firstName: 'Clive',
           lastName: 'Nacwo',
@@ -148,6 +149,20 @@ module.exports = models => {
                 version: [
                   {
                     status: 'draft',
+                    data: {}
+                  }
+                ]
+              },
+              {
+                id: '0a1c24e7-60dd-4882-8b07-31176e5657e4',
+                title: 'Transfer project',
+                licenceHolderId: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9', // Clive Nacwo
+                expiryDate: '2040-01-01T12:00:00Z',
+                licenceNumber: 'abc112',
+                status: 'active',
+                version: [
+                  {
+                    status: 'granted',
                     data: {}
                   }
                 ]
