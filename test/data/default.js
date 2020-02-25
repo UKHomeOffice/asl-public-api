@@ -206,7 +206,8 @@ module.exports = models => {
                 title: 'Test project 2',
                 licenceHolderId: 'ae28fb31-d867-4371-9b4f-79019e71232e',
                 expiryDate: '2040-01-01T12:00:00Z',
-                licenceNumber: 'abc789'
+                licenceNumber: 'abc789',
+                status: 'inactive'
               }
             ]
           },
