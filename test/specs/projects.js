@@ -59,7 +59,8 @@ describe('/projects', () => {
           assert.equal(body.model, 'project');
           assert.equal(body.action, 'revoke');
           assert.equal(body.id, ACTIVE_PROJECT_ID);
-          assert.deepEqual(body.data, { establishmentId: 100, licenceHolderId: LICENCE_HOLDER_ID });
+          assert.equal(body.establishmentId, 100);
+          assert.deepEqual(body.data, { licenceHolderId: LICENCE_HOLDER_ID });
         });
     });
   });
@@ -71,13 +72,8 @@ describe('/projects', () => {
 
     it('throws an error if the licence holder doesn\'t have permissions at the incoming establishment', () => {
       const payload = {
-        establishment: {
-          to: {
-            id: 999
-          },
-          from: {
-            id: 100
-          }
+        data: {
+          establishmentId: 999
         }
       };
       return request(this.api)
@@ -92,13 +88,8 @@ describe('/projects', () => {
 
     it('throws an error if the outgoing establishment is unknown', () => {
       const payload = {
-        establishment: {
-          to: {
-            id: 500
-          },
-          from: {
-            id: 100
-          }
+        data: {
+          establishmentId: 500
         }
       };
       return request(this.api)
@@ -113,13 +104,8 @@ describe('/projects', () => {
 
     it('throws an error if the outgoing and incoming establishments are the same', () => {
       const payload = {
-        establishment: {
-          to: {
-            id: 100
-          },
-          from: {
-            id: 100
-          }
+        data: {
+          establishmentId: 100
         }
       };
       return request(this.api)
@@ -134,13 +120,8 @@ describe('/projects', () => {
 
     it('creates a new transfer task', () => {
       const payload = {
-        establishment: {
-          to: {
-            id: 101
-          },
-          from: {
-            id: 100
-          }
+        data: {
+          establishmentId: 101
         }
       };
       return request(this.api)
