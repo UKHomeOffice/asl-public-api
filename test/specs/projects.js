@@ -69,7 +69,7 @@ describe('/projects', () => {
       this.api.setUser({ id: 'nacwo' });
     });
 
-    it('throws an error if the logged in user doesn\'t have permissions at the incoming establishment', () => {
+    it('throws an error if the licence holder doesn\'t have permissions at the incoming establishment', () => {
       const payload = {
         establishment: {
           to: {
