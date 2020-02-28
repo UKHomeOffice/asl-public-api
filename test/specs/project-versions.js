@@ -77,8 +77,8 @@ describe('/projects', () => {
         .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-444444444444/project-version/ed0687a2-1a52-4cc8-b100-588a04255c60')
         .expect(200)
         .expect(response => {
-          assert.equal(response.body.data.retrospectiveAssessment, false);
-          assert.equal(response.body.data.retrospectiveAssessmentRequired, false);
+          assert.equal(response.body.data.data.retrospectiveAssessment, false);
+          assert.equal(response.body.data.data.retrospectiveAssessmentRequired, false);
         });
     });
 
@@ -87,7 +87,7 @@ describe('/projects', () => {
         .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-555555555555/project-version/ed0687a2-1a52-4cc8-b100-588a04255c61')
         .expect(200)
         .expect(response => {
-          assert.equal(response.body.data.retrospectiveAssessment, true);
+          assert.equal(response.body.data.data.retrospectiveAssessment, true);
         });
     });
 
@@ -96,7 +96,7 @@ describe('/projects', () => {
         .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-555555555555/project-version/ed0687a2-1a52-4cc8-b100-588a04255c61')
         .expect(200)
         .expect(response => {
-          assert.equal(response.body.data.retrospectiveAssessmentRequired, false);
+          assert.equal(response.body.data.data.retrospectiveAssessmentRequired, false);
         });
     });
 
@@ -105,8 +105,8 @@ describe('/projects', () => {
         .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-666666666666/project-version/ed0687a2-1a52-4cc8-b100-588a04255c62')
         .expect(200)
         .expect(response => {
-          assert.equal(response.body.data.retrospectiveAssessment, true);
-          assert.equal(response.body.data.retrospectiveAssessmentRequired, true);
+          assert.equal(response.body.data.data.retrospectiveAssessment, true);
+          assert.equal(response.body.data.data.retrospectiveAssessmentRequired, true);
         });
     });
 
