@@ -5,6 +5,7 @@ const apiHelper = require('../helpers/api');
 
 const INACTIVE_PROJECT_ID = 'bf22f7cd-cf85-42ef-93da-02b709df67be';
 const ACTIVE_PROJECT_ID = 'd2f9777d-2d9d-4ea2-a9c2-c5ed592fd98d';
+const TRANSFER_PROJECT_ID = '0a1c24e7-60dd-4882-8b07-31176e5657e4';
 const LICENCE_HOLDER_ID = 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9';
 const ASRU_AMENDMENT_PROJECT_ID = 'db6cf8e1-7a1f-41c0-96f7-ef1a4dadcaa8';
 
@@ -58,9 +59,87 @@ describe('/projects', () => {
           assert.equal(body.model, 'project');
           assert.equal(body.action, 'revoke');
           assert.equal(body.id, ACTIVE_PROJECT_ID);
+          assert.equal(body.establishmentId, 100);
           assert.deepEqual(body.data, { establishmentId: 100, licenceHolderId: LICENCE_HOLDER_ID });
         });
     });
+  });
+
+  describe('POST /:id/transfer', () => {
+    beforeEach(() => {
+      this.api.setUser({ id: 'nacwo' });
+    });
+
+    it('throws an error if the licence holder doesn\'t have permissions at the incoming establishment', () => {
+      const payload = {
+        data: {
+          establishmentId: 999
+        }
+      };
+      return request(this.api)
+        .post(`/establishment/100/projects/${TRANSFER_PROJECT_ID}/transfer`)
+        .send(payload)
+        .expect(400)
+        .then(response => response.body)
+        .then(error => {
+          assert.equal(error.message, 'User is not associated with Invisible Pharma');
+        });
+    });
+
+    it('throws an error if the outgoing establishment is unknown', () => {
+      const payload = {
+        data: {
+          establishmentId: 500
+        }
+      };
+      return request(this.api)
+        .post(`/establishment/100/projects/${TRANSFER_PROJECT_ID}/transfer`)
+        .send(payload)
+        .expect(404)
+        .then(response => response.body)
+        .then(error => {
+          assert.equal(error.message, 'Not found');
+        });
+    });
+
+    it('throws an error if the outgoing and incoming establishments are the same', () => {
+      const payload = {
+        data: {
+          establishmentId: 100
+        }
+      };
+      return request(this.api)
+        .post(`/establishment/100/projects/${TRANSFER_PROJECT_ID}/transfer`)
+        .send(payload)
+        .expect(400)
+        .then(response => response.body)
+        .then(error => {
+          assert.equal(error.message, 'Cannot transfer licence to the same establishment');
+        });
+    });
+
+    it('creates a new transfer task', () => {
+      const payload = {
+        data: {
+          establishmentId: 101
+        }
+      };
+      return request(this.api)
+        .post(`/establishment/100/projects/${TRANSFER_PROJECT_ID}/transfer`)
+        .send(payload)
+        .expect(200)
+        .then(() => {
+          // calls openTasks and create
+          assert.equal(this.workflow.handler.callCount, 2);
+          const req = this.workflow.handler.secondCall.args[0];
+          const body = req.body;
+          assert.equal(req.method, 'POST');
+          assert.equal(body.model, 'project');
+          assert.equal(body.action, 'transfer');
+          assert.equal(body.id, TRANSFER_PROJECT_ID);
+        });
+    });
+
   });
 
   describe('DELETE /:id/draft-amendments', () => {
