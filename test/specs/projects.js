@@ -60,7 +60,7 @@ describe('/projects', () => {
           assert.equal(body.action, 'revoke');
           assert.equal(body.id, ACTIVE_PROJECT_ID);
           assert.equal(body.establishmentId, 100);
-          assert.deepEqual(body.data, { licenceHolderId: LICENCE_HOLDER_ID });
+          assert.deepEqual(body.data, { establishmentId: 100, licenceHolderId: LICENCE_HOLDER_ID });
         });
     });
   });
