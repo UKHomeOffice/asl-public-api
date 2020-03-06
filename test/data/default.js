@@ -279,6 +279,7 @@ module.exports = models => {
               licenceNumber: 'AB-123',
               status: 'active',
               issueDate: '2016-01-01T12:00:00Z',
+              revocationDate: null,
               procedures: ['A', 'B'],
               updatedAt: '2020-01-01T12:00:00Z',
               pilTransfers: [
@@ -296,6 +297,7 @@ module.exports = models => {
               licenceNumber: 'D-456',
               status: 'active',
               issueDate: '2016-01-01T12:00:00Z',
+              revocationDate: null,
               procedures: ['D'],
               notesCatD: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
               updatedAt: '2020-01-01T12:00:00Z'
@@ -307,6 +309,7 @@ module.exports = models => {
               licenceNumber: 'F-789',
               status: 'active',
               issueDate: '2016-01-01T12:00:00Z',
+              revocationDate: null,
               procedures: ['F'],
               notesCatF: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
               updatedAt: '2020-01-01T12:00:00Z'
@@ -318,6 +321,7 @@ module.exports = models => {
               licenceNumber: 'C-987',
               status: 'active',
               issueDate: '2016-01-01T12:00:00Z',
+              revocationDate: '2015-12-01T12:00:00Z',
               procedures: ['C'],
               species: ['Mice', 'Rats'],
               updatedAt: '2020-01-01T12:00:00Z',
