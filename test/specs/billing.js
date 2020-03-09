@@ -169,6 +169,16 @@ describe('/billing', () => {
         });
     });
 
+    it('does not set end date on active PILs with a revocation date', () => {
+      return request(this.api)
+        .get('/establishment/100/billing/pils?year=2018')
+        .expect(200)
+        .expect(response => {
+          const active = response.body.data.find(pil => pil.id === PIL_2);
+          assert.equal(active.endDate, null);
+        });
+    });
+
   });
 
 });

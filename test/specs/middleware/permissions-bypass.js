@@ -7,7 +7,7 @@ const { permissionsBypass } = require('../../../lib/middleware');
 const can = sinon.stub();
 const endpoint = '/establishment/100/project/100/project-version/100';
 
-describe.only('Permissions bypass middleware', () => {
+describe('Permissions bypass middleware', () => {
   beforeEach(() => {
     this.api = express();
     this.api.use((req, res, next) => {
