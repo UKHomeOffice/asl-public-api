@@ -154,20 +154,6 @@ module.exports = models => {
                 ]
               },
               {
-                id: '0a1c24e7-60dd-4882-8b07-31176e5657e4',
-                title: 'Transfer project',
-                licenceHolderId: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9', // Clive Nacwo
-                expiryDate: '2040-01-01T12:00:00Z',
-                licenceNumber: 'abc112',
-                status: 'active',
-                version: [
-                  {
-                    status: 'granted',
-                    data: {}
-                  }
-                ]
-              },
-              {
                 id: '3d112756-5d0b-4303-838e-34046aa98e30',
                 title: 'Revoked project',
                 licenceHolderId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
