@@ -179,6 +179,28 @@ describe('/billing', () => {
         });
     });
 
+    it('can filter the results by profile name', () => {
+      return request(this.api)
+        .get('/establishment/100/billing/pils?year=2019&filter=christie')
+        .expect(200)
+        .expect(response => {
+          const pils = response.body.data;
+          assert.equal(pils.length, 1);
+          assert.equal(pils[0].id, PIL_1);
+        });
+    });
+
+    it('can filter the results by pil number', () => {
+      return request(this.api)
+        .get('/establishment/100/billing/pils?year=2019&filter=c-987')
+        .expect(200)
+        .expect(response => {
+          const pils = response.body.data;
+          assert.equal(pils.length, 1);
+          assert.equal(pils[0].id, PIL_2);
+        });
+    });
+
   });
 
 });
