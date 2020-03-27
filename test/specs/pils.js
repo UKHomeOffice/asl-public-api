@@ -1,3 +1,4 @@
+const moment = require('moment');
 const assert = require('assert');
 const request = require('supertest');
 const sinon = require('sinon');
@@ -94,6 +95,54 @@ describe('/pils', () => {
         .expect(200)
         .expect(pil => {
           assert.equal(pil.body.data.reviewDate, '2024-12-01T12:00:00.000Z');
+        });
+    });
+
+    it('sets reviewDue and reviewOverdue properties on the pil if a review is not due', () => {
+      const { PIL } = this.api.app.db;
+      const reviewDate = moment().add(6, 'months').toISOString();
+      return Promise.resolve()
+        .then(() => PIL.query().findById(PIL_1).patch({ reviewDate }))
+        .then(() => {
+          return request(this.api)
+            .get(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
+            .expect(200)
+            .expect(pil => {
+              assert.equal(pil.body.data.reviewDue, false);
+              assert.equal(pil.body.data.reviewOverdue, false);
+            });
+        });
+    });
+
+    it('sets reviewDue and reviewOverdue properties on the pil if a review is due', () => {
+      const { PIL } = this.api.app.db;
+      const reviewDate = moment().add(2, 'months').toISOString();
+      return Promise.resolve()
+        .then(() => PIL.query().findById(PIL_1).patch({ reviewDate }))
+        .then(() => {
+          return request(this.api)
+            .get(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
+            .expect(200)
+            .expect(pil => {
+              assert.equal(pil.body.data.reviewDue, true);
+              assert.equal(pil.body.data.reviewOverdue, false);
+            });
+        });
+    });
+
+    it('sets reviewDue and reviewOverdue properties on the pil if a review is overdue', () => {
+      const { PIL } = this.api.app.db;
+      const reviewDate = moment().subtract(1, 'month').toISOString();
+      return Promise.resolve()
+        .then(() => PIL.query().findById(PIL_1).patch({ reviewDate }))
+        .then(() => {
+          return request(this.api)
+            .get(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
+            .expect(200)
+            .expect(pil => {
+              assert.equal(pil.body.data.reviewDue, true);
+              assert.equal(pil.body.data.reviewOverdue, true);
+            });
         });
     });
 
