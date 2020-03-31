@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = models => {
 
   const { Establishment, Profile, PIL, Invitation, Project, ProjectVersion } = models;
@@ -298,7 +300,8 @@ module.exports = models => {
               revocationDate: null,
               procedures: ['F'],
               notesCatF: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-              updatedAt: '2020-01-01T12:00:00Z'
+              updatedAt: '2020-01-01T12:00:00Z',
+              reviewDate: moment().subtract(1, 'month').toISOString()
             },
             {
               id: '117298fa-f98f-4a98-992d-d29b60703866',
