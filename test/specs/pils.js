@@ -57,6 +57,42 @@ describe('/pils', () => {
     });
   });
 
+  describe('GET /pils', () => {
+    it('returns a list of all active pils at the establishment', () => {
+      return request(this.api)
+        .get('/establishment/100/pils')
+        .expect(200)
+        .then(response => {
+          const meta = response.body.meta;
+          assert.equal(meta.total, 4);
+          assert.equal(meta.count, 4);
+        });
+    });
+
+    it('can search pils by licence holder name', () => {
+      return request(this.api)
+        .get('/establishment/100/pils?search=Linford')
+        .expect(200)
+        .then(response => {
+          const { data, meta } = response.body;
+          assert.equal(meta.total, 4);
+          assert.equal(meta.count, 1);
+          assert.equal(data[0].profile.name, 'Linford Christie');
+        });
+    });
+
+    it('assigns reviewDue and reviewOverdue properties', () => {
+      return request(this.api)
+        .get('/establishment/100/pils?search=Clive')
+        .expect(200)
+        .then(response => {
+          const data = response.body.data;
+          assert.equal(data[0].reviewDue, true);
+          assert.equal(data[0].reviewOverdue, true);
+        });
+    });
+  });
+
   describe('/pil/:id', () => {
 
     it('returns 404 for unrecognised id', () => {
