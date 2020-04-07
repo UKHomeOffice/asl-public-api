@@ -8,7 +8,7 @@ const settings = {
   database: process.env.POSTGRES_DB || 'asl-test',
   user: process.env.POSTGRES_USER || 'postgres',
   host: process.env.POSTGRES_HOST || 'localhost',
-  password: process.env.POSTGRES_PASSWORD
+  password: process.env.POSTGRES_PASSWORD || 'test-password'
 };
 
 module.exports = {
