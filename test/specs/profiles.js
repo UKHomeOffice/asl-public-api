@@ -252,6 +252,18 @@ describe('/profiles', () => {
         });
     });
 
+    it('throws a 404 if scoped to an unaffiliated establishment when ASRU are viewing a profile', () => {
+      this.api.setUser({ id: 'licensing' });
+
+      return request(this.api)
+        // get a profile that exists in multiple establishments at a completely different establishment
+        .get('/establishment/1000/profile/ae28fb31-d867-4371-9b4f-79019e71232f')
+        .expect(404)
+        .expect(response => {
+          assert.ok(!response.body.data, 'Response should not include data');
+        });
+    });
+
     describe('with basic permissions', () => {
 
       beforeEach(() => {

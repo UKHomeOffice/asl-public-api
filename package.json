@@ -10,7 +10,7 @@
     "test:lint": "eslint .",
     "pretest:unit": "npm run migrate",
     "test:unit": "mocha ./test/specs",
-    "migrate": "DATABASE_NAME=asl-test knex migrate:latest --knexfile ./node_modules/@asl/schema/knexfile.js",
+    "migrate": "DATABASE_NAME=asl-test NODE_ENV=test knex migrate:latest --knexfile ./node_modules/@asl/schema/knexfile.js",
     "rollback": "DATABASE_NAME=asl-test knex migrate:rollback"
   },
   "repository": {
@@ -25,7 +25,7 @@
   "homepage": "https://github.com/UKHomeOffice/asl-public-api#readme",
   "dependencies": {
     "@asl/constants": "^0.7.0",
-    "@asl/schema": "^7.35.0",
+    "@asl/schema": "^7.37.0",
     "@asl/service": "^7.19.0",
     "express": "^4.16.3",
     "lodash": "^4.17.15",
