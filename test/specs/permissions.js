@@ -1,5 +1,6 @@
 const request = require('supertest');
 const apiHelper = require('../helpers/api');
+const ids = require('../data/ids');
 
 describe('/permissions', () => {
   before(() => {
@@ -21,7 +22,7 @@ describe('/permissions', () => {
 
   it('can delete permissions from users who hold roles at other establishments - regression', () => {
     return request(this.api)
-      .delete('/establishment/101/profile/a942ffc7-e7ca-4d76-a001-0b5048a057d9/permission')
+      .delete(`/establishment/${ids.establishments.marvell}/profile/${ids.profiles.cliveNacwo}/permission`)
       .expect(200);
   });
 

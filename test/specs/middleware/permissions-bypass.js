@@ -3,9 +3,10 @@ const express = require('express');
 const request = require('supertest');
 const sinon = require('sinon');
 const { permissionsBypass } = require('../../../lib/middleware');
+const ids = require('../../data/ids');
 
 const can = sinon.stub();
-const endpoint = '/establishment/100/project/100/project-version/100';
+const endpoint = `/establishment/${ids.establishments.croydon}/project/100/project-version/100`;
 
 describe('Permissions bypass middleware', () => {
   beforeEach(() => {

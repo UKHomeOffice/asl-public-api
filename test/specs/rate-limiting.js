@@ -1,6 +1,7 @@
 const apiHelper = require('../helpers/api');
 const redis = require('redis');
 const request = require('supertest');
+const ids = require('../data/ids');
 
 require('dotenv').config();
 
@@ -40,13 +41,13 @@ describe('rate limiting', () => {
   });
 
   it('will reject the second request made by a user to a different url', () => {
-    this.rateLimitedApi.setUser({ establishment: '100' });
+    this.rateLimitedApi.setUser({ establishment: ids.establishments.croydon });
     return request(this.rateLimitedApi)
       .get('/establishments')
       .expect(200)
       .then(() => {
         return request(this.rateLimitedApi)
-          .get('/establishment/100')
+          .get(`/establishment/${ids.establishments.croydon}`)
           .expect(429);
       });
   });

@@ -1,9 +1,7 @@
 const assert = require('assert');
 const request = require('supertest');
 const apiHelper = require('../helpers/api');
-
-const PIL_1 = '9fbe0218-995d-47d3-88e7-641fc046d7d1';
-const PIL_2 = '117298fa-f98f-4a98-992d-d29b60703866';
+const ids = require('../data/ids');
 
 describe('/billing', () => {
 
@@ -20,7 +18,7 @@ describe('/billing', () => {
 
   it('defaults year to 2019 if not provided', () => {
     return request(this.api)
-      .get('/establishment/100/billing')
+      .get(`/establishment/${ids.establishments.croydon}/billing`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.meta.year, 2019);
@@ -29,7 +27,7 @@ describe('/billing', () => {
 
   it('returns number of billable PILs for the establishment', () => {
     return request(this.api)
-      .get('/establishment/100/billing?year=2019')
+      .get(`/establishment/${ids.establishments.croydon}/billing?year=2019`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.numberOfPils, 4);
@@ -38,7 +36,7 @@ describe('/billing', () => {
 
   it('includes transfered PILs in the response', () => {
     return request(this.api)
-      .get('/establishment/101/billing?year=2018')
+      .get(`/establishment/${ids.establishments.marvell}/billing?year=2018`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.numberOfPils, 1);
@@ -47,7 +45,7 @@ describe('/billing', () => {
 
   it('returns pils, pel and total fees', () => {
     return request(this.api)
-      .get('/establishment/100/billing?year=2019')
+      .get(`/establishment/${ids.establishments.croydon}/billing?year=2019`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.pils, 4 * 275);
@@ -58,7 +56,7 @@ describe('/billing', () => {
 
   it('returns a PEL fee of zero if the establishment was inactive', () => {
     return request(this.api)
-      .get('/establishment/101/billing?year=2018')
+      .get(`/establishment/${ids.establishments.marvell}/billing?year=2018`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.pel, 0);
@@ -68,7 +66,7 @@ describe('/billing', () => {
 
   it('returns a PEL fee of zero if the establishment was revoked before the billing period', () => {
     return request(this.api)
-      .get('/establishment/1000/billing?year=2019')
+      .get(`/establishment/${ids.establishments.revokedEstablishment1}/billing?year=2019`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.pel, 0);
@@ -77,7 +75,7 @@ describe('/billing', () => {
 
   it('returns a PEL fee if the establishment was revoked during the billing period', () => {
     return request(this.api)
-      .get('/establishment/1001/billing?year=2019')
+      .get(`/establishment/${ids.establishments.revokedEstablishment2}/billing?year=2019`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.pel, 826);
@@ -86,7 +84,7 @@ describe('/billing', () => {
 
   it('returns fees for the current year in response', () => {
     return request(this.api)
-      .get('/establishment/100/billing?year=2018')
+      .get(`/establishment/${ids.establishments.croydon}/billing?year=2018`)
       .expect(200)
       .expect(response => {
         assert.deepEqual(response.body.data.fees, { pil: 257, pel: 757 });
@@ -97,7 +95,7 @@ describe('/billing', () => {
 
     it('returns list of billable PILs for the establishment', () => {
       return request(this.api)
-        .get('/establishment/100/billing/pils?year=2019')
+        .get(`/establishment/${ids.establishments.croydon}/billing/pils?year=2019`)
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.length, 4);
@@ -106,7 +104,7 @@ describe('/billing', () => {
 
     it('removes `pilTransfers` property from PIL response', () => {
       return request(this.api)
-        .get('/establishment/100/billing/pils?year=2019')
+        .get(`/establishment/${ids.establishments.croydon}/billing/pils?year=2019`)
         .expect(200)
         .expect(response => {
           response.body.data.forEach(pil => {
@@ -117,43 +115,43 @@ describe('/billing', () => {
 
     it('only returns current establishment on profile where user has multiple establishments', () => {
       return request(this.api)
-        .get('/establishment/100/billing/pils?year=2019')
+        .get(`/establishment/${ids.establishments.croydon}/billing/pils?year=2019`)
         .expect(200)
         .expect(response => {
-          const pil = response.body.data.find(p => p.id === PIL_2);
+          const pil = response.body.data.find(p => p.id === ids.pils.multipleEstablishments);
           assert.equal(pil.profile.establishments.length, 1);
-          assert.equal(pil.profile.establishments[0].id, 100);
+          assert.equal(pil.profile.establishments[0].id, ids.establishments.croydon);
         });
     });
 
     it('does not return establishments on profile is user is no longer affiliated to scoped establishment', () => {
       return request(this.api)
-        .get('/establishment/101/billing/pils?year=2018')
+        .get(`/establishment/${ids.establishments.marvell}/billing/pils?year=2018`)
         .expect(200)
         .expect(response => {
-          const pil = response.body.data.find(p => p.id === PIL_1);
+          const pil = response.body.data.find(p => p.id === ids.pils.linfordChristie);
           assert.equal(pil.profile.establishments.length, 0);
         });
     });
 
     it('sets establishment id on PIL to scoped establishment even if they no longer hold it', () => {
       return request(this.api)
-        .get('/establishment/101/billing/pils?year=2018')
+        .get(`/establishment/${ids.establishments.marvell}/billing/pils?year=2018`)
         .expect(200)
         .expect(response => {
           response.body.data.forEach(pil => {
-            assert.equal(pil.establishmentId, 101);
+            assert.equal(pil.establishmentId, ids.establishments.marvell);
           });
         });
     });
 
     it('sets start date on returned PILs', () => {
       return request(this.api)
-        .get('/establishment/100/billing/pils?year=2019')
+        .get(`/establishment/${ids.establishments.croydon}/billing/pils?year=2019`)
         .expect(200)
         .expect(response => {
-          const transfered = response.body.data.find(pil => pil.id === PIL_1);
-          const notTransfered = response.body.data.find(pil => pil.id === PIL_2);
+          const transfered = response.body.data.find(pil => pil.id === ids.pils.linfordChristie);
+          const notTransfered = response.body.data.find(pil => pil.id === ids.pils.multipleEstablishments);
           assert.equal(transfered.startDate, '2019-01-01T12:00:00.000Z'); // start date is transfer date
           assert.equal(notTransfered.startDate, '2016-01-01T12:00:00.000Z'); // start date is issue date
         });
@@ -161,43 +159,43 @@ describe('/billing', () => {
 
     it('sets end date on returned PILs', () => {
       return request(this.api)
-        .get('/establishment/101/billing/pils?year=2018')
+        .get(`/establishment/${ids.establishments.marvell}/billing/pils?year=2018`)
         .expect(200)
         .expect(response => {
-          const transfered = response.body.data.find(pil => pil.id === PIL_1);
+          const transfered = response.body.data.find(pil => pil.id === ids.pils.linfordChristie);
           assert.equal(transfered.endDate, '2019-01-01T12:00:00.000Z'); // end date is transfer date
         });
     });
 
     it('does not set end date on active PILs with a revocation date', () => {
       return request(this.api)
-        .get('/establishment/100/billing/pils?year=2018')
+        .get(`/establishment/${ids.establishments.croydon}/billing/pils?year=2018`)
         .expect(200)
         .expect(response => {
-          const active = response.body.data.find(pil => pil.id === PIL_2);
+          const active = response.body.data.find(pil => pil.id === ids.pils.multipleEstablishments);
           assert.equal(active.endDate, null);
         });
     });
 
     it('can filter the results by profile name', () => {
       return request(this.api)
-        .get('/establishment/100/billing/pils?year=2019&filter=christie')
+        .get(`/establishment/${ids.establishments.croydon}/billing/pils?year=2019&filter=christie`)
         .expect(200)
         .expect(response => {
           const pils = response.body.data;
           assert.equal(pils.length, 1);
-          assert.equal(pils[0].id, PIL_1);
+          assert.equal(pils[0].id, ids.pils.linfordChristie);
         });
     });
 
     it('can filter the results by pil number', () => {
       return request(this.api)
-        .get('/establishment/100/billing/pils?year=2019&filter=c-987')
+        .get(`/establishment/${ids.establishments.croydon}/billing/pils?year=2019&filter=c-987`)
         .expect(200)
         .expect(response => {
           const pils = response.body.data;
           assert.equal(pils.length, 1);
-          assert.equal(pils[0].id, PIL_2);
+          assert.equal(pils[0].id, ids.pils.multipleEstablishments);
         });
     });
 

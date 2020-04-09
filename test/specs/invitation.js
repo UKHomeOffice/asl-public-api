@@ -2,8 +2,7 @@ const assert = require('assert');
 const request = require('supertest');
 const uuid = require('uuid/v4');
 const apiHelper = require('../helpers/api');
-
-const INVITATION_ID = 'f5bd5c7d-0cfc-4e3b-bbab-1ad59de9af1e';
+const ids = require('../data/ids');
 
 describe('/establishment/:id/invitations', () => {
   beforeEach(() => {
@@ -22,20 +21,20 @@ describe('/establishment/:id/invitations', () => {
 
     it('sends a delete message to workflow', () => {
       return request(this.api)
-        .delete(`/establishment/101/invitations/${INVITATION_ID}`)
+        .delete(`/establishment/${ids.establishments.marvell}/invitations/${ids.invitations.basic}`)
         .expect(200)
         .expect(response => {
           assert.equal(this.workflow.handler.callCount, 1);
           const req = this.workflow.handler.firstCall.args[0];
           assert.equal(req.body.model, 'invitation');
-          assert.equal(req.body.id, INVITATION_ID);
+          assert.equal(req.body.id, ids.invitations.basic);
           assert.equal(req.body.action, 'delete');
         });
     });
 
     it('returns a 404 for an invalid uuid', () => {
       return request(this.api)
-        .delete('/establishment/101/invitations/123')
+        .delete(`/establishment/${ids.establishments.marvell}/invitations/123`)
         .expect(404)
         .expect(response => {
           assert.equal(response.body.message, 'Not found');
@@ -45,7 +44,7 @@ describe('/establishment/:id/invitations', () => {
 
     it('returns a 404 if no invitation is found', () => {
       return request(this.api)
-        .delete(`/establishment/101/invitations/${uuid()}`)
+        .delete(`/establishment/${ids.establishments.marvell}/invitations/${uuid()}`)
         .expect(404)
         .expect(response => {
           assert.equal(response.body.message, 'Not found');
@@ -55,7 +54,7 @@ describe('/establishment/:id/invitations', () => {
 
     it('returns a 404 if invitation is held at another establishment', () => {
       return request(this.api)
-        .delete(`/establishment/100/invitations/${INVITATION_ID}`)
+        .delete(`/establishment/${ids.establishments.croydon}/invitations/${ids.invitations.basic}`)
         .expect(404)
         .expect(response => {
           assert.equal(response.body.message, 'Not found');
@@ -69,20 +68,20 @@ describe('/establishment/:id/invitations', () => {
 
     it('sends a cancel message to workflow', () => {
       return request(this.api)
-        .put(`/establishment/101/invitations/${INVITATION_ID}/cancel`)
+        .put(`/establishment/${ids.establishments.marvell}/invitations/${ids.invitations.basic}/cancel`)
         .expect(200)
         .expect(response => {
           assert.equal(this.workflow.handler.callCount, 1);
           const req = this.workflow.handler.firstCall.args[0];
           assert.equal(req.body.model, 'invitation');
-          assert.equal(req.body.id, INVITATION_ID);
+          assert.equal(req.body.id, ids.invitations.basic);
           assert.equal(req.body.action, 'cancel');
         });
     });
 
     it('returns a 404 for an invalid uuid', () => {
       return request(this.api)
-        .put('/establishment/101/invitations/123/cancel')
+        .put(`/establishment/${ids.establishments.marvell}/invitations/123/cancel`)
         .expect(404)
         .expect(response => {
           assert.equal(response.body.message, 'Not found');
@@ -92,7 +91,7 @@ describe('/establishment/:id/invitations', () => {
 
     it('returns a 404 if no invitation is found', () => {
       return request(this.api)
-        .put(`/establishment/101/invitations/${uuid()}/cancel`)
+        .put(`/establishment/${ids.establishments.marvell}/invitations/${uuid()}/cancel`)
         .expect(404)
         .expect(response => {
           assert.equal(response.body.message, 'Not found');
@@ -102,7 +101,7 @@ describe('/establishment/:id/invitations', () => {
 
     it('returns a 404 if invitation is held at another establishment', () => {
       return request(this.api)
-        .put(`/establishment/100/invitations/${INVITATION_ID}/cancel`)
+        .put(`/establishment/${ids.establishments.croydon}/invitations/${ids.invitations.basic}/cancel`)
         .expect(404)
         .expect(response => {
           assert.equal(response.body.message, 'Not found');
@@ -116,20 +115,20 @@ describe('/establishment/:id/invitations', () => {
 
     it('sends a resend message to workflow', () => {
       return request(this.api)
-        .put(`/establishment/101/invitations/${INVITATION_ID}/resend`)
+        .put(`/establishment/${ids.establishments.marvell}/invitations/${ids.invitations.basic}/resend`)
         .expect(200)
         .expect(response => {
           assert.equal(this.workflow.handler.callCount, 1);
           const req = this.workflow.handler.firstCall.args[0];
           assert.equal(req.body.model, 'invitation');
-          assert.equal(req.body.id, INVITATION_ID);
+          assert.equal(req.body.id, ids.invitations.basic);
           assert.equal(req.body.action, 'resend');
         });
     });
 
     it('returns a 404 for an invalid uuid', () => {
       return request(this.api)
-        .put('/establishment/101/invitations/123/resend')
+        .put(`/establishment/${ids.establishments.marvell}/invitations/123/resend`)
         .expect(404)
         .expect(response => {
           assert.equal(response.body.message, 'Not found');
@@ -139,7 +138,7 @@ describe('/establishment/:id/invitations', () => {
 
     it('returns a 404 if no invitation is found', () => {
       return request(this.api)
-        .put(`/establishment/101/invitations/${uuid()}/resend`)
+        .put(`/establishment/${ids.establishments.marvell}/invitations/${uuid()}/resend`)
         .expect(404)
         .expect(response => {
           assert.equal(response.body.message, 'Not found');
@@ -149,7 +148,7 @@ describe('/establishment/:id/invitations', () => {
 
     it('returns a 404 if invitation is held at another establishment', () => {
       return request(this.api)
-        .put(`/establishment/100/invitations/${INVITATION_ID}/resend`)
+        .put(`/establishment/${ids.establishments.croydon}/invitations/${ids.invitations.basic}/resend`)
         .expect(404)
         .expect(response => {
           assert.equal(response.body.message, 'Not found');

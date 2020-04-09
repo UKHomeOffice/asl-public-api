@@ -2,6 +2,7 @@ const assert = require('assert');
 const request = require('supertest');
 const { stringify } = require('qs');
 const apiHelper = require('../helpers/api');
+const ids = require('../data/ids');
 
 describe('/places', () => {
   beforeEach(() => {
@@ -18,19 +19,19 @@ describe('/places', () => {
 
   it('returns only the places related to the current establishment', () => {
     return request(this.api)
-      .get('/establishment/100/places')
+      .get(`/establishment/${ids.establishments.croydon}/places`)
       .expect(200)
       .expect(response => {
         assert(response.body.data.length > 0);
         response.body.data.forEach(row => {
-          assert.equal(row.establishmentId, 100);
+          assert.equal(row.establishmentId, ids.establishments.croydon);
         });
       });
   });
 
   it('does not include deleted places', () => {
     return request(this.api)
-      .get('/establishment/100/places')
+      .get(`/establishment/${ids.establishments.croydon}/places`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 2);
@@ -47,7 +48,7 @@ describe('/places', () => {
       }
     });
     return request(this.api)
-      .get(`/establishment/100/places?${query}`)
+      .get(`/establishment/${ids.establishments.croydon}/places?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 2);
@@ -61,7 +62,7 @@ describe('/places', () => {
       }
     });
     return request(this.api)
-      .get(`/establishment/100/places?${query}`)
+      .get(`/establishment/${ids.establishments.croydon}/places?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 1);
@@ -75,7 +76,7 @@ describe('/places', () => {
       }
     });
     return request(this.api)
-      .get(`/establishment/100/places?${query}`)
+      .get(`/establishment/${ids.establishments.croydon}/places?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 1);
@@ -92,7 +93,7 @@ describe('/places', () => {
       }
     };
     return request(this.api)
-      .post('/establishment/100/places')
+      .post(`/establishment/${ids.establishments.croydon}/places`)
       .send(input)
       .expect(200)
       .expect(() => {
@@ -102,7 +103,7 @@ describe('/places', () => {
         assert.equal(req.method, 'POST');
         assert.equal(body.model, 'place');
         assert.equal(body.action, 'create');
-        assert.deepEqual(body.data, { ...input.data, establishmentId: '100' });
+        assert.deepEqual(body.data, { ...input.data, establishmentId: ids.establishments.croydon });
       });
   });
 
@@ -121,7 +122,7 @@ describe('/places', () => {
       }
     };
     return request(this.api)
-      .post('/establishment/100/places')
+      .post(`/establishment/${ids.establishments.croydon}/places`)
       .send(input)
       .expect(200);
   });
@@ -141,7 +142,7 @@ describe('/places', () => {
       }
     };
     return request(this.api)
-      .post('/establishment/100/places')
+      .post(`/establishment/${ids.establishments.croydon}/places`)
       .send(input)
       .expect(400);
   });
@@ -150,13 +151,13 @@ describe('/places', () => {
 
     it('returns 404 for unrecognised id', () => {
       return request(this.api)
-        .get('/establishment/100/places/notanid')
+        .get(`/establishment/${ids.establishments.croydon}/places/notanid`)
         .expect(404);
     });
 
     it('returns 404 for a different establishments place id', () => {
       return request(this.api)
-        .get('/establishment/100/places/e859d43a-e8ab-4ae6-844a-95c978082a48')
+        .get(`/establishment/${ids.establishments.croydon}/places/${ids.places.marvell101}`)
         .expect(404);
     });
 
@@ -174,7 +175,7 @@ describe('/places', () => {
         }
       };
       return request(this.api)
-        .put('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
+        .put(`/establishment/${ids.establishments.croydon}/places/${ids.places.croydon101}`)
         .send(input)
         .expect(400);
     });
@@ -190,7 +191,7 @@ describe('/places', () => {
       };
 
       return request(this.api)
-        .put('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
+        .put(`/establishment/${ids.establishments.croydon}/places/${ids.places.croydon101}`)
         .send(input)
         .expect(200)
         .expect(() => {
@@ -200,8 +201,8 @@ describe('/places', () => {
           assert.equal(req.method, 'POST');
           assert.equal(body.model, 'place');
           assert.equal(body.action, 'update');
-          assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
-          assert.deepEqual(body.data, { ...input.data, establishmentId: '100' });
+          assert.equal(body.id, ids.places.croydon101);
+          assert.deepEqual(body.data, { ...input.data, establishmentId: ids.establishments.croydon });
         });
     });
 
@@ -212,7 +213,7 @@ describe('/places', () => {
         }
       };
       return request(this.api)
-        .delete('/establishment/100/places/1d6c5bb4-be60-40fd-97a8-b29ffaa2135f')
+        .delete(`/establishment/${ids.establishments.croydon}/places/${ids.places.croydon101}`)
         .send(input)
         .expect(200)
         .expect(() => {
@@ -222,7 +223,7 @@ describe('/places', () => {
           assert.equal(req.method, 'POST');
           assert.equal(body.model, 'place');
           assert.equal(body.action, 'delete');
-          assert.equal(body.id, '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f');
+          assert.equal(body.id, ids.places.croydon101);
         });
     });
 

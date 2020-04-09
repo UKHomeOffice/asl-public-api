@@ -1,10 +1,7 @@
 const assert = require('assert');
 const request = require('supertest');
 const apiHelper = require('../helpers/api');
-
-const ESTABSLISHMENT_ID = '100';
-const PROFILE_ID = 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9';
-const CERTIFICATE_ID = 'c3032cc0-7dc7-40bc-be7e-97edc4ea1072';
+const ids = require('../data/ids');
 
 describe('Certificates', () => {
   beforeEach(() => {
@@ -37,7 +34,7 @@ describe('Certificates', () => {
     };
 
     return request(this.api)
-      .post(`/establishment/${ESTABSLISHMENT_ID}/profile/${PROFILE_ID}/certificate`)
+      .post(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/certificate`)
       .send({ data: input })
       .expect(200)
       .expect(() => {
@@ -47,13 +44,13 @@ describe('Certificates', () => {
         assert.equal(req.method, 'POST');
         assert.equal(body.model, 'certificate');
         assert.equal(body.action, 'create');
-        assert.deepEqual(body.data, { ...input, profileId: PROFILE_ID });
+        assert.deepEqual(body.data, { ...input, profileId: ids.profiles.linfordChristie });
       });
   });
 
   it('sends a message to workflow on DELETE', () => {
     return request(this.api)
-      .delete(`/establishment/${ESTABSLISHMENT_ID}/profile/${PROFILE_ID}/certificate/${CERTIFICATE_ID}`)
+      .delete(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/certificate/${ids.certificates.linfordChristie}`)
       .expect(200)
       .expect(() => {
         assert.equal(this.workflow.handler.callCount, 1);
@@ -62,7 +59,7 @@ describe('Certificates', () => {
         assert.equal(req.method, 'POST');
         assert.equal(body.model, 'certificate');
         assert.equal(body.action, 'delete');
-        assert.equal(body.id, CERTIFICATE_ID);
+        assert.equal(body.id, ids.certificates.linfordChristie);
       });
   });
 });
