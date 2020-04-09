@@ -1,8 +1,7 @@
 const assert = require('assert');
 const request = require('supertest');
 const apiHelper = require('../helpers/api');
-
-const PROFILE_ID = 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9';
+const ids = require('../data/ids');
 
 describe('/me', () => {
   beforeEach(() => {
@@ -24,14 +23,14 @@ describe('/me', () => {
         .get('/me')
         .expect(200)
         .expect(response => {
-          assert.deepEqual(response.body.data.id, PROFILE_ID);
+          assert.deepEqual(response.body.data.id, ids.profiles.linfordChristie);
         });
     });
 
     it('includes a list of allowed actions', () => {
       const actions = {
         global: [],
-        100: ['establishment.read']
+        [ids.establishments.croydon]: ['establishment.read']
       };
       this.api.setUser({ allowedActions: () => Promise.resolve(actions) });
       return request(this.api)

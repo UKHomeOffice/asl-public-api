@@ -3,14 +3,7 @@ const assert = require('assert');
 const request = require('supertest');
 const sinon = require('sinon');
 const apiHelper = require('../helpers/api');
-
-const PROFILE_1 = 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9';
-const PROFILE_2 = 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88';
-const PROFILE_3 = 'ae28fb31-d867-4371-9b4f-79019e71232f';
-const LICENSING_ID = 'a942ffc7-e7ca-4d76-a001-0b5048a057d2';
-
-const PIL_1 = '9fbe0218-995d-47d3-88e7-641fc046d7d1';
-const PIL_2 = '117298fa-f98f-4a98-992d-d29b60703866';
+const ids = require('../data/ids');
 
 describe('/pils', () => {
 
@@ -29,7 +22,7 @@ describe('/pils', () => {
   describe('/pil', () => {
     it('sends a message to workflow on POST', () => {
       return request(this.api)
-        .post(`/establishment/100/profile/${PROFILE_1}/pil`)
+        .post(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil`)
         .send({ data: {} })
         .expect(200)
         .expect(() => {
@@ -40,8 +33,8 @@ describe('/pils', () => {
           assert.equal(body.model, 'pil');
           assert.equal(body.action, 'create');
           assert.deepEqual(body.data, {
-            establishmentId: '100',
-            profileId: PROFILE_1
+            establishmentId: ids.establishments.croydon,
+            profileId: ids.profiles.linfordChristie
           });
         });
     });
@@ -51,7 +44,7 @@ describe('/pils', () => {
         status: 'active'
       };
       return request(this.api)
-        .post(`/establishment/100/profile/${PROFILE_1}/pil`)
+        .post(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil`)
         .send({ data: input })
         .expect(400);
     });
@@ -60,7 +53,7 @@ describe('/pils', () => {
   describe('GET /pils', () => {
     it('returns a list of all active pils at the establishment', () => {
       return request(this.api)
-        .get('/establishment/100/pils')
+        .get(`/establishment/${ids.establishments.croydon}/pils`)
         .expect(200)
         .then(response => {
           const meta = response.body.meta;
@@ -71,7 +64,7 @@ describe('/pils', () => {
 
     it('can search pils by licence holder name', () => {
       return request(this.api)
-        .get('/establishment/100/pils?search=Linford')
+        .get(`/establishment/${ids.establishments.croydon}/pils?search=Linford`)
         .expect(200)
         .then(response => {
           const { data, meta } = response.body;
@@ -83,7 +76,7 @@ describe('/pils', () => {
 
     it('assigns reviewDue and reviewOverdue properties', () => {
       return request(this.api)
-        .get('/establishment/100/pils?search=Clive')
+        .get(`/establishment/${ids.establishments.croydon}/pils?search=Clive`)
         .expect(200)
         .then(response => {
           const data = response.body.data;
@@ -97,19 +90,19 @@ describe('/pils', () => {
 
     it('returns 404 for unrecognised id', () => {
       return request(this.api)
-        .get(`/establishment/100/profile/${PROFILE_1}/pil/notanid`)
+        .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil/notanid`)
         .expect(404);
     });
 
     it('returns 404 for a different profiles pil id', () => {
       return request(this.api)
-        .get(`/establishment/100/profile/${PROFILE_2}/pil/${PIL_1}`)
+        .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.noddyHolder}/pil/${ids.pils.linfordChristie}`)
         .expect(404);
     });
 
     it('returns the data for an individual pil', () => {
       return request(this.api)
-        .get(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
+        .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil/${ids.pils.linfordChristie}`)
         .expect(200)
         .expect(pil => {
           assert.equal(pil.body.data.licenceNumber, 'AB-123');
@@ -118,7 +111,7 @@ describe('/pils', () => {
 
     it('defaults the reviewDate to the last updated date + 5 years if it is not present', () => {
       return request(this.api)
-        .get(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
+        .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil/${ids.pils.linfordChristie}`)
         .expect(200)
         .expect(pil => {
           assert.equal(pil.body.data.reviewDate, '2025-01-01T12:00:00.000Z');
@@ -127,7 +120,7 @@ describe('/pils', () => {
 
     it('uses the reviewDate from the model if it is present', () => {
       return request(this.api)
-        .get(`/establishment/100/profile/${PROFILE_3}/pil/${PIL_2}`)
+        .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.multipleEstablishments}/pil/${ids.pils.multipleEstablishments}`)
         .expect(200)
         .expect(pil => {
           assert.equal(pil.body.data.reviewDate, '2024-12-01T12:00:00.000Z');
@@ -138,10 +131,10 @@ describe('/pils', () => {
       const { PIL } = this.api.app.db;
       const reviewDate = moment().add(6, 'months').toISOString();
       return Promise.resolve()
-        .then(() => PIL.query().findById(PIL_1).patch({ reviewDate }))
+        .then(() => PIL.query().findById(ids.pils.linfordChristie).patch({ reviewDate }))
         .then(() => {
           return request(this.api)
-            .get(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
+            .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil/${ids.pils.linfordChristie}`)
             .expect(200)
             .expect(pil => {
               assert.equal(pil.body.data.reviewDue, false);
@@ -154,10 +147,10 @@ describe('/pils', () => {
       const { PIL } = this.api.app.db;
       const reviewDate = moment().add(2, 'months').toISOString();
       return Promise.resolve()
-        .then(() => PIL.query().findById(PIL_1).patch({ reviewDate }))
+        .then(() => PIL.query().findById(ids.pils.linfordChristie).patch({ reviewDate }))
         .then(() => {
           return request(this.api)
-            .get(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
+            .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil/${ids.pils.linfordChristie}`)
             .expect(200)
             .expect(pil => {
               assert.equal(pil.body.data.reviewDue, true);
@@ -170,10 +163,10 @@ describe('/pils', () => {
       const { PIL } = this.api.app.db;
       const reviewDate = moment().subtract(1, 'month').toISOString();
       return Promise.resolve()
-        .then(() => PIL.query().findById(PIL_1).patch({ reviewDate }))
+        .then(() => PIL.query().findById(ids.pils.linfordChristie).patch({ reviewDate }))
         .then(() => {
           return request(this.api)
-            .get(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}`)
+            .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil/${ids.pils.linfordChristie}`)
             .expect(200)
             .expect(pil => {
               assert.equal(pil.body.data.reviewDue, true);
@@ -185,10 +178,10 @@ describe('/pils', () => {
     describe('establishmentName permissions', () => {
       it('includes the establishment if the requesting user has permissions for the holding establishment', () => {
         const can = sinon.stub().resolves(true);
-        can.withArgs('establishment.read', { establishment: 100 }).resolves(true);
+        can.withArgs('establishment.read', { establishment: ids.establishments.croydon }).resolves(true);
         this.api.setUser({ can });
         return request(this.api)
-          .get(`/establishment/101/profile/${PROFILE_1}/pil/${PIL_1}`)
+          .get(`/establishment/${ids.establishments.marvell}/profile/${ids.profiles.linfordChristie}/pil/${ids.pils.linfordChristie}`)
           .expect(200)
           .expect(pil => {
             assert.ok(pil.body.data.establishment);
@@ -197,10 +190,10 @@ describe('/pils', () => {
 
       it('does not include the establishment if the requesting user doesn\'t have permissions for the holding establishment', () => {
         const can = sinon.stub().resolves(true);
-        can.withArgs('establishment.read', { establishment: 100 }).resolves(false);
+        can.withArgs('establishment.read', { establishment: ids.establishments.croydon }).resolves(false);
         this.api.setUser({ can });
         return request(this.api)
-          .get(`/establishment/101/profile/${PROFILE_1}/pil/${PIL_1}`)
+          .get(`/establishment/${ids.establishments.marvell}/profile/${ids.profiles.linfordChristie}/pil/${ids.pils.linfordChristie}`)
           .expect(200)
           .expect(pil => {
             assert.equal(pil.body.data.establishment, undefined);
@@ -214,7 +207,7 @@ describe('/pils', () => {
           procedures: ['C']
         };
         return request(this.api)
-          .put(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}/grant`)
+          .put(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil/${ids.pils.linfordChristie}/grant`)
           .send({ data: input })
           .expect(200)
           .expect(() => {
@@ -224,11 +217,11 @@ describe('/pils', () => {
             assert.equal(req.method, 'POST');
             assert.equal(body.model, 'pil');
             assert.equal(body.action, 'grant');
-            assert.equal(body.id, PIL_1);
+            assert.equal(body.id, ids.pils.linfordChristie);
             assert.deepEqual(body.data, {
               ...input,
-              establishmentId: '100',
-              profileId: PROFILE_1,
+              establishmentId: ids.establishments.croydon,
+              profileId: ids.profiles.linfordChristie,
               procedures: ['C']
             });
           });
@@ -240,7 +233,7 @@ describe('/pils', () => {
           status: 'active'
         };
         return request(this.api)
-          .put(`/establishment/100/profile/${PROFILE_1}/pil/${PIL_1}/grant`)
+          .put(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil/${ids.pils.linfordChristie}/grant`)
           .send({ data: input })
           .expect(400);
       });
@@ -256,13 +249,13 @@ describe('/pils', () => {
           procedures: ['C'],
           species: ['Mice', 'Rats'],
           establishment: {
-            from: { id: 100, name: 'University of Croydon' },
-            to: { id: 999, name: 'Invisible Pharma' }
+            from: { id: ids.establishments.croydon, name: 'University of Croydon' },
+            to: { id: ids.inactiveEstablishment, name: 'Invisible Pharma' }
           }
         };
 
         return request(this.api)
-          .put(`/establishment/100/profile/${PROFILE_3}/pil/${PIL_2}/transfer`)
+          .put(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.multipleEstablishments}/pil/${ids.pils.multipleEstablishments}/transfer`)
           .send({ data: input })
           .expect(400)
           .expect(response => {
@@ -275,13 +268,13 @@ describe('/pils', () => {
           procedures: ['C'],
           species: ['Mice', 'Rats'],
           establishment: {
-            from: { id: 100, name: 'University of Croydon' },
-            to: { id: 101, name: 'Marvell Pharmaceutical' }
+            from: { id: ids.establishments.croydon, name: 'University of Croydon' },
+            to: { id: ids.establishments.marvell, name: 'Marvell Pharmaceutical' }
           }
         };
 
         return request(this.api)
-          .put(`/establishment/100/profile/${PROFILE_3}/pil/${PIL_2}/transfer`)
+          .put(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.multipleEstablishments}/pil/${ids.pils.multipleEstablishments}/transfer`)
           .send({ data: input })
           .expect(200)
           .expect(() => {
@@ -292,12 +285,12 @@ describe('/pils', () => {
             assert.equal(req.method, 'POST');
             assert.equal(body.model, 'pil');
             assert.equal(body.action, 'transfer');
-            assert.equal(body.changedBy, PROFILE_3);
-            assert.equal(body.id, PIL_2);
+            assert.equal(body.changedBy, ids.profiles.multipleEstablishments);
+            assert.equal(body.id, ids.pils.multipleEstablishments);
             assert.deepEqual(body.data, {
               ...input,
-              establishmentId: '101',
-              profileId: PROFILE_3
+              establishmentId: ids.establishments.marvell,
+              profileId: ids.profiles.multipleEstablishments
             });
           });
       });
@@ -309,13 +302,13 @@ describe('/pils', () => {
           procedures: ['C'],
           species: ['Mice', 'Rats'],
           establishment: {
-            from: { id: 100, name: 'University of Croydon' },
-            to: { id: 101, name: 'Marvell Pharmaceutical' }
+            from: { id: ids.establishments.croydon, name: 'University of Croydon' },
+            to: { id: ids.establishments.marvell, name: 'Marvell Pharmaceutical' }
           }
         };
 
         return request(this.api)
-          .put(`/establishment/100/profile/${PROFILE_3}/pil/${PIL_2}/transfer`)
+          .put(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.multipleEstablishments}/pil/${ids.pils.multipleEstablishments}/transfer`)
           .send({ data: input })
           .expect(200)
           .expect(() => {
@@ -326,12 +319,12 @@ describe('/pils', () => {
             assert.equal(req.method, 'POST');
             assert.equal(body.model, 'pil');
             assert.equal(body.action, 'transfer');
-            assert.equal(body.changedBy, LICENSING_ID);
-            assert.equal(body.id, PIL_2);
+            assert.equal(body.changedBy, ids.profiles.licensing);
+            assert.equal(body.id, ids.pils.multipleEstablishments);
             assert.deepEqual(body.data, {
               ...input,
-              establishmentId: '101',
-              profileId: PROFILE_3
+              establishmentId: ids.establishments.marvell,
+              profileId: ids.profiles.multipleEstablishments
             });
           });
       });

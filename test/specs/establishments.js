@@ -1,6 +1,7 @@
 const assert = require('assert');
 const request = require('supertest');
 const apiHelper = require('../helpers/api');
+const ids = require('../data/ids');
 
 const NOT_AUTHORISED = new Error('Not authorised');
 NOT_AUTHORISED.status = 403;
@@ -44,7 +45,7 @@ describe('/establishments', () => {
 
     it('returns the establishment details when provided a valid id', () => {
       return request(this.api)
-        .get('/establishment/100')
+        .get(`/establishment/${ids.establishments.croydon}`)
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.name, 'University of Croydon');
@@ -53,7 +54,7 @@ describe('/establishments', () => {
 
     it('includes the details for the licence holder as `pelh`', () => {
       return request(this.api)
-        .get('/establishment/100')
+        .get(`/establishment/${ids.establishments.croydon}`)
         .expect(200)
         .expect(response => {
           const profile = response.body.data.roles.find(r => r.type === 'pelh').profile;
@@ -65,7 +66,7 @@ describe('/establishments', () => {
 
     it('includes a count of the places at the establishment', () => {
       return request(this.api)
-        .get('/establishment/100')
+        .get(`/establishment/${ids.establishments.croydon}`)
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.placesCount, 3);
@@ -73,9 +74,9 @@ describe('/establishments', () => {
     });
 
     it('returns the users establishment', () => {
-      this.api.setUser({ establishment: '100' });
+      this.api.setUser({ establishment: ids.establishments.croydon });
       return request(this.api)
-        .get('/establishment/100')
+        .get(`/establishment/${ids.establishments.croydon}`)
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.name, 'University of Croydon');
@@ -85,20 +86,18 @@ describe('/establishments', () => {
     it('returns a 404 if the user is not authorised', () => {
       this.api.setUser({ can: () => Promise.reject(NOT_AUTHORISED) });
       return request(this.api)
-        .get('/establishment/100')
+        .get(`/establishment/${ids.establishments.croydon}`)
         .expect(404);
     });
 
     describe('grant', () => {
       it('sends a message to workflow on PUT', () => {
-        const inactiveEstId = 999;
-
         const meta = {
           comments: 'Hey there'
         };
 
         return request(this.api)
-          .put(`/establishment/${inactiveEstId}/grant`)
+          .put(`/establishment/${ids.establishments.inactiveEstablishment}/grant`)
           .send({ data: {}, meta })
           .expect(200)
           .expect(() => {
@@ -108,7 +107,7 @@ describe('/establishments', () => {
             assert.equal(req.method, 'POST');
             assert.equal(body.model, 'establishment');
             assert.equal(body.action, 'grant');
-            assert.equal(body.id, inactiveEstId);
+            assert.equal(body.id, ids.establishments.inactiveEstablishment);
             assert.deepEqual(body.meta, meta);
           });
       });

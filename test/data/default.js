@@ -1,515 +1,538 @@
+const uuid = require('uuid/v4');
 const moment = require('moment');
+const ids = require('./ids');
 
 module.exports = models => {
 
-  const { Establishment, Profile, PIL, Invitation, Project, ProjectVersion } = models;
-
   return Promise.resolve()
-    .then(() => {
-      return Profile.query().insertGraph([
-        {
-          id: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
-          userId: 'abc123',
-          title: 'Dr',
-          firstName: 'Linford',
-          lastName: 'Christie',
-          address: '1 Some Road',
-          postcode: 'A1 1AA',
-          email: 'test1@example.com',
-          telephone: '01234567890',
-          certificates: [
+    .then(() => models.Profile.query().insert([
+      {
+        id: ids.profiles.linfordChristie,
+        userId: 'abc123',
+        title: 'Dr',
+        firstName: 'Linford',
+        lastName: 'Christie',
+        address: '1 Some Road',
+        postcode: 'A1 1AA',
+        email: 'test1@example.com',
+        telephone: '01234567890'
+      },
+      {
+        id: ids.profiles.noddyHolder,
+        userId: 'basic',
+        title: 'Dr',
+        firstName: 'Noddy',
+        lastName: 'Holder',
+        address: '1 Some Road',
+        postcode: 'A1 1AA',
+        email: 'test2@example.com',
+        telephone: '01234567890'
+      },
+      {
+        id: ids.profiles.cliveNacwo,
+        userId: 'nacwo',
+        title: 'Dr',
+        firstName: 'Clive',
+        lastName: 'Nacwo',
+        address: '1 Some Road',
+        postcode: 'A1 1AA',
+        email: 'test3@example.com',
+        telephone: '01234567890'
+      },
+      {
+        id: ids.profiles.noddyNacwo,
+        title: 'Dr',
+        firstName: 'Noddy',
+        lastName: 'Nacwo',
+        address: '1 Some Road',
+        postcode: 'A1 1AA',
+        email: 'test4@example.com',
+        telephone: '01234567890'
+      },
+      {
+        id: ids.profiles.multipleEstablishments,
+        userId: 'multi-establishment',
+        title: 'Professor',
+        firstName: 'Colin',
+        lastName: 'Jackson',
+        address: '1 Some Road',
+        postcode: 'A1 1AA',
+        email: 'test5@example.com',
+        telephone: '01234567890'
+      },
+      {
+        id: ids.profiles.vincentMalloy,
+        title: 'Mr',
+        firstName: 'Vincent',
+        lastName: 'Malloy',
+        address: '1 Some Road',
+        postcode: 'A1 1AA',
+        email: 'vincent@malloy.com',
+        telephone: '01234567890'
+      }
+    ]))
+    .then(() => models.Profile.query().insert([
+      {
+        id: ids.profiles.licensing,
+        userId: 'licensing',
+        firstName: 'Li Sen',
+        lastName: 'Xing',
+        email: 'lisenxing@example.com',
+        asruUser: true,
+        asruLicensing: true,
+        asruInspector: false,
+        asruAdmin: false
+      }
+    ]))
+    .then(() => models.Certificate.query().insert([
+      {
+        id: ids.certificates.linfordChristie,
+        profileId: ids.profiles.linfordChristie
+      }
+    ]))
+    .then(() => models.Establishment.query().insert([
+      {
+        id: ids.establishments.croydon,
+        issueDate: '2018-01-01T12:00:00Z',
+        name: 'University of Croydon',
+        country: 'england',
+        address: '100 High Street',
+        email: 'test@example.com'
+      },
+      {
+        id: ids.establishments.marvell,
+        issueDate: '2020-01-01T12:00:00Z',
+        name: 'Marvell Pharmaceuticals',
+        country: 'england',
+        address: '101 High Street',
+        email: 'test@example.com'
+      },
+      {
+        id: ids.establishments.inactiveEstablishment,
+        name: 'Invisible Pharma'
+      },
+      {
+        id: ids.establishments.revokedEstablishment1,
+        name: 'Invisible Pharma 2',
+        issueDate: '2017-01-01T12:00:00Z',
+        revocationDate: '2018-01-01T12:00:00Z',
+        status: 'revoked'
+      },
+      {
+        id: ids.establishments.revokedEstablishment2,
+        name: 'Invisible Pharma 3',
+        issueDate: '2017-01-01T12:00:00Z',
+        revocationDate: '2020-01-01T12:00:00Z',
+        status: 'revoked'
+      }
+    ]))
+    .then(() => models.Place.query().insert([
+      {
+        id: ids.places.croydon101,
+        establishmentId: ids.establishments.croydon,
+        site: 'Lunar House',
+        name: 'Room 101',
+        suitability: ['SA', 'LA'],
+        holding: ['LTH']
+      },
+      {
+        id: ids.places.croydon102,
+        establishmentId: ids.establishments.croydon,
+        site: 'Lunar House',
+        name: 'Room 102',
+        suitability: ['SA'],
+        holding: ['STH']
+      },
+      {
+        id: ids.places.deleted,
+        establishmentId: ids.establishments.croydon,
+        site: 'Lunar House',
+        name: 'Deleted room',
+        suitability: ['SA'],
+        holding: ['STH'],
+        deleted: '2018-01-01T14:00:00Z'
+      },
+      {
+        id: ids.places.marvell101,
+        establishmentId: ids.establishments.marvell,
+        site: 'Apollo House',
+        name: 'Room 101',
+        suitability: ['SA'],
+        holding: ['LTH']
+      },
+      {
+        id: ids.places.marvell102,
+        establishmentId: ids.establishments.marvell,
+        site: 'Apollo House',
+        name: 'Room 102',
+        suitability: ['SA'],
+        holding: ['STH']
+      }
+    ]))
+    .then(() => models.Project.query().insert([
+      {
+        id: ids.projects.croydon.draftProject,
+        establishmentId: ids.establishments.croydon,
+        title: 'Draft project',
+        schemaVersion: 1,
+        licenceHolderId: ids.profiles.linfordChristie,
+        expiryDate: '2040-01-01T12:00:00Z',
+        licenceNumber: 'abc123',
+        status: 'inactive'
+      },
+      {
+        id: ids.projects.croydon.expiredProject,
+        establishmentId: ids.establishments.croydon,
+        title: 'Expired project',
+        schemaVersion: 1,
+        licenceHolderId: ids.profiles.linfordChristie,
+        expiryDate: '2010-01-01T12:00:00Z',
+        licenceNumber: 'abc456',
+        status: 'expired'
+      },
+      {
+        id: ids.projects.croydon.activeProject,
+        establishmentId: ids.establishments.croydon,
+        title: 'Active project',
+        schemaVersion: 1,
+        licenceHolderId: ids.profiles.linfordChristie,
+        expiryDate: '2040-01-01T12:00:00Z',
+        licenceNumber: 'abc111',
+        status: 'active'
+      },
+      {
+        id: ids.projects.croydon.revokedProject,
+        establishmentId: ids.establishments.croydon,
+        title: 'Revoked project',
+        schemaVersion: 1,
+        licenceHolderId: ids.profiles.linfordChristie,
+        expiryDate: '2030-01-01T12:00:00Z',
+        licenceNumber: 'abc000',
+        status: 'revoked'
+      },
+      {
+        id: ids.projects.marvell.marvellProject,
+        establishmentId: ids.establishments.marvell,
+        title: 'Test project 2',
+        schemaVersion: 1,
+        licenceHolderId: ids.profiles.vincentMalloy,
+        expiryDate: '2040-01-01T12:00:00Z',
+        licenceNumber: 'abc789',
+        status: 'inactive'
+      },
+      {
+        id: ids.projects.marvell.testProject,
+        establishmentId: ids.establishments.marvell,
+        title: 'Test project',
+        status: 'inactive',
+        expiryDate: null,
+        revocationDate: null,
+        schemaVersion: 1
+      },
+      {
+        id: ids.projects.marvell.testLegacyProject,
+        establishmentId: ids.establishments.marvell,
+        title: 'Test legacy project',
+        status: 'inactive',
+        expiryDate: null,
+        revocationDate: null,
+        schemaVersion: 0
+      },
+      {
+        id: ids.projects.marvell.nonRaProject,
+        establishmentId: ids.establishments.marvell,
+        title: 'Non-RA project',
+        status: 'active',
+        expiryDate: '2025-01-01T12:00:00Z',
+        revocationDate: null,
+        schemaVersion: 0
+      },
+      {
+        id: ids.projects.marvell.raProject,
+        establishmentId: ids.establishments.marvell,
+        title: 'RA project',
+        status: 'active',
+        expiryDate: '2025-01-01T12:00:00Z',
+        revocationDate: null,
+        schemaVersion: 0
+      },
+      {
+        id: ids.projects.marvell.revokedRaProject,
+        establishmentId: ids.establishments.marvell,
+        title: 'Revoked RA project',
+        status: 'revoked',
+        expiryDate: '2025-01-01T12:00:00Z',
+        revocationDate: '2024-01-01T12:00:00Z',
+        schemaVersion: 0
+      }
+    ]))
+    .then(() => models.Project.query().insert([
+      {
+        id: ids.projects.croydon.asruInitiatedAmendment,
+        establishmentId: ids.establishments.croydon,
+        title: 'Asru initiated amendment',
+        status: 'active',
+        schemaVersion: 1,
+        createdAt: '2019-09-04T13:32:45.886Z',
+        issueDate: '2019-04-23T00:00:00.000Z',
+        updatedAt: '2019-09-04T13:32:45.886Z',
+        expiryDate: '2024-04-23T00:00:00.000Z'
+      }
+    ]))
+    .then(() => models.ProjectVersion.query().insert([
+      {
+        id: uuid(),
+        projectId: ids.projects.croydon.activeProject,
+        status: 'draft',
+        data: {}
+      },
+      {
+        id: ids.versions.testProject,
+        projectId: ids.projects.marvell.testProject,
+        status: 'submitted',
+        data: {
+          protocols: [
             {
-              id: 'c3032cc0-7dc7-40bc-be7e-97edc4ea1072'
+              species: [
+                {
+                  geneticallyAltered: true
+                }
+              ]
             }
           ]
-        },
-        {
-          id: 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88',
-          userId: 'basic',
-          title: 'Dr',
-          firstName: 'Noddy',
-          lastName: 'Holder',
-          address: '1 Some Road',
-          postcode: 'A1 1AA',
-          email: 'test2@example.com',
-          telephone: '01234567890'
-        },
-        {
-          id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9',
-          userId: 'nacwo',
-          title: 'Dr',
-          firstName: 'Clive',
-          lastName: 'Nacwo',
-          address: '1 Some Road',
-          postcode: 'A1 1AA',
-          email: 'test3@example.com',
-          telephone: '01234567890'
-        },
-        {
-          id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d0',
-          title: 'Dr',
-          firstName: 'Noddy',
-          lastName: 'Nacwo',
-          address: '1 Some Road',
-          postcode: 'A1 1AA',
-          email: 'test4@example.com',
-          telephone: '01234567890'
-        },
-        {
-          id: 'ae28fb31-d867-4371-9b4f-79019e71232f',
-          userId: 'multi-establishment',
-          title: 'Professor',
-          firstName: 'Colin',
-          lastName: 'Jackson',
-          address: '1 Some Road',
-          postcode: 'A1 1AA',
-          email: 'test5@example.com',
-          telephone: '01234567890'
-        },
-        {
-          id: 'ae28fb31-d867-4371-9b4f-79019e71232e',
-          title: 'Mr',
-          firstName: 'Vincent',
-          lastName: 'Malloy',
-          address: '1 Some Road',
-          postcode: 'A1 1AA',
-          email: 'vincent@malloy.com',
-          telephone: '01234567890'
         }
-      ])
-        .then(() => {
-          return Profile.query().insertGraph([
+      },
+      {
+        id: ids.versions.testLegacyProject,
+        projectId: ids.projects.marvell.testLegacyProject,
+        status: 'submitted',
+        data: {
+          protocols: [
             {
-              id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d2',
-              userId: 'licensing',
-              firstName: 'Li Sen',
-              lastName: 'Xing',
-              email: 'lisenxing@example.com',
-              asruUser: true,
-              asruLicensing: true,
-              asruInspector: false,
-              asruAdmin: false
-            }
-          ]);
-        })
-        .then(() => {
-          return Establishment.query().insertGraph([{
-            id: 100,
-            issueDate: '2018-01-01T12:00:00Z',
-            name: 'University of Croydon',
-            country: 'england',
-            address: '100 High Street',
-            email: 'test@example.com',
-            places: [
-              {
-                id: '1d6c5bb4-be60-40fd-97a8-b29ffaa2135f',
-                site: 'Lunar House',
-                name: 'Room 101',
-                suitability: ['SA', 'LA'],
-                holding: ['LTH']
-              },
-              {
-                id: '2f404b2f-656f-4cc3-b432-5aadad052fc8',
-                site: 'Lunar House',
-                name: 'Room 102',
-                suitability: ['SA'],
-                holding: ['STH']
-              },
-              {
-                id: 'a50331bb-c1d0-4068-87ca-b5a41143b0d0',
-                site: 'Lunar House',
-                name: 'Deleted room',
-                suitability: ['SA'],
-                holding: ['STH'],
-                deleted: '2018-01-01T14:00:00Z'
-              }
-            ],
-            projects: [
-              {
-                id: 'bf22f7cd-cf85-42ef-93da-02b709df67be',
-                title: 'Draft project',
-                licenceHolderId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
-                expiryDate: '2040-01-01T12:00:00Z',
-                licenceNumber: 'abc123',
-                status: 'inactive'
-              },
-              {
-                id: '33628b46-da08-4e60-9b15-b031f5000f0c',
-                title: 'Expired project',
-                licenceHolderId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
-                expiryDate: '2010-01-01T12:00:00Z',
-                licenceNumber: 'abc456',
-                status: 'expired'
-              },
-              {
-                id: 'd2f9777d-2d9d-4ea2-a9c2-c5ed592fd98d',
-                title: 'Active project',
-                licenceHolderId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
-                expiryDate: '2040-01-01T12:00:00Z',
-                licenceNumber: 'abc111',
-                status: 'active',
-                version: [
-                  {
-                    status: 'draft',
-                    data: {}
-                  }
-                ]
-              },
-              {
-                id: '3d112756-5d0b-4303-838e-34046aa98e30',
-                title: 'Revoked project',
-                licenceHolderId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
-                expiryDate: '2030-01-01T12:00:00Z',
-                licenceNumber: 'abc000',
-                status: 'revoked'
-              }
-            ]
-          },
-          {
-            id: 101,
-            issueDate: '2020-01-01T12:00:00Z',
-            name: 'Marvell Pharmaceuticals',
-            country: 'england',
-            address: '101 High Street',
-            email: 'test@example.com',
-            places: [
-              {
-                id: 'e859d43a-e8ab-4ae6-844a-95c978082a48',
-                site: 'Apollo House',
-                name: 'Room 101',
-                suitability: ['SA'],
-                holding: ['LTH']
-              },
-              {
-                id: '4c9f9921-92ad-465c-8f94-06f05fcb7736',
-                site: 'Apollo House',
-                name: 'Room 102',
-                suitability: ['SA'],
-                holding: ['STH']
-              }
-            ],
-            projects: [
-              {
-                id: '4f76232a-7794-45da-a0ef-c7eafc15fa1e',
-                title: 'Test project 2',
-                licenceHolderId: 'ae28fb31-d867-4371-9b4f-79019e71232e',
-                expiryDate: '2040-01-01T12:00:00Z',
-                licenceNumber: 'abc789',
-                status: 'inactive'
-              }
-            ]
-          },
-          {
-            id: 999,
-            name: 'Invisible Pharma'
-          },
-          {
-            id: 1000,
-            name: 'Invisible Pharma 2',
-            issueDate: '2017-01-01T12:00:00Z',
-            revocationDate: '2018-01-01T12:00:00Z',
-            status: 'revoked'
-          },
-          {
-            id: 1001,
-            name: 'Invisible Pharma 3',
-            issueDate: '2017-01-01T12:00:00Z',
-            revocationDate: '2020-01-01T12:00:00Z',
-            status: 'revoked'
-          }]);
-        })
-        .then(() => {
-          return Establishment.query().upsertGraph([{
-            id: 100,
-            profiles: [
-              { id: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9' },
-              { id: 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88' },
-              { id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9' },
-              { id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d0' },
-              { id: 'ae28fb31-d867-4371-9b4f-79019e71232f' }
-            ],
-            roles: [
-              {
-                type: 'pelh',
-                profileId: 'ae28fb31-d867-4371-9b4f-79019e71232f'
-              },
-              {
-                type: 'nacwo',
-                profileId: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9'
-              },
-              {
-                type: 'nacwo',
-                profileId: 'a942ffc7-e7ca-4d76-a001-0b5048a057d0'
-              }
-            ]
-          },
-          {
-            id: 101,
-            profiles: [
-              { id: 'ae28fb31-d867-4371-9b4f-79019e71232f' },
-              { id: 'ae28fb31-d867-4371-9b4f-79019e71232e' },
-              { id: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9' }
-            ],
-            roles: [
-              {
-                type: 'pelh',
-                profileId: 'ae28fb31-d867-4371-9b4f-79019e71232f'
-              }
-            ]
-          }], { relate: true });
-        })
-        .then(() => {
-          return PIL.query().insertGraph([
-            {
-              id: '9fbe0218-995d-47d3-88e7-641fc046d7d1',
-              profileId: 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9',
-              establishmentId: 100,
-              licenceNumber: 'AB-123',
-              status: 'active',
-              issueDate: '2016-01-01T12:00:00Z',
-              revocationDate: null,
-              procedures: ['A', 'B'],
-              updatedAt: '2020-01-01T12:00:00Z',
-              pilTransfers: [
+              species: [
                 {
-                  fromEstablishmentId: 101,
-                  toEstablishmentId: 100,
-                  createdAt: '2019-01-01T12:00:00Z'
+                  'genetically-altered': true,
+                  lifeStage: 'Adult'
+                },
+                {
+                  geneticallyAltered: true,
+                  'genetically-altered': false,
+                  lifeStage: 'Adult'
                 }
               ]
             },
             {
-              id: '247912b2-e5c6-487d-b717-f8136491f7b8',
-              profileId: 'b2b8315b-82c0-4b2d-bc13-eb13e605ee88',
-              establishmentId: 100,
-              licenceNumber: 'D-456',
-              status: 'active',
-              issueDate: '2016-01-01T12:00:00Z',
-              revocationDate: null,
-              procedures: ['D'],
-              notesCatD: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-              updatedAt: '2020-01-01T12:00:00Z'
-            },
-            {
-              id: 'ba3f4fdf-27e4-461e-a251-3188faa35df5',
-              profileId: 'a942ffc7-e7ca-4d76-a001-0b5048a057d9',
-              establishmentId: 100,
-              licenceNumber: 'F-789',
-              status: 'active',
-              issueDate: '2016-01-01T12:00:00Z',
-              revocationDate: null,
-              procedures: ['F'],
-              notesCatF: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-              updatedAt: '2020-01-01T12:00:00Z',
-              reviewDate: moment().subtract(1, 'month').toISOString()
-            },
-            {
-              id: '117298fa-f98f-4a98-992d-d29b60703866',
-              profileId: 'ae28fb31-d867-4371-9b4f-79019e71232f', // Colin is at both establishments
-              establishmentId: 100,
-              licenceNumber: 'C-987',
-              status: 'active',
-              issueDate: '2016-01-01T12:00:00Z',
-              revocationDate: '2015-12-01T12:00:00Z',
-              procedures: ['C'],
-              species: ['Mice', 'Rats'],
-              updatedAt: '2020-01-01T12:00:00Z',
-              reviewDate: '2024-12-01T12:00:00Z'
+              species: [
+                {
+                  geneticallyAltered: true,
+                  'life-stages': 'Embryo',
+                  lifeStage: 'Adult'
+                }
+              ]
             }
-          ]);
-        })
-        .then(() => {
-          return Invitation.query().insertGraph([
+          ]
+        }
+      },
+      {
+        id: ids.versions.testLegacyProject2,
+        projectId: ids.projects.marvell.testLegacyProject,
+        status: 'submitted',
+        data: {
+          conditions: [
             {
-              id: 'f5bd5c7d-0cfc-4e3b-bbab-1ad59de9af1e',
-              email: 'TEST1@example.com', // test that case does not have to match profile.email
-              establishmentId: 101,
-              role: 'basic',
-              token: 'abcdef'
-            },
-            {
-              id: 'b75a466f-a3fb-483e-9d1f-c35d80d85da3',
-              email: 'test2@example.com',
-              establishmentId: 101,
-              role: 'admin',
-              token: 'abcdef'
+              key: 'custom',
+              edited: 'This is a custom condition'
             }
-          ]);
-        })
-        .then(() => {
-          return Project.query().insert([
-            {
-              id: 'ba3f4fdf-27e4-461e-a251-111111111111',
-              title: 'Test project',
-              status: 'inactive',
-              expiryDate: null,
-              revocationDate: null,
-              establishmentId: 101,
-              schemaVersion: 1
-            },
-            {
-              id: 'ba3f4fdf-27e4-461e-a251-333333333333',
-              title: 'Test legacy project',
-              status: 'inactive',
-              expiryDate: null,
-              revocationDate: null,
-              establishmentId: 101,
-              schemaVersion: 0
-            },
-            {
-              id: 'ba3f4fdf-27e4-461e-a251-444444444444',
-              title: 'Non-RA project',
-              status: 'active',
-              expiryDate: '2025-01-01T12:00:00Z',
-              revocationDate: null,
-              establishmentId: 101,
-              schemaVersion: 0
-            },
-            {
-              id: 'ba3f4fdf-27e4-461e-a251-555555555555',
-              title: 'RA project',
-              status: 'active',
-              expiryDate: '2025-01-01T12:00:00Z',
-              revocationDate: null,
-              establishmentId: 101,
-              schemaVersion: 0
-            },
-            {
-              id: 'ba3f4fdf-27e4-461e-a251-666666666666',
-              title: 'Revoked RA project',
-              status: 'revoked',
-              expiryDate: '2025-01-01T12:00:00Z',
-              revocationDate: '2024-01-01T12:00:00Z',
-              establishmentId: 101,
-              schemaVersion: 0
-            }
-          ]);
-        })
-        .then(() => {
-          return Project.query().insert({
-            id: 'db6cf8e1-7a1f-41c0-96f7-ef1a4dadcaa8',
-            title: 'Asru initiated amendment',
-            status: 'active',
-            establishmentId: 100,
-            schemaVersion: 1,
-            createdAt: '2019-09-04T13:32:45.886Z',
-            issueDate: '2019-04-23T00:00:00.000Z',
-            updatedAt: '2019-09-04T13:32:45.886Z',
-            expiryDate: '2024-04-23T00:00:00.000Z'
-          });
-        })
-        .then(() => {
-          return ProjectVersion.query().insert([
-            {
-              projectId: 'ba3f4fdf-27e4-461e-a251-111111111111',
-              status: 'submitted',
-              id: 'ba3f4fdf-27e4-461e-a251-222222222222',
-              data: {
-                protocols: [
-                  {
-                    species: [
-                      {
-                        geneticallyAltered: true
-                      }
-                    ]
-                  }
-                ]
-              }
-            },
-            {
-              projectId: 'ba3f4fdf-27e4-461e-a251-333333333333',
-              status: 'submitted',
-              id: 'ba3f4fdf-27e4-461e-a251-444444444444',
-              data: {
-                protocols: [
-                  {
-                    species: [
-                      {
-                        'genetically-altered': true,
-                        lifeStage: 'Adult'
-                      },
-                      {
-                        geneticallyAltered: true,
-                        'genetically-altered': false,
-                        lifeStage: 'Adult'
-                      }
-                    ]
-                  },
-                  {
-                    species: [
-                      {
-                        geneticallyAltered: true,
-                        'life-stages': 'Embryo',
-                        lifeStage: 'Adult'
-                      }
-                    ]
-                  }
-                ]
-              }
-            },
-            {
-              projectId: 'ba3f4fdf-27e4-461e-a251-333333333333',
-              status: 'submitted',
-              id: 'ed0687a2-1a52-4cc8-b100-588a04255c59',
-              data: {
-                conditions: [
-                  {
-                    key: 'custom',
-                    edited: 'This is a custom condition'
-                  }
-                ]
-              }
-            },
-            {
-              projectId: 'ba3f4fdf-27e4-461e-a251-444444444444',
-              status: 'granted',
-              id: 'ed0687a2-1a52-4cc8-b100-588a04255c60',
-              data: {}
-            },
-            {
-              projectId: 'ba3f4fdf-27e4-461e-a251-555555555555',
-              status: 'granted',
-              id: 'ed0687a2-1a52-4cc8-b100-588a04255c61',
-              data: {
-                retrospectiveAssessment: true
-              }
-            },
-            {
-              projectId: 'ba3f4fdf-27e4-461e-a251-666666666666',
-              status: 'granted',
-              id: 'ed0687a2-1a52-4cc8-b100-588a04255c62',
-              data: {
-                species: [
-                  'marmosets'
-                ]
-              }
-            }
-          ]);
-        })
-        .then(() => {
-          return ProjectVersion.query().insert([
-            {
-              projectId: 'db6cf8e1-7a1f-41c0-96f7-ef1a4dadcaa8',
-              status: 'granted',
-              createdAt: '2019-09-04T13:32:45.886Z',
-              updatedAt: '2019-09-04T13:32:45.886Z',
-              asruVersion: false
-            },
-            {
-              projectId: 'db6cf8e1-7a1f-41c0-96f7-ef1a4dadcaa8',
-              status: 'draft',
-              createdAt: '2019-09-05T13:32:45.886Z',
-              updatedAt: '2019-09-05T13:32:45.886Z',
-              asruVersion: true
-            },
-            {
-              projectId: 'db6cf8e1-7a1f-41c0-96f7-ef1a4dadcaa8',
-              status: 'draft',
-              createdAt: '2019-09-06T13:32:45.886Z',
-              updatedAt: '2019-09-06T13:32:45.886Z',
-              asruVersion: true
-            }
-          ]);
-        });
-    });
+          ]
+        }
+      },
+      {
+        id: ids.versions.nonRaProject,
+        projectId: ids.projects.marvell.nonRaProject,
+        status: 'granted',
+        data: {}
+      },
+      {
+        id: ids.versions.raProject,
+        projectId: ids.projects.marvell.raProject,
+        status: 'granted',
+        data: {
+          retrospectiveAssessment: true
+        }
+      },
+      {
+        id: ids.versions.revokedRaProject,
+        projectId: ids.projects.marvell.revokedRaProject,
+        status: 'granted',
+        data: {
+          species: [
+            'marmosets'
+          ]
+        }
+      }
+    ]))
+    .then(() => models.ProjectVersion.query().insert([
+      {
+        projectId: ids.projects.croydon.asruInitiatedAmendment,
+        status: 'granted',
+        createdAt: '2019-09-04T13:32:45.886Z',
+        updatedAt: '2019-09-04T13:32:45.886Z',
+        asruVersion: false
+      },
+      {
+        projectId: ids.projects.croydon.asruInitiatedAmendment,
+        status: 'draft',
+        createdAt: '2019-09-05T13:32:45.886Z',
+        updatedAt: '2019-09-05T13:32:45.886Z',
+        asruVersion: true
+      },
+      {
+        projectId: ids.projects.croydon.asruInitiatedAmendment,
+        status: 'draft',
+        createdAt: '2019-09-06T13:32:45.886Z',
+        updatedAt: '2019-09-06T13:32:45.886Z',
+        asruVersion: true
+      }
+    ]))
+    .then(() => models.Permission.query().insert([
+      {
+        profileId: ids.profiles.linfordChristie,
+        establishmentId: ids.establishments.croydon,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.noddyHolder,
+        establishmentId: ids.establishments.croydon,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.cliveNacwo,
+        establishmentId: ids.establishments.croydon,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.noddyNacwo,
+        establishmentId: ids.establishments.croydon,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.multipleEstablishments,
+        establishmentId: ids.establishments.croydon,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.multipleEstablishments,
+        establishmentId: ids.establishments.marvell,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.vincentMalloy,
+        establishmentId: ids.establishments.marvell,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.cliveNacwo,
+        establishmentId: ids.establishments.marvell,
+        role: 'basic'
+      }
+    // permissions does not have an id column
+    ]).returning('*'))
+    .then(() => models.Role.query().insert([
+      {
+        type: 'pelh',
+        profileId: ids.profiles.multipleEstablishments,
+        establishmentId: ids.establishments.croydon
+      },
+      {
+        type: 'nacwo',
+        profileId: ids.profiles.cliveNacwo,
+        establishmentId: ids.establishments.croydon
+      },
+      {
+        type: 'nacwo',
+        profileId: ids.profiles.noddyNacwo,
+        establishmentId: ids.establishments.croydon
+      },
+      {
+        type: 'pelh',
+        profileId: ids.profiles.multipleEstablishments,
+        establishmentId: ids.establishments.marvell
+      }
+    ]))
+    .then(() => models.PIL.query().insert([
+      {
+        id: ids.pils.linfordChristie,
+        profileId: ids.profiles.linfordChristie,
+        establishmentId: ids.establishments.croydon,
+        licenceNumber: 'AB-123',
+        status: 'active',
+        issueDate: '2016-01-01T12:00:00Z',
+        revocationDate: null,
+        procedures: ['A', 'B'],
+        updatedAt: '2020-01-01T12:00:00Z'
+      },
+      {
+        id: ids.pils.noddyHolder,
+        profileId: ids.profiles.noddyHolder,
+        establishmentId: ids.establishments.croydon,
+        licenceNumber: 'D-456',
+        status: 'active',
+        issueDate: '2016-01-01T12:00:00Z',
+        revocationDate: null,
+        procedures: ['D'],
+        notesCatD: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        updatedAt: '2020-01-01T12:00:00Z'
+      },
+      {
+        id: ids.pils.cliveNacwo,
+        profileId: ids.profiles.cliveNacwo,
+        establishmentId: ids.establishments.croydon,
+        licenceNumber: 'F-789',
+        status: 'active',
+        issueDate: '2016-01-01T12:00:00Z',
+        revocationDate: null,
+        procedures: ['F'],
+        notesCatF: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        updatedAt: '2020-01-01T12:00:00Z',
+        reviewDate: moment().subtract(1, 'month').toISOString()
+      },
+      {
+        id: ids.pils.multipleEstablishments,
+        profileId: ids.profiles.multipleEstablishments, // Colin is at both establishments
+        establishmentId: ids.establishments.croydon,
+        licenceNumber: 'C-987',
+        status: 'active',
+        issueDate: '2016-01-01T12:00:00Z',
+        revocationDate: '2015-12-01T12:00:00Z',
+        procedures: ['C'],
+        species: ['Mice', 'Rats'],
+        updatedAt: '2020-01-01T12:00:00Z',
+        reviewDate: '2024-12-01T12:00:00Z'
+      }
+    ]))
+    .then(() => models.PilTransfer.query().insert([
+      {
+        pilId: ids.pils.linfordChristie,
+        fromEstablishmentId: ids.establishments.marvell,
+        toEstablishmentId: ids.establishments.croydon,
+        createdAt: '2019-01-01T12:00:00Z'
+      }
+    ]))
+    .then(() => models.Invitation.query().insert([
+      {
+        id: ids.invitations.basic,
+        // test that case does not have to match profile.email
+        email: 'TEST1@example.com',
+        establishmentId: ids.establishments.marvell,
+        role: 'basic',
+        token: 'abcdef'
+      },
+      {
+        id: ids.invitations.admin,
+        email: 'test2@example.com',
+        establishmentId: ids.establishments.marvell,
+        role: 'admin',
+        token: 'abcdef'
+      }
+    ]));
 };

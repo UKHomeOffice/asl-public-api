@@ -2,6 +2,7 @@ const assert = require('assert');
 const request = require('supertest');
 const { stringify } = require('qs');
 const apiHelper = require('../helpers/api');
+const ids = require('../data/ids');
 
 describe('/profiles', () => {
   before(() => {
@@ -23,13 +24,13 @@ describe('/profiles', () => {
 
   it('returns only the profiles related to the current establishment', () => {
     return request(this.api)
-      .get('/establishment/100/profiles')
+      .get(`/establishment/${ids.establishments.croydon}/profiles`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 5);
         response.body.data.forEach(profile => {
           profile.establishments.forEach(establishment => {
-            assert.equal(establishment.id, 100);
+            assert.equal(establishment.id, ids.establishments.croydon);
           });
         });
       });
@@ -42,7 +43,7 @@ describe('/profiles', () => {
       }
     });
     return request(this.api)
-      .get(`/establishment/100/profiles?${query}`)
+      .get(`/establishment/${ids.establishments.croydon}/profiles?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 2);
@@ -56,7 +57,7 @@ describe('/profiles', () => {
   it('can search on full name', () => {
     const query = stringify({ search: 'Linford Christie' });
     return request(this.api)
-      .get(`/establishment/100/profiles?${query}`)
+      .get(`/establishment/${ids.establishments.croydon}/profiles?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 1);
@@ -66,7 +67,7 @@ describe('/profiles', () => {
   it('can search on full name', () => {
     const query = stringify({ search: 'Linford Christina' });
     return request(this.api)
-      .get(`/establishment/100/profiles?${query}`)
+      .get(`/establishment/${ids.establishments.croydon}/profiles?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 0);
@@ -76,7 +77,7 @@ describe('/profiles', () => {
   it('can search on firstName', () => {
     const query = stringify({ search: 'Linford' });
     return request(this.api)
-      .get(`/establishment/100/profiles?${query}`)
+      .get(`/establishment/${ids.establishments.croydon}/profiles?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 1);
@@ -86,7 +87,7 @@ describe('/profiles', () => {
   it('can search on firstName', () => {
     const query = stringify({ search: 'Linfordia' });
     return request(this.api)
-      .get(`/establishment/100/profiles?${query}`)
+      .get(`/establishment/${ids.establishments.croydon}/profiles?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 0);
@@ -96,7 +97,7 @@ describe('/profiles', () => {
   it('can search on lastName', () => {
     const query = stringify({ search: 'Christie' });
     return request(this.api)
-      .get(`/establishment/100/profiles?${query}`)
+      .get(`/establishment/${ids.establishments.croydon}/profiles?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 1);
@@ -106,7 +107,7 @@ describe('/profiles', () => {
   it('can search on lastName', () => {
     const query = stringify({ search: 'Christina' });
     return request(this.api)
-      .get(`/establishment/100/profiles?${query}`)
+      .get(`/establishment/${ids.establishments.croydon}/profiles?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 0);
@@ -121,7 +122,7 @@ describe('/profiles', () => {
       search: 'colin'
     });
     return request(this.api)
-      .get(`/establishment/100/profiles?${query}`)
+      .get(`/establishment/${ids.establishments.croydon}/profiles?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 1);
@@ -137,7 +138,7 @@ describe('/profiles', () => {
       }
     });
     return request(this.api)
-      .get(`/establishment/100/profiles?${query}`)
+      .get(`/establishment/${ids.establishments.croydon}/profiles?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 1);
@@ -152,7 +153,7 @@ describe('/profiles', () => {
       }
     });
     return request(this.api)
-      .get(`/establishment/101/profiles?${query}`)
+      .get(`/establishment/${ids.establishments.marvell}/profiles?${query}`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 1);
@@ -171,7 +172,7 @@ describe('/profiles', () => {
 
     it('returns only named users and the current logged-in user', () => {
       return request(this.api)
-        .get(`/establishment/100/profiles`)
+        .get(`/establishment/${ids.establishments.croydon}/profiles`)
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.length, 4, 'The full set of users is not returned');
@@ -190,7 +191,7 @@ describe('/profiles', () => {
 
     it('returns the profile data for an individual profile', () => {
       return request(this.api)
-        .get('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9')
+        .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}`)
         .expect(200)
         .expect(profile => {
           assert.equal(profile.body.data.firstName, 'Linford');
@@ -200,7 +201,7 @@ describe('/profiles', () => {
 
     it('includes the PIL data if it exists', () => {
       return request(this.api)
-        .get('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9')
+        .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}`)
         .expect(200)
         .expect(profile => {
           assert.equal(profile.body.data.pil.licenceNumber, 'AB-123');
@@ -209,7 +210,7 @@ describe('/profiles', () => {
 
     it('returns a NACWO role for NACWOs without places', () => {
       return request(this.api)
-        .get('/establishment/100/profile/a942ffc7-e7ca-4d76-a001-0b5048a057d9')
+        .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.cliveNacwo}`)
         .expect(200)
         .expect(profile => {
           assert.deepEqual(profile.body.data.roles.map(r => r.type), ['nacwo']);
@@ -219,7 +220,7 @@ describe('/profiles', () => {
     it('does not include establishments except the one in scope', () => {
       return request(this.api)
         // get a profile that exists in multiple establishments
-        .get('/establishment/100/profile/ae28fb31-d867-4371-9b4f-79019e71232f')
+        .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.multipleEstablishments}`)
         .expect(200)
         .expect(profile => {
           assert.equal(profile.body.data.establishments.length, 1);
@@ -228,7 +229,7 @@ describe('/profiles', () => {
         .then(() => {
           return request(this.api)
             // request the same profile within the scope of the other establishment
-            .get('/establishment/101/profile/ae28fb31-d867-4371-9b4f-79019e71232f')
+            .get(`/establishment/${ids.establishments.marvell}/profile/${ids.profiles.multipleEstablishments}`)
             .expect(200)
             .expect(profile => {
               assert.equal(profile.body.data.establishments.length, 1);
@@ -242,7 +243,7 @@ describe('/profiles', () => {
 
       return request(this.api)
         // get a profile that exists in multiple establishments
-        .get('/establishment/100/profile/ae28fb31-d867-4371-9b4f-79019e71232f')
+        .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.multipleEstablishments}`)
         .expect(200)
         .expect(response => {
           const profile = response.body.data;
@@ -257,7 +258,7 @@ describe('/profiles', () => {
 
       return request(this.api)
         // get a profile that exists in multiple establishments at a completely different establishment
-        .get('/establishment/1000/profile/ae28fb31-d867-4371-9b4f-79019e71232f')
+        .get(`/establishment/${ids.establishments.croydon}0/profile/${ids.profiles.multipleEstablishments}`)
         .expect(404)
         .expect(response => {
           assert.ok(!response.body.data, 'Response should not include data');
@@ -275,7 +276,7 @@ describe('/profiles', () => {
 
       it('can access the profile of the current logged-in user', () => {
         return request(this.api)
-          .get('/establishment/100/profile/b2b8315b-82c0-4b2d-bc13-eb13e605ee88')
+          .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.noddyHolder}`)
           .expect(200)
           .expect(profile => {
             assert.equal(profile.body.data.firstName, 'Noddy');
@@ -285,7 +286,7 @@ describe('/profiles', () => {
 
       it('can access the profile of a named person', () => {
         return request(this.api)
-          .get('/establishment/100/profile/a942ffc7-e7ca-4d76-a001-0b5048a057d9')
+          .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.cliveNacwo}`)
           .expect(200)
           .expect(profile => {
             assert.equal(profile.body.data.firstName, 'Clive');
@@ -295,7 +296,7 @@ describe('/profiles', () => {
 
       it('cannot access the profile of people who do not have named roles', () => {
         return request(this.api)
-          .get('/establishment/100/profile/f0835b01-00a0-4c7f-954c-13ed2ef7efd9')
+          .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}`)
           .expect(404);
       });
 

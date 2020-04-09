@@ -1,6 +1,7 @@
 const assert = require('assert');
 const request = require('supertest');
 const apiHelper = require('../helpers/api');
+const ids = require('../data/ids');
 
 describe('Invite User', () => {
   beforeEach(() => {
@@ -23,7 +24,7 @@ describe('Invite User', () => {
       role: 'admin'
     };
     return request(this.api)
-      .post('/establishment/100/invite-user')
+      .post(`/establishment/${ids.establishments.croydon}/invite-user`)
       .send({ data: input })
       .expect(200)
       .expect(() => {
@@ -33,7 +34,7 @@ describe('Invite User', () => {
         assert.equal(req.method, 'POST');
         assert.equal(body.model, 'invitation');
         assert.equal(body.action, 'create');
-        assert.deepEqual(body.data, { ...input, establishmentId: '100' });
+        assert.deepEqual(body.data, { ...input, establishmentId: ids.establishments.croydon });
       });
   });
 
@@ -44,7 +45,7 @@ describe('Invite User', () => {
       role: 'admin'
     };
     return request(this.api)
-      .post('/establishment/100/invite-user')
+      .post(`/establishment/${ids.establishments.croydon}/invite-user`)
       .send({ data: input })
       .expect(400)
       .expect(response => {
@@ -62,7 +63,7 @@ describe('Invite User', () => {
       email: 'sterling@archer.com'
     };
     return request(this.api)
-      .post('/establishment/100/invite-user')
+      .post(`/establishment/${ids.establishments.croydon}/invite-user`)
       .send({ data: input })
       .expect(400)
       .expect(response => {
@@ -82,7 +83,7 @@ describe('Invite User', () => {
     };
 
     return request(this.api)
-      .post('/establishment/100/invite-user')
+      .post(`/establishment/${ids.establishments.croydon}/invite-user`)
       .send({ data: user })
       .expect(400)
       .expect(response => {
@@ -102,7 +103,7 @@ describe('Invite User', () => {
     };
 
     return request(this.api)
-      .post('/establishment/100/invite-user')
+      .post(`/establishment/${ids.establishments.croydon}/invite-user`)
       .send({ data: user })
       .expect(400)
       .expect(response => {

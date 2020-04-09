@@ -1,6 +1,7 @@
 const assert = require('assert');
 const request = require('supertest');
 const apiHelper = require('../helpers/api');
+const ids = require('../data/ids');
 
 describe('/projects', () => {
   before(() => {
@@ -17,7 +18,7 @@ describe('/projects', () => {
 
   it('checks that version id and project id correspond', () => {
     return request(this.api)
-      .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-111111111111/project-version/ba3f4fdf-27e4-461e-a251-444444444444')
+      .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.testProject}/project-version/${ids.versions.testLegacyProject}`)
       .expect(404)
       .expect(response => {
         assert(!response.body.data, 'Response should contain no data');
@@ -26,7 +27,7 @@ describe('/projects', () => {
 
   it('maps cameCase species fields to hyphen-separated - bugfix', () => {
     return request(this.api)
-      .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-333333333333/project-version/ba3f4fdf-27e4-461e-a251-444444444444')
+      .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.testLegacyProject}/project-version/${ids.versions.testLegacyProject}`)
       .expect(200)
       .expect(response => {
         const protocols = response.body.data.data.protocols;
@@ -49,7 +50,7 @@ describe('/projects', () => {
 
   it('maps the custom conditions prop named "edited" to "content" to fix a migration issue', () => {
     return request(this.api)
-      .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-333333333333/project-version/ed0687a2-1a52-4cc8-b100-588a04255c59')
+      .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.testLegacyProject}/project-version/${ids.versions.testLegacyProject2}`)
       .expect(200)
       .expect(response => {
         const conditions = response.body.data.data.conditions;
@@ -60,7 +61,7 @@ describe('/projects', () => {
 
   it('does not map any fields on schema version 1 licences - bugfix', () => {
     return request(this.api)
-      .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-111111111111/project-version/ba3f4fdf-27e4-461e-a251-222222222222')
+      .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.testProject}/project-version/${ids.versions.testProject}`)
       .expect(200)
       .expect(response => {
         const protocols = response.body.data.data.protocols;
@@ -74,7 +75,7 @@ describe('/projects', () => {
 
     it('sets properties to false if RA is not required', () => {
       return request(this.api)
-        .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-444444444444/project-version/ed0687a2-1a52-4cc8-b100-588a04255c60')
+        .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.nonRaProject}/project-version/${ids.versions.nonRaProject}`)
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.data.retrospectiveAssessment, false);
@@ -84,7 +85,7 @@ describe('/projects', () => {
 
     it('includes retrospectiveAssessment property when RA applies', () => {
       return request(this.api)
-        .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-555555555555/project-version/ed0687a2-1a52-4cc8-b100-588a04255c61')
+        .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.raProject}/project-version/${ids.versions.raProject}`)
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.data.retrospectiveAssessment, true);
@@ -93,7 +94,7 @@ describe('/projects', () => {
 
     it('set retrospectiveAssessmentRequired property to false when RA was manually added', () => {
       return request(this.api)
-        .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-555555555555/project-version/ed0687a2-1a52-4cc8-b100-588a04255c61')
+        .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.raProject}/project-version/${ids.versions.raProject}`)
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.data.retrospectiveAssessmentRequired, false);
@@ -102,7 +103,7 @@ describe('/projects', () => {
 
     it('sets retrospectiveAssessmentRequired property to true when RA is a result of project data', () => {
       return request(this.api)
-        .get('/establishment/101/project/ba3f4fdf-27e4-461e-a251-666666666666/project-version/ed0687a2-1a52-4cc8-b100-588a04255c62')
+        .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.revokedRaProject}/project-version/${ids.versions.revokedRaProject}`)
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.data.retrospectiveAssessment, true);

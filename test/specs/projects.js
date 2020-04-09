@@ -2,11 +2,7 @@ const assert = require('assert');
 const request = require('supertest');
 const moment = require('moment');
 const apiHelper = require('../helpers/api');
-
-const INACTIVE_PROJECT_ID = 'bf22f7cd-cf85-42ef-93da-02b709df67be';
-const ACTIVE_PROJECT_ID = 'd2f9777d-2d9d-4ea2-a9c2-c5ed592fd98d';
-const LICENCE_HOLDER_ID = 'f0835b01-00a0-4c7f-954c-13ed2ef7efd9';
-const ASRU_AMENDMENT_PROJECT_ID = 'db6cf8e1-7a1f-41c0-96f7-ef1a4dadcaa8';
+const ids = require('../data/ids');
 
 describe('/projects', () => {
   beforeEach(() => {
@@ -23,7 +19,8 @@ describe('/projects', () => {
 
   it('returns only the current establishments projects when searching - bugfix', () => {
     return request(this.api)
-      .get('/establishment/100/projects?search=abc&status=inactive') // "abc" matches licence number for all projects
+      // "abc" matches licence number for all projects
+      .get(`/establishment/${ids.establishments.croydon}/projects?search=abc&status=inactive`)
       .expect(200)
       .expect(response => {
         assert.equal(response.body.data.length, 1, 'Returns exactly one project');
@@ -34,7 +31,7 @@ describe('/projects', () => {
   describe('PUT /:id/revoke', () => {
     it('prevents the revocation of non-active projects', () => {
       return request(this.api)
-        .put(`/establishment/100/projects/${INACTIVE_PROJECT_ID}/revoke`)
+        .put(`/establishment/${ids.establishments.croydon}/projects/${ids.projects.croydon.draftProject}/revoke`)
         .send({ meta: { comments: 'testing revocation of inactive project' } })
         .expect(400)
         .expect(response => {
@@ -47,7 +44,7 @@ describe('/projects', () => {
 
     it('can revoke active projects', () => {
       return request(this.api)
-        .put(`/establishment/100/projects/${ACTIVE_PROJECT_ID}/revoke`)
+        .put(`/establishment/${ids.establishments.croydon}/projects/${ids.projects.croydon.activeProject}/revoke`)
         .send({ meta: { comments: 'testing revocation of active project' } })
         .expect(200)
         .expect(() => {
@@ -57,9 +54,9 @@ describe('/projects', () => {
           assert.equal(req.method, 'POST');
           assert.equal(body.model, 'project');
           assert.equal(body.action, 'revoke');
-          assert.equal(body.id, ACTIVE_PROJECT_ID);
-          assert.equal(body.establishmentId, 100);
-          assert.deepEqual(body.data, { establishmentId: 100, licenceHolderId: LICENCE_HOLDER_ID });
+          assert.equal(body.id, ids.projects.croydon.activeProject);
+          assert.equal(body.establishmentId, ids.establishments.croydon);
+          assert.deepEqual(body.data, { establishmentId: ids.establishments.croydon, licenceHolderId: ids.profiles.linfordChristie });
         });
     });
   });
@@ -67,7 +64,7 @@ describe('/projects', () => {
   describe('DELETE /:id/draft-amendments', () => {
     it('throws an error if called by an establishment user and draft version is asruVersion', () => {
       return request(this.api)
-        .delete(`/establishment/100/projects/${ASRU_AMENDMENT_PROJECT_ID}/draft-amendments`)
+        .delete(`/establishment/${ids.establishments.croydon}/projects/${ids.projects.croydon.asruInitiatedAmendment}/draft-amendments`)
         .expect(400)
         .expect(response => {
           assert.equal(JSON.parse(response.error.text).message, 'Cannot delete amendment as initiated by ASRU');
@@ -77,7 +74,7 @@ describe('/projects', () => {
     it('calls workflow if user can delete amendment', () => {
       this.api.setUser({ id: 'licensing' });
       return request(this.api)
-        .delete(`/establishment/100/projects/${ASRU_AMENDMENT_PROJECT_ID}/draft-amendments`)
+        .delete(`/establishment/${ids.establishments.croydon}/projects/${ids.projects.croydon.asruInitiatedAmendment}/draft-amendments`)
         .expect(200)
         .expect(() => {
           assert.equal(this.workflow.handler.callCount, 1);
@@ -86,7 +83,7 @@ describe('/projects', () => {
           assert.equal(req.method, 'POST');
           assert.equal(body.model, 'project');
           assert.equal(body.action, 'delete-amendments');
-          assert.equal(body.id, ASRU_AMENDMENT_PROJECT_ID);
+          assert.equal(body.id, ids.projects.croydon.asruInitiatedAmendment);
         });
     });
   });
@@ -95,7 +92,7 @@ describe('/projects', () => {
 
     it('does not include RA date on draft projects', () => {
       return request(this.api)
-        .get('/establishment/101/projects/ba3f4fdf-27e4-461e-a251-333333333333')
+        .get(`/establishment/${ids.establishments.marvell}/projects/${ids.projects.marvell.testLegacyProject}`)
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.raDate, undefined);
@@ -104,7 +101,7 @@ describe('/projects', () => {
 
     it('does not include RA date on projects without RA', () => {
       return request(this.api)
-        .get('/establishment/101/projects/ba3f4fdf-27e4-461e-a251-444444444444')
+        .get(`/establishment/${ids.establishments.marvell}/projects/${ids.projects.marvell.nonRaProject}`)
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.raDate, undefined);
@@ -113,7 +110,7 @@ describe('/projects', () => {
 
     it('includes RA date on granted projects with RA condition', () => {
       return request(this.api)
-        .get('/establishment/101/projects/ba3f4fdf-27e4-461e-a251-555555555555')
+        .get(`/establishment/${ids.establishments.marvell}/projects/${ids.projects.marvell.raProject}`)
         .expect(200)
         .expect(response => {
           assert.equal(moment(response.body.data.raDate).format('YYYY-MM-DD'), '2025-07-01');
@@ -122,7 +119,7 @@ describe('/projects', () => {
 
     it('calculates RA date from revocation date on revoked projects', () => {
       return request(this.api)
-        .get('/establishment/101/projects/ba3f4fdf-27e4-461e-a251-666666666666')
+        .get(`/establishment/${ids.establishments.marvell}/projects/${ids.projects.marvell.revokedRaProject}`)
         .expect(200)
         .expect(response => {
           assert.equal(moment(response.body.data.raDate).format('YYYY-MM-DD'), '2024-07-01');
