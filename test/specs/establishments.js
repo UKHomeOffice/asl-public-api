@@ -37,6 +37,12 @@ describe('/establishments', () => {
 
   describe('/establishment/:establishment', () => {
 
+    it('returns a 404 error for invalid establishment id', () => {
+      return request(this.api)
+        .get('/establishment/undefined')
+        .expect(404);
+    });
+
     it('returns a 404 error for unknown establishment id', () => {
       return request(this.api)
         .get('/establishment/99999')
