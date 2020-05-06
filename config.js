@@ -15,13 +15,5 @@ module.exports = {
     port: process.env.DATABASE_PORT,
     user: process.env.DATABASE_USERNAME,
     application_name: 'public-api'
-  },
-  redis: {
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    password: process.env.REDIS_PASSWORD
-  },
-  limiter: {
-    total: parseInt(process.env.RATE_LIMIT_TOTAL, 10) || 0
   }
 };
