@@ -14,6 +14,7 @@ module.exports = {
     password: process.env.DATABASE_PASSWORD,
     port: process.env.DATABASE_PORT,
     user: process.env.DATABASE_USERNAME,
-    application_name: 'public-api'
+    application_name: 'public-api',
+    maxConnections: parseInt(process.env.DATABASE_POOL_SIZE, 10) || 5
   }
 };

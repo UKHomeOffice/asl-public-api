@@ -38,6 +38,7 @@ The following environment variables can be optionally defined:
 * `DATABASE_PORT` - port of the postgres instance - default `5432`
 * `DATABASE_USERNAME` - username of the postgres instance - default `undefined`
 * `DATABASE_PASSWORD` - password of the postgres instance - default `undefined`
+* `DATABASE_POOL_SIZE` - maximum size of the postgres connection pool - default `5`
 * `REDIS_HOST` - redis instance used to store rate limit data - default `localhost`
 * `REDIS_PORT` - redis instance used to store rate limit data - default `6379`
 * `REDIS_PASSWORD` - redis instance used to store rate limit data - default `undefined`
