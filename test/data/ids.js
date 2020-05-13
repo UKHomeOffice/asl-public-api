@@ -17,6 +17,10 @@ module.exports = {
     vincentMalloy: uuid(),
     licensing: uuid()
   },
+  roles: {
+    nacwoClive: uuid(),
+    nacwoNoddy: uuid()
+  },
   pils: {
     linfordChristie: uuid(),
     noddyHolder: uuid(),

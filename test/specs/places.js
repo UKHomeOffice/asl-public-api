@@ -41,6 +41,18 @@ describe('/places', () => {
       });
   });
 
+  it('includes the profiles of assigned NACWOs', () => {
+    return request(this.api)
+      .get(`/establishment/${ids.establishments.croydon}/places`)
+      .expect(200)
+      .expect(response => {
+        const croydon101 = response.body.data.find(place => place.id === ids.places.croydon101);
+        assert.equal(croydon101.nacwos.length, 1);
+        assert.equal(croydon101.nacwos[0].profile.firstName, 'Clive');
+        assert.equal(croydon101.nacwos[0].profile.lastName, 'Nacwo');
+      });
+  });
+
   it('filters by site', () => {
     const query = stringify({
       filters: {
@@ -178,6 +190,19 @@ describe('/places', () => {
         .put(`/establishment/${ids.establishments.croydon}/places/${ids.places.croydon101}`)
         .send(input)
         .expect(400);
+    });
+
+    it('returns the profiles for associated roles', () => {
+      return request(this.api)
+        .get(`/establishment/${ids.establishments.croydon}/places/${ids.places.croydon101}`)
+        .expect(200)
+        .expect(response => {
+          const croydon101 = response.body.data;
+          assert.equal(croydon101.roles.length, 1);
+          assert.equal(croydon101.roles[0].type, 'nacwo');
+          assert.equal(croydon101.roles[0].profile.firstName, 'Clive');
+          assert.equal(croydon101.roles[0].profile.lastName, 'Nacwo');
+        });
     });
 
     it('adds a message to SQS on PUT', () => {
