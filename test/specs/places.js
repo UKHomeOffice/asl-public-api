@@ -159,6 +159,23 @@ describe('/places', () => {
       .expect(400);
   });
 
+  it('returns 400 for invalid role ids that don\'t exist at the establishment', () => {
+    const invalidRoleId = '77748b0f-6725-44f5-a8f2-013014da4525';
+    const input = {
+      data: {
+        site: 'Lunar House 3rd floor',
+        name: '83',
+        suitability: ['LA', 'DOG'],
+        holding: ['NOH'],
+        roles: [invalidRoleId]
+      }
+    };
+    return request(this.api)
+      .post(`/establishment/${ids.establishments.croydon}/places`)
+      .send(input)
+      .expect(400);
+  });
+
   describe('/place/:id', () => {
 
     it('returns 404 for unrecognised id', () => {
@@ -184,6 +201,23 @@ describe('/places', () => {
         meta: {
           changesToRestrictions: 'changes',
           comments: 'comments'
+        }
+      };
+      return request(this.api)
+        .put(`/establishment/${ids.establishments.croydon}/places/${ids.places.croydon101}`)
+        .send(input)
+        .expect(400);
+    });
+
+    it('returns 400 for invalid role ids that don\'t exist at the establishment', () => {
+      const invalidRoleId = '77748b0f-6725-44f5-a8f2-013014da4525';
+      const input = {
+        data: {
+          site: 'Lunar House',
+          name: 'Room 101',
+          suitability: ['SA', 'LA'],
+          holding: ['LTH'],
+          roles: [invalidRoleId]
         }
       };
       return request(this.api)
