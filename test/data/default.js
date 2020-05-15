@@ -439,21 +439,25 @@ module.exports = models => {
     ]).returning('*'))
     .then(() => models.Role.query().insert([
       {
+        id: uuid(),
         type: 'pelh',
         profileId: ids.profiles.multipleEstablishments,
         establishmentId: ids.establishments.croydon
       },
       {
+        id: ids.roles.nacwoClive,
         type: 'nacwo',
         profileId: ids.profiles.cliveNacwo,
         establishmentId: ids.establishments.croydon
       },
       {
+        id: ids.roles.nacwoNoddy,
         type: 'nacwo',
         profileId: ids.profiles.noddyNacwo,
         establishmentId: ids.establishments.croydon
       },
       {
+        id: uuid(),
         type: 'pelh',
         profileId: ids.profiles.multipleEstablishments,
         establishmentId: ids.establishments.marvell
@@ -533,6 +537,12 @@ module.exports = models => {
         establishmentId: ids.establishments.marvell,
         role: 'admin',
         token: 'abcdef'
+      }
+    ]))
+    .then(() => models.PlaceRole.query().insert([
+      {
+        placeId: ids.places.croydon101,
+        roleId: ids.roles.nacwoClive
       }
     ]));
 };
