@@ -79,9 +79,7 @@ module.exports = models => {
         lastName: 'Xing',
         email: 'lisenxing@example.com',
         asruUser: true,
-        asruLicensing: true,
-        asruInspector: false,
-        asruAdmin: false
+        asruLicensing: true
       }
     ]))
     .then(() => models.Certificate.query().insert([
