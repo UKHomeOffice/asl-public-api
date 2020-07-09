@@ -6,7 +6,9 @@ module.exports = {
     url: process.env.KEYCLOAK_URL,
     client: process.env.KEYCLOAK_CLIENT,
     secret: process.env.KEYCLOAK_SECRET,
-    permissions: process.env.PERMISSIONS_SERVICE
+    permissions: process.env.PERMISSIONS_SERVICE,
+    adminUsername: process.env.KEYCLOAK_USERNAME,
+    adminPassword: process.env.KEYCLOAK_PASSWORD
   },
   db: {
     database: process.env.DATABASE_NAME,
