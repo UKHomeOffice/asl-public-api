@@ -30,6 +30,8 @@ The following environment variables are required:
 * `KEYCLOAK_URL` - the url of the keycloak server
 * `KEYCLOAK_CLIENT` - the client name used to authenticate with keycloak
 * `KEYCLOAK_SECRET` - the secret used to authenticate with the keycloak client
+* `KEYCLOAK_USERNAME` - administrator username to authenticate with the keycloak client
+* `KEYCLOAK_PASSWORD` - administrator password used to authenticate with the keycloak client
 
 The following environment variables can be optionally defined:
 
