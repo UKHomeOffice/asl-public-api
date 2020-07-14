@@ -71,46 +71,4 @@ describe('/projects', () => {
       });
   });
 
-  describe('retrospective assessment', () => {
-
-    it('sets properties to false if RA is not required', () => {
-      return request(this.api)
-        .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.nonRaProject}/project-version/${ids.versions.nonRaProject}`)
-        .expect(200)
-        .expect(response => {
-          assert.equal(response.body.data.data.retrospectiveAssessment, false);
-          assert.equal(response.body.data.data.retrospectiveAssessmentRequired, false);
-        });
-    });
-
-    it('includes retrospectiveAssessment property when RA applies', () => {
-      return request(this.api)
-        .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.raProject}/project-version/${ids.versions.raProject}`)
-        .expect(200)
-        .expect(response => {
-          assert.equal(response.body.data.data.retrospectiveAssessment, true);
-        });
-    });
-
-    it('set retrospectiveAssessmentRequired property to false when RA was manually added', () => {
-      return request(this.api)
-        .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.raProject}/project-version/${ids.versions.raProject}`)
-        .expect(200)
-        .expect(response => {
-          assert.equal(response.body.data.data.retrospectiveAssessmentRequired, false);
-        });
-    });
-
-    it('sets retrospectiveAssessmentRequired property to true when RA is a result of project data', () => {
-      return request(this.api)
-        .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.revokedRaProject}/project-version/${ids.versions.revokedRaProject}`)
-        .expect(200)
-        .expect(response => {
-          assert.equal(response.body.data.data.retrospectiveAssessment, true);
-          assert.equal(response.body.data.data.retrospectiveAssessmentRequired, true);
-        });
-    });
-
-  });
-
 });
