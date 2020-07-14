@@ -1,6 +1,5 @@
 const assert = require('assert');
 const request = require('supertest');
-const moment = require('moment');
 const apiHelper = require('../helpers/api');
 const ids = require('../data/ids');
 
@@ -86,46 +85,6 @@ describe('/projects', () => {
           assert.equal(body.id, ids.projects.croydon.asruInitiatedAmendment);
         });
     });
-  });
-
-  describe('GET /:id', () => {
-
-    it('does not include RA date on draft projects', () => {
-      return request(this.api)
-        .get(`/establishment/${ids.establishments.marvell}/projects/${ids.projects.marvell.testLegacyProject}`)
-        .expect(200)
-        .expect(response => {
-          assert.equal(response.body.data.raDate, undefined);
-        });
-    });
-
-    it('does not include RA date on projects without RA', () => {
-      return request(this.api)
-        .get(`/establishment/${ids.establishments.marvell}/projects/${ids.projects.marvell.nonRaProject}`)
-        .expect(200)
-        .expect(response => {
-          assert.equal(response.body.data.raDate, undefined);
-        });
-    });
-
-    it('includes RA date on granted projects with RA condition', () => {
-      return request(this.api)
-        .get(`/establishment/${ids.establishments.marvell}/projects/${ids.projects.marvell.raProject}`)
-        .expect(200)
-        .expect(response => {
-          assert.equal(moment(response.body.data.raDate).format('YYYY-MM-DD'), '2025-07-01');
-        });
-    });
-
-    it('calculates RA date from revocation date on revoked projects', () => {
-      return request(this.api)
-        .get(`/establishment/${ids.establishments.marvell}/projects/${ids.projects.marvell.revokedRaProject}`)
-        .expect(200)
-        .expect(response => {
-          assert.equal(moment(response.body.data.raDate).format('YYYY-MM-DD'), '2024-07-01');
-        });
-    });
-
   });
 
 });
