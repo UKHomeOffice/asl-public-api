@@ -18,15 +18,8 @@ describe('Certificates', () => {
 
   it('sends a message to Workflow on POST', () => {
     const input = {
-      modules: [
-        {
-          module: 'L',
-          species: [
-            'rats',
-            'mice'
-          ]
-        }
-      ],
+      modules: ['L'],
+      species: ['rats', 'mice'],
       passDate: '2018-01-01',
       accreditingBody: 'University of Croydon',
       otherAccreditingBody: null,
