@@ -5,10 +5,10 @@ const WithUser = require('../helpers/with-user');
 const Workflow = require('../helpers/workflow');
 
 const settings = {
-  database: process.env.POSTGRES_DB || 'asl-test',
-  user: process.env.POSTGRES_USER || 'postgres',
-  host: process.env.POSTGRES_HOST || 'localhost',
-  password: process.env.POSTGRES_PASSWORD || 'test-password'
+  database: process.env.DATABASE_NAME || 'asl-test',
+  user: process.env.DATABASE_USERNAME || 'postgres',
+  host: process.env.DATABASE_HOST || 'localhost',
+  password: process.env.DATABASE_PASSWORD || 'test-password'
 };
 
 module.exports = {
