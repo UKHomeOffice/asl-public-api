@@ -11,6 +11,7 @@ module.exports = settings => {
         'Project',
         'Permission',
         'Authorisation',
+        'FeeWaiver',
         'PilTransfer',
         'PIL',
         'PlaceRole',
