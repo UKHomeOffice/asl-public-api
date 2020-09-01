@@ -15,7 +15,8 @@ module.exports = models => {
         address: '1 Some Road',
         postcode: 'A1 1AA',
         email: 'test1@example.com',
-        telephone: '01234567890'
+        telephone: '01234567890',
+        pilLicenceNumber: 'AB-123'
       },
       {
         id: ids.profiles.noddyHolder,
@@ -26,7 +27,8 @@ module.exports = models => {
         address: '1 Some Road',
         postcode: 'A1 1AA',
         email: 'test2@example.com',
-        telephone: '01234567890'
+        telephone: '01234567890',
+        pilLicenceNumber: 'D-456'
       },
       {
         id: ids.profiles.cliveNacwo,
@@ -37,7 +39,8 @@ module.exports = models => {
         address: '1 Some Road',
         postcode: 'A1 1AA',
         email: 'test3@example.com',
-        telephone: '01234567890'
+        telephone: '01234567890',
+        pilLicenceNumber: 'F-789'
       },
       {
         id: ids.profiles.noddyNacwo,
@@ -58,7 +61,8 @@ module.exports = models => {
         address: '1 Some Road',
         postcode: 'A1 1AA',
         email: 'test5@example.com',
-        telephone: '01234567890'
+        telephone: '01234567890',
+        pilLicenceNumber: 'C-987'
       },
       {
         id: ids.profiles.vincentMalloy,
@@ -466,7 +470,6 @@ module.exports = models => {
         id: ids.pils.linfordChristie,
         profileId: ids.profiles.linfordChristie,
         establishmentId: ids.establishments.croydon,
-        licenceNumber: 'AB-123',
         status: 'active',
         issueDate: '2016-01-01T12:00:00Z',
         revocationDate: null,
@@ -477,7 +480,6 @@ module.exports = models => {
         id: ids.pils.noddyHolder,
         profileId: ids.profiles.noddyHolder,
         establishmentId: ids.establishments.croydon,
-        licenceNumber: 'D-456',
         status: 'active',
         issueDate: '2016-01-01T12:00:00Z',
         revocationDate: null,
@@ -489,7 +491,6 @@ module.exports = models => {
         id: ids.pils.cliveNacwo,
         profileId: ids.profiles.cliveNacwo,
         establishmentId: ids.establishments.croydon,
-        licenceNumber: 'F-789',
         status: 'active',
         issueDate: '2016-01-01T12:00:00Z',
         revocationDate: null,
@@ -502,7 +503,6 @@ module.exports = models => {
         id: ids.pils.multipleEstablishments,
         profileId: ids.profiles.multipleEstablishments, // Colin is at both establishments
         establishmentId: ids.establishments.croydon,
-        licenceNumber: 'C-987',
         status: 'active',
         issueDate: '2016-01-01T12:00:00Z',
         revocationDate: '2015-12-01T12:00:00Z',

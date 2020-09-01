@@ -204,7 +204,7 @@ describe('/profiles', () => {
         .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}`)
         .expect(200)
         .expect(profile => {
-          assert.equal(profile.body.data.pil.licenceNumber, 'AB-123');
+          assert.equal(profile.body.data.pil.id, ids.pils.linfordChristie);
         });
     });
 
