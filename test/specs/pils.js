@@ -22,7 +22,7 @@ describe('/pils', () => {
   describe('/pil', () => {
     it('sends a message to workflow on POST', () => {
       return request(this.api)
-        .post(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil`)
+        .post(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.hasNoPil}/pil`)
         .send({ data: {} })
         .expect(200)
         .expect(() => {
@@ -34,7 +34,7 @@ describe('/pils', () => {
           assert.equal(body.action, 'create');
           assert.deepEqual(body.data, {
             establishmentId: ids.establishments.croydon,
-            profileId: ids.profiles.linfordChristie
+            profileId: ids.profiles.hasNoPil
           });
         });
     });
@@ -44,7 +44,7 @@ describe('/pils', () => {
         status: 'active'
       };
       return request(this.api)
-        .post(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil`)
+        .post(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.hasNoPil}/pil`)
         .send({ data: input })
         .expect(400);
     });

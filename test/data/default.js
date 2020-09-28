@@ -73,6 +73,13 @@ module.exports = models => {
         postcode: 'A1 1AA',
         email: 'vincent@malloy.com',
         telephone: '01234567890'
+      },
+      {
+        id: ids.profiles.hasNoPil,
+        title: 'Mr',
+        firstName: 'Hasnø',
+        lastName: 'PIL',
+        email: 'hasnopil@example.com'
       }
     ]))
     .then(() => models.Profile.query().insert([
@@ -435,6 +442,11 @@ module.exports = models => {
       {
         profileId: ids.profiles.cliveNacwo,
         establishmentId: ids.establishments.marvell,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.hasNoPil,
+        establishmentId: ids.establishments.croydon,
         role: 'basic'
       }
     // permissions does not have an id column
