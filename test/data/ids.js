@@ -15,6 +15,7 @@ module.exports = {
     noddyNacwo: uuid(),
     multipleEstablishments: uuid(),
     vincentMalloy: uuid(),
+    hasNoPil: uuid(),
     licensing: uuid()
   },
   roles: {
