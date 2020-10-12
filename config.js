@@ -18,5 +18,6 @@ module.exports = {
     user: process.env.DATABASE_USERNAME,
     application_name: 'public-api',
     maxConnections: parseInt(process.env.DATABASE_POOL_SIZE, 10) || 5
-  }
+  },
+  bodySizeLimit: process.env.BODY_SIZE_LIMIT
 };
