@@ -45,6 +45,7 @@ The following environment variables can be optionally defined:
 * `REDIS_PORT` - redis instance used to store rate limit data - default `6379`
 * `REDIS_PASSWORD` - redis instance used to store rate limit data - default `undefined`
 * `RATE_LIMIT_TOTAL` - maximum requests per hour allowable per-user - default `1000`
+* `BODY_SIZE_LIMIT` - maximum body size for requests - default `50mb`
 
 ## Connected services
 
