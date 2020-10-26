@@ -24,6 +24,7 @@ The service can be configured for local development by setting environment varia
 The following environment variables are required:
 
 * `WORKFLOW_SERVICE` - the url of the `asl-workflow` instance
+* `SEARCH_SERVICE` - the url of the `asl-public-search` instance
 * `PERMISSIONS_SERVICE` - the url of the `asl-permissions` instance
 * `DATABASE_NAME` - the name of your postgres database
 * `KEYCLOAK_REALM` - the keycloak realm used for authentication
