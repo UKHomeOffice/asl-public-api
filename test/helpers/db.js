@@ -9,6 +9,8 @@ module.exports = settings => {
         'TrainingPil',
         'TrainingCourse',
         'AsruEstablishment',
+        'ProjectEstablishment',
+        'ProjectProfile',
         'ProjectVersion',
         'Project',
         'Permission',
@@ -26,7 +28,12 @@ module.exports = settings => {
         'Establishment'
       ];
       return tables.reduce((p, table) => {
-        return p.then(() => schema[table].queryWithDeleted().hardDelete());
+        return p.then(() => {
+          if (schema[table].queryWithDeleted) {
+            return schema[table].queryWithDeleted().hardDelete();
+          }
+          return schema[table].query().delete();
+        });
       }, Promise.resolve())
         .then(() => populate && populate(schema))
         .then(() => schema.destroy())
