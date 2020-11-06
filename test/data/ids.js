@@ -4,6 +4,7 @@ module.exports = {
   establishments: {
     croydon: 100,
     marvell: 101,
+    cheese: 102,
     inactiveEstablishment: 999,
     revokedEstablishment1: 1000,
     revokedEstablishment2: 1001
@@ -16,7 +17,8 @@ module.exports = {
     multipleEstablishments: uuid(),
     vincentMalloy: uuid(),
     hasNoPil: uuid(),
-    licensing: uuid()
+    licensing: uuid(),
+    marvellAdmin: uuid()
   },
   roles: {
     nacwoClive: uuid(),
@@ -41,10 +43,12 @@ module.exports = {
   projects: {
     croydon: {
       draftProject: uuid(),
+      draftProjectWithMarvellAvailability: uuid(),
       expiredProject: uuid(),
       activeProject: uuid(),
       revokedProject: uuid(),
-      asruInitiatedAmendment: uuid()
+      asruInitiatedAmendment: uuid(),
+      hasMarvellAvailability: uuid()
     },
     marvell: {
       marvellProject: uuid(),

@@ -80,6 +80,14 @@ module.exports = models => {
         firstName: 'Hasnø',
         lastName: 'PIL',
         email: 'hasnopil@example.com'
+      },
+      {
+        id: ids.profiles.marvellAdmin,
+        userId: 'marvellAdmin',
+        title: 'Mr',
+        firstName: 'Ben',
+        lastName: 'Marvell',
+        email: 'ibuiltmyownhouse@anditfelldown.com'
       }
     ]))
     .then(() => models.Profile.query().insert([
@@ -273,6 +281,22 @@ module.exports = models => {
         expiryDate: '2025-01-01T12:00:00Z',
         revocationDate: '2024-01-01T12:00:00Z',
         schemaVersion: 0
+      },
+      {
+        id: ids.projects.croydon.hasMarvellAvailability,
+        establishmentId: ids.establishments.croydon,
+        title: 'Has Marvell Availability',
+        status: 'active',
+        expiryDate: '2025-01-01T12:00:00Z',
+        licenceNumber: 'abc321',
+        schemaVersion: 1
+      },
+      {
+        id: ids.projects.croydon.draftProjectWithMarvellAvailability,
+        establishmentId: ids.establishments.croydon,
+        title: 'Draft Has Marvell Availability',
+        status: 'inactive',
+        schemaVersion: 1
       }
     ]))
     .then(() => models.Project.query().insert([
@@ -378,6 +402,16 @@ module.exports = models => {
             'marmosets'
           ]
         }
+      },
+      {
+        id: uuid(),
+        projectId: ids.projects.croydon.hasMarvellAvailability,
+        status: 'granted'
+      },
+      {
+        id: uuid(),
+        projectId: ids.projects.croydon.draftProjectWithMarvellAvailability,
+        status: 'draft'
       }
     ]))
     .then(() => models.ProjectVersion.query().insert([
@@ -401,6 +435,19 @@ module.exports = models => {
         createdAt: '2019-09-06T13:32:45.886Z',
         updatedAt: '2019-09-06T13:32:45.886Z',
         asruVersion: true
+      }
+    ]))
+    .then(() => models.ProjectEstablishment.query().insert([
+      {
+        projectId: ids.projects.croydon.hasMarvellAvailability,
+        establishmentId: ids.establishments.marvell,
+        status: 'active',
+        issueDate: moment().toISOString()
+      },
+      {
+        projectId: ids.projects.croydon.draftProjectWithMarvellAvailability,
+        establishmentId: ids.establishments.marvell,
+        status: 'draft'
       }
     ]))
     .then(() => models.Permission.query().insert([
@@ -428,6 +475,11 @@ module.exports = models => {
         profileId: ids.profiles.multipleEstablishments,
         establishmentId: ids.establishments.croydon,
         role: 'basic'
+      },
+      {
+        profileId: ids.profiles.marvellAdmin,
+        establishmentId: ids.establishments.marvell,
+        role: 'admin'
       },
       {
         profileId: ids.profiles.multipleEstablishments,
