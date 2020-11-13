@@ -13,9 +13,12 @@ steps:
     commands:
       - npm ci
   - name: wait
-    image: node:12
+    image: postgres
+    environment:
+      PGPASSWORD: test-password
     commands:
-      - sleep 20
+      # wait for postgres service to become available
+      - until psql -U asl-test -d asl-test -h postgres -c "SELECT 1;" >/dev/null 2>&1; do sleep 1; done
   - name: test
     image: node:12
     environment:
