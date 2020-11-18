@@ -16,7 +16,8 @@ module.exports = models => {
         postcode: 'A1 1AA',
         email: 'test1@example.com',
         telephone: '01234567890',
-        pilLicenceNumber: 'AB-123'
+        pilLicenceNumber: 'AB-123',
+        emailConfirmed: true
       },
       {
         id: ids.profiles.noddyHolder,
@@ -28,7 +29,8 @@ module.exports = models => {
         postcode: 'A1 1AA',
         email: 'test2@example.com',
         telephone: '01234567890',
-        pilLicenceNumber: 'D-456'
+        pilLicenceNumber: 'D-456',
+        emailConfirmed: true
       },
       {
         id: ids.profiles.cliveNacwo,
@@ -40,7 +42,8 @@ module.exports = models => {
         postcode: 'A1 1AA',
         email: 'test3@example.com',
         telephone: '01234567890',
-        pilLicenceNumber: 'F-789'
+        pilLicenceNumber: 'F-789',
+        emailConfirmed: true
       },
       {
         id: ids.profiles.noddyNacwo,
@@ -50,7 +53,8 @@ module.exports = models => {
         address: '1 Some Road',
         postcode: 'A1 1AA',
         email: 'test4@example.com',
-        telephone: '01234567890'
+        telephone: '01234567890',
+        emailConfirmed: true
       },
       {
         id: ids.profiles.multipleEstablishments,
@@ -62,7 +66,8 @@ module.exports = models => {
         postcode: 'A1 1AA',
         email: 'test5@example.com',
         telephone: '01234567890',
-        pilLicenceNumber: 'C-987'
+        pilLicenceNumber: 'C-987',
+        emailConfirmed: true
       },
       {
         id: ids.profiles.vincentMalloy,
@@ -72,14 +77,16 @@ module.exports = models => {
         address: '1 Some Road',
         postcode: 'A1 1AA',
         email: 'vincent@malloy.com',
-        telephone: '01234567890'
+        telephone: '01234567890',
+        emailConfirmed: true
       },
       {
         id: ids.profiles.hasNoPil,
         title: 'Mr',
         firstName: 'Hasnø',
         lastName: 'PIL',
-        email: 'hasnopil@example.com'
+        email: 'hasnopil@example.com',
+        emailConfirmed: true
       },
       {
         id: ids.profiles.marvellAdmin,
@@ -87,7 +94,17 @@ module.exports = models => {
         title: 'Mr',
         firstName: 'Ben',
         lastName: 'Marvell',
-        email: 'ibuiltmyownhouse@anditfelldown.com'
+        email: 'ibuiltmyownhouse@anditfelldown.com',
+        emailConfirmed: true
+      },
+      {
+        id: ids.profiles.unverified,
+        userId: 'unverified',
+        title: 'Mr',
+        firstName: 'Edward',
+        lastName: 'Meat',
+        email: 'unknown@example.com',
+        emailConfirmed: false
       }
     ]))
     .then(() => models.Profile.query().insert([

@@ -18,7 +18,8 @@ module.exports = {
     vincentMalloy: uuid(),
     hasNoPil: uuid(),
     licensing: uuid(),
-    marvellAdmin: uuid()
+    marvellAdmin: uuid(),
+    unverified: uuid()
   },
   roles: {
     nacwoClive: uuid(),
