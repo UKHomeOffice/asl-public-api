@@ -7,7 +7,8 @@ const makeDummyUser = user => (req, res, next) => {
     is: role => user.roles.includes(role),
     get: key => user[key],
     can: () => Promise.resolve({ json: {} }),
-    allowedActions: () => Promise.resolve({})
+    allowedActions: () => Promise.resolve({}),
+    _auth: {}
   }, user);
   next();
 };

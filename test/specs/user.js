@@ -67,6 +67,20 @@ describe('/me', () => {
         });
     });
 
+    describe('unverified user', () => {
+
+      it('returns only basic data for users without verified email addresses', () => {
+        this.api.setUser({ id: 'unverified' });
+        return request(this.api)
+          .get('/me')
+          .expect(200)
+          .expect(response => {
+            assert.deepEqual(Object.keys(response.body.data), ['firstName', 'lastName', 'email'], 'only name and email fields should exist on the response data');
+          });
+      });
+
+    });
+
   });
 
   it('posts to workflow on PUT', () => {
