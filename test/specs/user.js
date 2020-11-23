@@ -75,7 +75,7 @@ describe('/me', () => {
           .get('/me')
           .expect(200)
           .expect(response => {
-            assert.deepEqual(Object.keys(response.body.data), ['firstName', 'lastName', 'email'], 'only name and email fields should exist on the response data');
+            assert.deepEqual(Object.keys(response.body.data), ['id', 'firstName', 'lastName', 'email'], 'only name and email fields should exist on the response data');
           });
       });
 
