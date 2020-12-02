@@ -27,7 +27,7 @@ describe('/profiles', () => {
       .get(`/establishment/${ids.establishments.croydon}/profiles`)
       .expect(200)
       .expect(response => {
-        assert.equal(response.body.data.length, 6);
+        assert.equal(response.body.data.length, 9);
         response.body.data.forEach(profile => {
           profile.establishments.forEach(establishment => {
             assert.equal(establishment.id, ids.establishments.croydon);

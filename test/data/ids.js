@@ -19,7 +19,10 @@ module.exports = {
     hasNoPil: uuid(),
     licensing: uuid(),
     marvellAdmin: uuid(),
-    unverified: uuid()
+    unverified: uuid(),
+    aaProjectRemoved: uuid(),
+    projectElsewhere: uuid(),
+    activeAA: uuid()
   },
   roles: {
     nacwoClive: uuid(),
@@ -49,7 +52,9 @@ module.exports = {
       activeProject: uuid(),
       revokedProject: uuid(),
       asruInitiatedAmendment: uuid(),
-      hasMarvellAvailability: uuid()
+      hasMarvellAvailability: uuid(),
+      aaRemoved: uuid(),
+      activeAA: uuid()
     },
     marvell: {
       marvellProject: uuid(),

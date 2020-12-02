@@ -105,6 +105,30 @@ module.exports = models => {
         lastName: 'Meat',
         email: 'unknown@example.com',
         emailConfirmed: false
+      },
+      {
+        id: ids.profiles.projectElsewhere,
+        title: 'Mr',
+        firstName: 'Project',
+        lastName: 'Elsewhere',
+        email: 'projelsewhere@example.com',
+        emailConfirmed: true
+      },
+      {
+        id: ids.profiles.aaProjectRemoved,
+        title: 'Mr',
+        firstName: 'AA',
+        lastName: 'removed',
+        email: 'aaremoved@example.com',
+        emailConfirmed: true
+      },
+      {
+        id: ids.profiles.activeAA,
+        title: 'Mr',
+        firstName: 'AA',
+        lastName: 'active0',
+        email: 'aaactive@example.com',
+        emailConfirmed: true
       }
     ]))
     .then(() => models.Profile.query().insert([
@@ -314,6 +338,36 @@ module.exports = models => {
         title: 'Draft Has Marvell Availability',
         status: 'inactive',
         schemaVersion: 1
+      },
+      {
+        id: uuid(),
+        establishmentId: ids.establishments.croydon,
+        title: 'Project elsewhere',
+        status: 'active',
+        schemaVersion: 1,
+        expiryDate: '2040-01-01T12:00:00Z',
+        licenceNumber: 'abc000',
+        licenceHolderId: ids.profiles.projectElsewhere
+      },
+      {
+        id: ids.projects.croydon.aaRemoved,
+        establishmentId: ids.establishments.croydon,
+        title: 'Project elsewhere',
+        status: 'active',
+        schemaVersion: 1,
+        expiryDate: '2040-01-01T12:00:00Z',
+        licenceNumber: 'abc000',
+        licenceHolderId: ids.profiles.aaProjectRemoved
+      },
+      {
+        id: ids.projects.croydon.activeAA,
+        establishmentId: ids.establishments.croydon,
+        title: 'Active AA',
+        status: 'active',
+        schemaVersion: 1,
+        expiryDate: '2040-01-01T12:00:00Z',
+        licenceNumber: 'abc000',
+        licenceHolderId: ids.profiles.activeAA
       }
     ]))
     .then(() => models.Project.query().insert([
@@ -465,6 +519,16 @@ module.exports = models => {
         projectId: ids.projects.croydon.draftProjectWithMarvellAvailability,
         establishmentId: ids.establishments.marvell,
         status: 'draft'
+      },
+      {
+        projectId: ids.projects.croydon.aaRemoved,
+        establishmentId: ids.establishments.marvell,
+        status: 'removed'
+      },
+      {
+        projectId: ids.projects.croydon.activeAA,
+        establishmentId: ids.establishments.marvell,
+        status: 'active'
       }
     ]))
     .then(() => models.Permission.query().insert([
@@ -516,6 +580,36 @@ module.exports = models => {
       {
         profileId: ids.profiles.hasNoPil,
         establishmentId: ids.establishments.croydon,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.aaProjectRemoved,
+        establishmentId: ids.establishments.croydon,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.aaProjectRemoved,
+        establishmentId: ids.establishments.marvell,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.projectElsewhere,
+        establishmentId: ids.establishments.croydon,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.projectElsewhere,
+        establishmentId: ids.establishments.marvell,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.activeAA,
+        establishmentId: ids.establishments.croydon,
+        role: 'basic'
+      },
+      {
+        profileId: ids.profiles.activeAA,
+        establishmentId: ids.establishments.marvell,
         role: 'basic'
       }
     // permissions does not have an id column
