@@ -1,4 +1,5 @@
 const assert = require('assert');
+const moment = require('moment');
 const request = require('supertest');
 const apiHelper = require('../helpers/api');
 const ids = require('../data/ids');
@@ -16,12 +17,12 @@ describe('/billing', () => {
     return apiHelper.destroy();
   });
 
-  it('defaults year to 2019 if not provided', () => {
+  it('default year to current calendar year if not provided', () => {
     return request(this.api)
       .get(`/establishment/${ids.establishments.croydon}/billing`)
       .expect(200)
       .expect(response => {
-        assert.equal(response.body.meta.year, 2019);
+        assert.equal(response.body.meta.year, moment().subtract(1, 'year').format('YYYY'));
       });
   });
 
