@@ -11,6 +11,7 @@ module.exports = settings => {
         'AsruEstablishment',
         'ProjectEstablishment',
         'ProjectProfile',
+        'RetrospectiveAssessment',
         'ProjectVersion',
         'Project',
         'Permission',
