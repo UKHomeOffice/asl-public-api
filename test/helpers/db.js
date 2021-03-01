@@ -24,6 +24,7 @@ module.exports = settings => {
         'Role',
         'Exemption',
         'Certificate',
+        'EmailPreferences',
         'Profile',
         'Invitation',
         'Establishment'
