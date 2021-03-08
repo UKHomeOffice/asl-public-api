@@ -12,6 +12,8 @@ module.exports = settings => {
         'ProjectEstablishment',
         'ProjectProfile',
         'RetrospectiveAssessment',
+        'Procedure',
+        'Rop',
         'ProjectVersion',
         'Project',
         'Permission',
