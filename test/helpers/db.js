@@ -8,6 +8,7 @@ module.exports = settings => {
       const tables = [
         'TrainingPil',
         'TrainingCourse',
+        'EmailPreferences',
         'AsruEstablishment',
         'ProjectEstablishment',
         'ProjectProfile',
