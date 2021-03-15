@@ -65,6 +65,14 @@ module.exports = {
       revokedRaProject: uuid()
     }
   },
+  rops: {
+    draft: uuid(),
+    submitted: uuid()
+  },
+  procedures: {
+    draft: uuid(),
+    submitted: uuid()
+  },
   versions: {
     testProject: uuid(),
     testLegacyProject: uuid(),

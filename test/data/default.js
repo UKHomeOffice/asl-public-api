@@ -383,11 +383,53 @@ module.exports = models => {
         expiryDate: '2024-04-23T00:00:00.000Z'
       }
     ]))
+    .then(() => models.Rop.query().insert([
+      {
+        id: ids.rops.draft,
+        projectId: ids.projects.croydon.activeAA,
+        status: 'draft',
+        year: 2021
+      },
+      {
+        id: ids.rops.submitted,
+        projectId: ids.projects.croydon.activeAA,
+        status: 'submitted',
+        year: 2020
+      }
+    ]))
+    .then(() => models.Procedure.query().insert([
+      {
+        id: ids.procedures.submitted,
+        ropId: ids.rops.submitted,
+        species: 'mice',
+        ga: 'no-ga',
+        purposes: 'basic',
+        newGeneticLine: false,
+        severity: 'severe',
+        severityNum: 123
+      },
+      {
+        id: ids.procedures.draft,
+        ropId: ids.rops.draft,
+        species: 'mice',
+        ga: 'no-ga',
+        purposes: 'basic',
+        newGeneticLine: false,
+        severity: 'severe',
+        severityNum: 123
+      }
+    ]))
     .then(() => models.ProjectVersion.query().insert([
       {
         id: uuid(),
         projectId: ids.projects.croydon.activeProject,
         status: 'draft',
+        data: {}
+      },
+      {
+        id: uuid(),
+        projectId: ids.projects.croydon.activeAA,
+        status: 'granted',
         data: {}
       },
       {
