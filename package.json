@@ -44,6 +44,7 @@
     "dotenv": "^5.0.1",
     "eslint": "^4.18.2",
     "eslint-config-lennym": "^2.1.1",
+    "eslint-plugin-implicit-dependencies": "^1.0.4",
     "eslint-plugin-undocumented-env": "^1.0.0",
     "mocha": "^7.1.0",
     "nodemon": "^2.0.4",
