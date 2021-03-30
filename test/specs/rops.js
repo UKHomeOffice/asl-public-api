@@ -28,7 +28,7 @@ describe('Rops', () => {
           assert.equal(req.method, 'POST');
           assert.equal(body.model, 'rop');
           assert.equal(body.action, 'create');
-          assert.deepEqual(body.data, { projectId: ids.projects.croydon.activeProject, year: 2021 });
+          assert.deepEqual(body.data, { projectId: ids.projects.croydon.activeProject, year: 2021, establishmentId: 100 });
         });
     });
 
