@@ -365,6 +365,7 @@ module.exports = models => {
         title: 'Active AA',
         status: 'active',
         schemaVersion: 1,
+        issueDate: '2020-02-10T12:00:00Z',
         expiryDate: '2040-01-01T12:00:00Z',
         licenceNumber: 'abc000',
         licenceHolderId: ids.profiles.activeAA
