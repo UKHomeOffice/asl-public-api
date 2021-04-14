@@ -395,7 +395,8 @@ module.exports = models => {
         id: ids.rops.submitted,
         projectId: ids.projects.croydon.activeAA,
         status: 'submitted',
-        year: 2020
+        year: 2020,
+        submittedDate: '2021-01-19T12:00:00.000Z'
       }
     ]))
     .then(() => models.Procedure.query().insert([
