@@ -396,7 +396,7 @@ module.exports = models => {
         projectId: ids.projects.croydon.activeAA,
         status: 'submitted',
         year: 2020,
-        submittedDate: moment().subtract(1, 'month').toISOString()
+        submittedDate: '2021-01-19T12:00:00.000Z'
       }
     ]))
     .then(() => models.Procedure.query().insert([
