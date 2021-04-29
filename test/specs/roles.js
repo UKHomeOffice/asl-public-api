@@ -27,4 +27,17 @@ describe('/roles', () => {
       });
   });
 
+  describe('delete', () => {
+
+    it('returns a 404 if the role does not exist', () => {
+      return request(this.api)
+        .delete(`/establishment/${ids.establishments.marvell}/roles/${ids.roles.nacwoClive}?type=nacwo`)
+        .expect(404)
+        .expect(() => {
+          assert.equal(this.workflow.handler.called, false);
+        });
+    });
+
+  });
+
 });
