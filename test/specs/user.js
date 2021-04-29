@@ -114,4 +114,15 @@ describe('/me', () => {
       .send({ data })
       .expect(400);
   });
+
+  describe('email preferences', () => {
+
+    it('does not throw a 404 if no preferences are defined', () => {
+      return request(this.api)
+        .get('/me/email-preferences')
+        .expect(200);
+    });
+
+  });
+
 });
