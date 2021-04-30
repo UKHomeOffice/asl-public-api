@@ -149,48 +149,52 @@ describe('/projects/:projectId/retrospective-assessments', () => {
     return apiHelper.destroy();
   });
 
-  it('can return reasons why RA required', () => {
-    return request(this.api)
-      .get(`/establishment/${ids.establishments.croydon}/projects/${ids.projects.croydon.raSevere}/retrospective-assessments/reasons`)
-      .expect(200)
-      .expect(response => {
-        const { data } = response.body;
-        const expected = { hasSevereProtocols: true };
-        assert.deepStrictEqual(data, expected, 'it should return severe protocols as the reason');
-      });
-  });
+  describe('/reasons', () => {
 
-  it('can return reasons why RA required when there are mutlitple', () => {
-    return request(this.api)
-      .get(`/establishment/${ids.establishments.croydon}/projects/${ids.projects.croydon.raMultiple}/retrospective-assessments/reasons`)
-      .expect(200)
-      .expect(response => {
-        const { data } = response.body;
-        const expected = { hasSevereProtocols: true, hasCatsDogsEquidae: true };
-        assert.deepStrictEqual(data, expected, 'it should return severe protocols and cats as the reason');
-      });
-  });
+    it('can return reasons why RA required', () => {
+      return request(this.api)
+        .get(`/establishment/${ids.establishments.croydon}/projects/${ids.projects.croydon.raSevere}/retrospective-assessments/reasons`)
+        .expect(200)
+        .expect(response => {
+          const { data } = response.body;
+          const expected = { hasSevereProtocols: true };
+          assert.deepStrictEqual(data, expected, 'it should return severe protocols as the reason');
+        });
+    });
 
-  it('can return reasons why RA required when ASRU added', () => {
-    return request(this.api)
-      .get(`/establishment/${ids.establishments.croydon}/projects/${ids.projects.croydon.raAsru}/retrospective-assessments/reasons`)
-      .expect(200)
-      .expect(response => {
-        const { data } = response.body;
-        const expected = { addedByAsru: true };
-        assert.deepStrictEqual(data, expected, 'it should return asru added as the reason');
-      });
-  });
+    it('can return reasons why RA required when there are multiple', () => {
+      return request(this.api)
+        .get(`/establishment/${ids.establishments.croydon}/projects/${ids.projects.croydon.raMultiple}/retrospective-assessments/reasons`)
+        .expect(200)
+        .expect(response => {
+          const { data } = response.body;
+          const expected = { hasSevereProtocols: true, hasCatsDogsEquidae: true };
+          assert.deepStrictEqual(data, expected, 'it should return severe protocols and cats as the reason');
+        });
+    });
 
-  it('can return reasons why RA required when only present in earlier version', () => {
-    return request(this.api)
-      .get(`/establishment/${ids.establishments.croydon}/projects/${ids.projects.croydon.raPreviousVersion}/retrospective-assessments/reasons`)
-      .expect(200)
-      .expect(response => {
-        const { data } = response.body;
-        const expected = { hasCatsDogsEquidae: true };
-        assert.deepStrictEqual(data, expected, 'it should return cats as the reason');
-      });
+    it('can return reasons why RA required when ASRU added', () => {
+      return request(this.api)
+        .get(`/establishment/${ids.establishments.croydon}/projects/${ids.projects.croydon.raAsru}/retrospective-assessments/reasons`)
+        .expect(200)
+        .expect(response => {
+          const { data } = response.body;
+          const expected = { addedByAsru: true };
+          assert.deepStrictEqual(data, expected, 'it should return asru added as the reason');
+        });
+    });
+
+    it('can return reasons why RA required when only present in earlier version', () => {
+      return request(this.api)
+        .get(`/establishment/${ids.establishments.croydon}/projects/${ids.projects.croydon.raPreviousVersion}/retrospective-assessments/reasons`)
+        .expect(200)
+        .expect(response => {
+          const { data } = response.body;
+          const expected = { hasCatsDogsEquidae: true };
+          assert.deepStrictEqual(data, expected, 'it should return cats as the reason');
+        });
+    });
+
   });
 
 });
