@@ -54,7 +54,11 @@ module.exports = {
       asruInitiatedAmendment: uuid(),
       hasMarvellAvailability: uuid(),
       aaRemoved: uuid(),
-      activeAA: uuid()
+      activeAA: uuid(),
+      raSevere: uuid(),
+      raMultiple: uuid(),
+      raAsru: uuid(),
+      raPreviousVersion: uuid()
     },
     marvell: {
       marvellProject: uuid(),
