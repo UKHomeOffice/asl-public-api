@@ -58,7 +58,8 @@ module.exports = {
       raSevere: uuid(),
       raMultiple: uuid(),
       raAsru: uuid(),
-      raPreviousVersion: uuid()
+      raPreviousVersion: uuid(),
+      notATransfer: uuid()
     },
     marvell: {
       marvellProject: uuid(),
@@ -83,7 +84,8 @@ module.exports = {
     testLegacyProject2: uuid(),
     nonRaProject: uuid(),
     raProject: uuid(),
-    revokedRaProject: uuid()
+    revokedRaProject: uuid(),
+    notATransfer: uuid()
   },
   invitations: {
     basic: uuid(),

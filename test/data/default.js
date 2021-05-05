@@ -369,6 +369,17 @@ module.exports = models => {
         expiryDate: '2040-01-01T12:00:00Z',
         licenceNumber: 'abc000',
         licenceHolderId: ids.profiles.activeAA
+      },
+      {
+        id: ids.projects.croydon.notATransfer,
+        establishmentId: ids.establishments.croydon,
+        title: 'Not a transfer',
+        status: 'active',
+        schemaVersion: 1,
+        issueDate: '2020-02-10T12:00:00Z',
+        expiryDate: '2040-01-01T12:00:00Z',
+        licenceNumber: 'abc000',
+        licenceHolderId: ids.profiles.linfordChristie
       }
     ]))
     .then(() => models.Project.query().insert([
@@ -527,6 +538,15 @@ module.exports = models => {
         id: uuid(),
         projectId: ids.projects.croydon.draftProjectWithMarvellAvailability,
         status: 'draft'
+      },
+      {
+        id: ids.versions.notATransfer,
+        projectId: ids.projects.croydon.notATransfer,
+        status: 'draft',
+        data: {
+          transferToEstablishment: ids.establishments.croydon,
+          transferToEstablishmentName: 'University of Croydon'
+        }
       }
     ]))
     .then(() => models.ProjectVersion.query().insert([
