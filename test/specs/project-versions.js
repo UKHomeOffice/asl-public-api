@@ -25,6 +25,16 @@ describe('/projects', () => {
       });
   });
 
+  it('removes transfer fields if not a transfer (regression)', () => {
+    return request(this.api)
+      .get(`/establishment/${ids.establishments.croydon}/project/${ids.projects.croydon.notATransfer}/project-version/${ids.versions.notATransfer}`)
+      .expect(200)
+      .expect(response => {
+        assert.equal(response.body.data.data.transferToEstablishment, undefined);
+        assert.equal(response.body.data.data.transferToEstablishmentName, undefined);
+      });
+  });
+
   it('maps cameCase species fields to hyphen-separated - bugfix', () => {
     return request(this.api)
       .get(`/establishment/${ids.establishments.marvell}/project/${ids.projects.marvell.testLegacyProject}/project-version/${ids.versions.testLegacyProject}`)
