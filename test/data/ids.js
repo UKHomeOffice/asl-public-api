@@ -17,6 +17,7 @@ module.exports = {
     multipleEstablishments: uuid(),
     vincentMalloy: uuid(),
     hasNoPil: uuid(),
+    hasRevokedPil: uuid(),
     licensing: uuid(),
     marvellAdmin: uuid(),
     unverified: uuid(),
@@ -32,6 +33,7 @@ module.exports = {
     linfordChristie: uuid(),
     noddyHolder: uuid(),
     cliveNacwo: uuid(),
+    hasRevokedPil: uuid(),
     multipleEstablishments: uuid()
   },
   certificates: {

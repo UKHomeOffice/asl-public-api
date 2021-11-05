@@ -89,6 +89,15 @@ module.exports = models => {
         emailConfirmed: true
       },
       {
+        id: ids.profiles.hasRevokedPil,
+        userId: 'hasRevokedPil',
+        title: 'Mr',
+        firstName: 'Has-Revoked',
+        lastName: 'PIL',
+        email: 'hasrevokedpil@example.com',
+        emailConfirmed: true
+      },
+      {
         id: ids.profiles.marvellAdmin,
         userId: 'marvellAdmin',
         title: 'Mr',
@@ -647,6 +656,11 @@ module.exports = models => {
         role: 'basic'
       },
       {
+        profileId: ids.profiles.hasRevokedPil,
+        establishmentId: ids.establishments.croydon,
+        role: 'basic'
+      },
+      {
         profileId: ids.profiles.aaProjectRemoved,
         establishmentId: ids.establishments.croydon,
         role: 'basic'
@@ -749,6 +763,18 @@ module.exports = models => {
         species: ['Mice', 'Rats'],
         updatedAt: '2020-01-01T12:00:00Z',
         reviewDate: '2024-12-01T12:00:00Z'
+      },
+      {
+        id: ids.pils.hasRevokedPil,
+        profileId: ids.profiles.hasRevokedPil,
+        establishmentId: ids.establishments.croydon,
+        status: 'revoked',
+        issueDate: '2015-01-01T12:00:00Z',
+        revocationDate: '2016-12-01T12:00:00Z',
+        procedures: ['C'],
+        species: ['Mice', 'Rats'],
+        updatedAt: '2016-01-01T12:00:00Z',
+        reviewDate: '2021-01-01T12:00:00Z'
       }
     ]))
     .then(() => models.PilTransfer.query().insert([
