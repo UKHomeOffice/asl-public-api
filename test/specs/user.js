@@ -38,6 +38,18 @@ describe('/me', () => {
         });
     });
 
+    it('does not include PIL review metadata for users with revoked PILs', () => {
+      this.api.setUser({ id: 'hasRevokedPil' });
+      return request(this.api)
+        .get('/me')
+        .expect(200)
+        .expect(response => {
+          assert.equal(response.body.data.pil.reviewDate, '2021-01-01T12:00:00.000Z');
+          assert.equal(response.body.data.pil.reviewDue, undefined);
+          assert.equal(response.body.data.pil.reviewOverdue, undefined);
+        });
+    });
+
     it('includes a list of allowed actions', () => {
       const actions = {
         global: [],

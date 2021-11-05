@@ -175,6 +175,17 @@ describe('/pils', () => {
         });
     });
 
+    it('does not attach review metadata to revoked pils', () => {
+      return request(this.api)
+        .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.hasRevokedPil}/pil`)
+        .expect(200)
+        .then(response => {
+          const data = response.body.data;
+          assert.equal(data.reviewDue, undefined);
+          assert.equal(data.reviewOverdue, undefined);
+        });
+    });
+
     describe('establishmentName permissions', () => {
       it('includes the establishment if the requesting user has permissions for the holding establishment', () => {
         const can = sinon.stub().resolves(true);
