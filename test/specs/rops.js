@@ -20,6 +20,7 @@ describe('Rops', () => {
     it('sends a message to Workflow on POST, setting year to 2021', () => {
       return request(this.api)
         .post(`/establishment/${ids.establishments.croydon}/project/${ids.projects.croydon.activeProject}/rops`)
+        .send({ data: { year: 2021 } })
         .expect(200)
         .expect(() => {
           assert.equal(this.workflow.handler.callCount, 1);
@@ -32,15 +33,32 @@ describe('Rops', () => {
         });
     });
 
-    it('throws an error if a draft rop already exists', () => {
+    it('throws an error if a draft rop for same year already exists', () => {
       return request(this.api)
         .post(`/establishment/${ids.establishments.croydon}/project/${ids.projects.croydon.activeAA}/rops`)
+        .send({ data: { year: 2021 } })
         .expect(400)
         .expect(response => {
           assert(
             JSON.parse(response.error.text).message
               .match(/A rop already exists for 2021/)
           );
+        });
+    });
+
+    it('allows rop to be created for new year', () => {
+      return request(this.api)
+        .post(`/establishment/${ids.establishments.croydon}/project/${ids.projects.croydon.activeAA}/rops`)
+        .send({ data: { year: 2022 } })
+        .expect(200)
+        .expect(response => {
+          assert.equal(this.workflow.handler.callCount, 1);
+          const req = this.workflow.handler.firstCall.args[0];
+          const body = req.body;
+          assert.equal(req.method, 'POST');
+          assert.equal(body.model, 'rop');
+          assert.equal(body.action, 'create');
+          assert.deepEqual(body.data, { projectId: ids.projects.croydon.activeAA, year: 2022, establishmentId: 100 });
         });
     });
   });
