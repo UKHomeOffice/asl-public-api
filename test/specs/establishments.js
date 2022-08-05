@@ -58,18 +58,6 @@ describe('/establishments', () => {
         });
     });
 
-    it('includes the details for the licence holder as `pelh`', () => {
-      return request(this.api)
-        .get(`/establishment/${ids.establishments.croydon}`)
-        .expect(200)
-        .expect(response => {
-          const profile = response.body.data.roles.find(r => r.type === 'pelh').profile;
-
-          assert.equal(profile.firstName, 'Colin');
-          assert.equal(profile.lastName, 'Jackson');
-        });
-    });
-
     it('includes a count of the places at the establishment', () => {
       return request(this.api)
         .get(`/establishment/${ids.establishments.croydon}`)
