@@ -42,7 +42,7 @@
   "devDependencies": {
     "body-parser": "^1.18.3",
     "dotenv": "^5.0.1",
-    "eslint": "^4.18.2",
+    "eslint": "^8.26.0",
     "eslint-config-lennym": "^2.1.1",
     "eslint-plugin-undocumented-env": "^1.0.0",
     "knex": "^0.21.21",
