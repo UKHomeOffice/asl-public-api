@@ -137,4 +137,30 @@ describe('/me', () => {
 
   });
 
+  describe('changing email', () => {
+
+    it('rejects if email is in use already', () => {
+      const data = {
+        email: 'test2@example.com'
+      };
+
+      return request(this.api)
+        .put('/me/email')
+        .send({ data })
+        .expect(400);
+    });
+
+    it('rejects if email is in use already with different casing', () => {
+      const data = {
+        email: 'TEST2@example.com'
+      };
+
+      return request(this.api)
+        .put('/me/email')
+        .send({ data })
+        .expect(400);
+    });
+
+  });
+
 });
