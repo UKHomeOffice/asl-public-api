@@ -10,6 +10,7 @@
     "test:lint": "eslint .",
     "pretest:unit": "npm run migrate",
     "test:unit": "mocha ./test/specs",
+    "test:audit": "audit-ci --high --skip-dev --config .auditrc.json",
     "migrate": "DATABASE_NAME=asl-test NODE_ENV=test knex migrate:latest --knexfile ./node_modules/@asl/schema/knexfile.js",
     "rollback": "DATABASE_NAME=asl-test knex migrate:rollback"
   },
@@ -40,6 +41,7 @@
     "uuid-validate": "0.0.3"
   },
   "devDependencies": {
+    "audit-ci": "^6.5.0",
     "body-parser": "^1.18.3",
     "dotenv": "^5.0.1",
     "eslint": "^8.30.0",
@@ -52,8 +54,5 @@
     "sinon": "^6.3.5",
     "supertest": "^3.4.2",
     "uuid": "^3.4.0"
-  },
-  "overrides": {
-    "redis": "^4.5.1"
   }
 }
