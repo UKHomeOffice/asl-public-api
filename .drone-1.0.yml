@@ -35,10 +35,6 @@ steps:
   - name: audit
     image: node:18
     environment:
-      NPM_AUTH_USERNAME:
-        from_secret: npm_auth_username
-      NPM_AUTH_TOKEN:
-        from_secret: npm_auth_token
     commands:
       - npm run test:audit
   - name: docker build
