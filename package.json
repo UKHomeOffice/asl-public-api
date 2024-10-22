@@ -1,6 +1,6 @@
 {
   "name": "asl-public-api",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/UKHomeOffice/asl-public-api#readme",
   "dependencies": {
-    "@asl/schema": "^10.18.4",
+    "@asl/schema": "^10.18.5",
     "@asl/service": "^10.3.1",
     "@ukhomeoffice/asl-constants": "^2.1.5",
     "express": "^4.18.2",
