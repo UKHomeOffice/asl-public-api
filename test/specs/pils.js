@@ -114,7 +114,7 @@ describe('/pils', () => {
         .get(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.linfordChristie}/pil/${ids.pils.linfordChristie}`)
         .expect(200)
         .expect(pil => {
-          assert.equal(pil.body.data.reviewDate, '2025-01-01T12:00:00.000Z');
+          assert.equal(pil.body.data.reviewDate, '2029-01-01T12:00:00.000Z');
         });
     });
 
