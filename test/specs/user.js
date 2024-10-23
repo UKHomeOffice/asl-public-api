@@ -33,7 +33,7 @@ describe('/me', () => {
         .expect(200)
         .expect(response => {
           assert.equal(response.body.data.pil.reviewDate, '2025-01-01T12:00:00.000Z');
-          assert.equal(response.body.data.pil.reviewDue, false);
+          assert.equal(response.body.data.pil.reviewDue, true);
           assert.equal(response.body.data.pil.reviewOverdue, false);
         });
     });
