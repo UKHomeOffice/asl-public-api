@@ -727,7 +727,7 @@ module.exports = models => {
         issueDate: '2016-01-01T12:00:00Z',
         revocationDate: null,
         procedures: ['A', 'B'],
-        updatedAt: '2020-01-01T12:00:00Z'
+        updatedAt: '2024-01-01T12:00:00Z'
       },
       {
         id: ids.pils.noddyHolder,
