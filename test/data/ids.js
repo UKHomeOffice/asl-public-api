@@ -74,7 +74,8 @@ module.exports = {
   },
   rops: {
     draft: uuid(),
-    submitted: uuid()
+    submitted: uuid(),
+    submitted2019: uuid()
   },
   procedures: {
     draft: uuid(),
