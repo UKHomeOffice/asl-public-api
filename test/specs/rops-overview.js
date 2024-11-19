@@ -76,4 +76,31 @@ describe('ROPs overview', () => {
       });
   });
 
+  function assertDownloadRowsForYear(api, year, expectedCount) {
+    return request(api)
+      .get(`/establishment/${ids.establishments.croydon}/rops/download?year=${year}`)
+      .expect(200)
+      .expect(response => {
+        assert.equal(
+          response.body.data.length,
+          expectedCount,
+          `Unexpected number of RoPs downloaded for ${year}.`
+        );
+      });
+  }
+
+  // Test data has submitted RoPs for 2019, 2020, and a draft for 2021
+
+  it('should not return any rows when downloading rops for a year with no submission', () => {
+    return assertDownloadRowsForYear(this.api, 2022, 0);
+  });
+
+  it('should not return any rows when downloading rops for a year with a draft RoP', () => {
+    return assertDownloadRowsForYear(this.api, 2021, 0);
+  });
+
+  it('should return the specified year\'s rop when downloading rops for a year with a submitted RoP', () => {
+    return assertDownloadRowsForYear(this.api, 2020, 1);
+  });
+
 });
