@@ -5,7 +5,6 @@
   ],
   "allowlist": [
     "GHSA-grv7-fg5c-xmjg",
-    "GHSA-4jv9-3563-23j3",
-    "GHSA-c2qf-rxjj-qqgw"
+    "GHSA-4jv9-3563-23j3"
   ]
 }
