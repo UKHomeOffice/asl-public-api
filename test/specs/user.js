@@ -4,16 +4,14 @@ const apiHelper = require('../helpers/api');
 const ids = require('../data/ids');
 
 describe('/me', () => {
-  beforeEach(() => {
-    return apiHelper.create()
-      .then(api => {
-        this.api = api.api;
-        this.workflow = api.workflow;
-      });
+  beforeEach(async () => {
+    const api = await apiHelper.create();
+    this.api = api.api;
+    this.workflow = api.workflow;
   });
 
-  afterEach(() => {
-    return apiHelper.destroy();
+  afterEach(async () => {
+    await apiHelper.destroy();
   });
 
   describe('GET', () => {

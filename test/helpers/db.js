@@ -1,28 +1,39 @@
-const Schema = require('@asl/schema');
+const Schema = require('../../asl-schema');
 
-const snakeCase = str => str.replace(/[A-Z]/g, s => `_${s.toLowerCase()}`);
+const snakeCase = (str) => str.replace(/[A-Z]/g, (s) => `_${s.toLowerCase()}`);
 
-module.exports = settings => {
-
+module.exports = (settings) => {
   return {
-    init: (populate) => {
-      const schema = Schema(settings);
-
-      const tables = Object.keys(schema);
-      return tables.reduce((p, table) => {
-        return p.then(() => {
-          if (schema[table].tableName) {
-            return schema[table].knex().raw(`truncate ${snakeCase(schema[table].tableName)} cascade;`);
+    init: async (populate) => {
+      const schema = await Schema(settings);
+      try {
+        for (const table of Object.keys(schema)) {
+          // Exclude 'knex', 'transaction', and 'destroy' explicitly
+          if (
+            schema[table] &&
+            schema[table].tableName &&
+            !['knex', 'transaction', 'destroy'].includes(table)
+          ) {
+            const tableName = snakeCase(schema[table].tableName);
+            try {
+              await schema[table].knex().client.raw(`TRUNCATE ${tableName} CASCADE;`);
+            } catch (error) {
+              console.error(`Error truncating table ${tableName}:`, error);
+            }
           }
-        });
-      }, Promise.resolve())
-        .then(() => populate && populate(schema))
-        .then(() => schema.destroy())
-        .catch(err => {
-          schema.destroy();
-          throw err;
-        });
+        }
+
+        if (populate) {
+          console.log('data populate ran!!!');
+          await populate(schema);
+        }
+      } catch (err) {
+        console.error('Error during initialization:', err);
+        throw err;
+      } finally {
+        await schema.destroy();
+        console.log('Schema resources destroyed.');
+      }
     }
   };
-
 };
