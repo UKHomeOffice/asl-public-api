@@ -4,10 +4,12 @@ const apiHelper = require('../helpers/api');
 const ids = require('../data/ids');
 
 describe('/me', () => {
-  beforeEach(async () => {
-    const api = await apiHelper.create();
-    this.api = api.api;
-    this.workflow = api.workflow;
+  beforeEach(() => {
+    return apiHelper.create()
+      .then(api => {
+        this.api = api.api;
+        this.workflow = api.workflow;
+      });
   });
 
   afterEach(async () => {
@@ -98,11 +100,14 @@ describe('/me', () => {
       firstName: 'Sterling'
     };
 
+    console.log('this.workflow:', this.api);
+
     return request(this.api)
       .put('/me')
       .send({ data: input })
       .expect(200)
       .expect(() => {
+        console.log('Request completed, checking workflow handler...');
         assert.equal(this.workflow.handler.callCount, 1);
         const req = this.workflow.handler.firstCall.args[0];
         const body = req.body;
