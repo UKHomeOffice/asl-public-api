@@ -11,20 +11,22 @@ const settings = {
   password: process.env.DATABASE_PASSWORD || 'test-password'
 };
 
-// Define variables at the module level
 let workflowInstance;
 let apiInstance;
 
 module.exports = {
   create: async (options = {}) => {
     try {
-      // Initialize the database and wait for it to complete
-      await Database(settings).init(data.default);
+      await Promise.race([
+        Database(settings).init(data.default),
+        new Promise((resolve, reject) => setTimeout(() => reject(new Error('Database initialization timeout after 5 seconds')), 5000))
+      ]);
 
-      // Initialize the workflow
       workflowInstance = await Workflow();
+      if (!workflowInstance.url) {
+        throw new Error('Workflow initialization failed: Missing URL.');
+      }
 
-      // Initialize the API
       const api = Api({
         auth: false,
         log: { level: 'error' },
@@ -33,35 +35,43 @@ module.exports = {
         ...options
       });
 
-      // Wrap the API with user handling
-      apiInstance = WithUser(api, {});
+      // Wrap the API with user handling middleware
+      apiInstance = await WithUser(api, {});
 
       return {
-        workflow: workflowInstance,
+        workflow: workflowInstance.url,
         api: apiInstance
       };
     } catch (error) {
-      console.error('Error during initialization:', error);
-      throw error; // Rethrow to handle upstream errors if needed
+      console.error('Initialization error:', error.message);
+      throw error;
     }
   },
 
   destroy: async () => {
     try {
       if (workflowInstance) {
-        console.log('Tearing down workflow...');
+        console.log('Tearing down workflow start...');
         await workflowInstance.teardown();
+        console.log('Workflow teardown completed.');
+      } else {
+        console.warn('No workflow instance found to teardown.');
       }
 
-      if (apiInstance) {
+      // Safely destroy Knex database connection
+      if (apiInstance.app.db) {
         const knex = await apiInstance.app.db;
-        knex.destroy();
-        console.log('API-Schema instance destroyed...');
+        if (knex.destroy) {
+          await knex.destroy();
+          console.log('Knex connection destroyed successfully.');
+        } else {
+          console.warn('Knex instance missing or does not have a destroy method.');
+        }
       } else {
-        console.warn('No destroy method found on apiInstance.app.db.knex');
+        console.warn('No API or Knex instance found to destroy.');
       }
     } catch (error) {
-      console.error('Error during teardown:', error);
+      console.error('Teardown error:', error.message);
     }
   }
 };
