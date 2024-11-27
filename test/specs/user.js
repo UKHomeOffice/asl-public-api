@@ -2,17 +2,13 @@ const assert = require('assert');
 const request = require('supertest');
 const apiHelper = require('../helpers/api');
 const ids = require('../data/ids');
-const Workflow = require('../helpers/workflow');
 
 describe('/me', () => {
   beforeEach(async () => {
     try {
       const api = await apiHelper.create();
-
-      console.log('api.workflow', api.workflow);
-
-      this.api = await api.api;
-      this.workflow = api.workflow; // await Workflow();
+      this.api = api.api;
+      this.workflow = api.workflow;
     } catch (error) {
       console.error('Setup error:', error);
       throw error;

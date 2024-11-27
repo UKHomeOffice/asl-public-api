@@ -1,11 +1,11 @@
-const Schema = require('../../asl-schema');
+const aslSchema = require('../../asl-schema');
 
 const snakeCase = (str) => str.replace(/[A-Z]/g, (s) => `_${s.toLowerCase()}`);
 
 module.exports = (settings) => {
   return {
     init: async (populate) => {
-      const schema = await Schema(settings);
+      const schema = await aslSchema(settings);
       try {
         for (const table of Object.keys(schema)) {
           // Exclude 'knex', 'transaction', and 'destroy' explicitly
@@ -24,15 +24,16 @@ module.exports = (settings) => {
         }
 
         if (populate) {
-          console.log('data populate ran!!!');
           await populate(schema);
+          console.log('data populate ran!!!');
         }
+        return schema;
       } catch (err) {
         console.error('Error during initialization:', err);
         throw err;
       } finally {
         await schema.destroy();
-        console.log('Schema resources destroyed.');
+        console.log('API-Schema resource destroyed.');
       }
     }
   };
