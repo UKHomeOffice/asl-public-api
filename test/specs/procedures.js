@@ -82,7 +82,7 @@ describe('Procedures', () => {
             'severity',
             'severityNum'
           ].forEach(field => {
-            const re = new RegExp(`${field}: is a required property`);
+            const re = new RegExp(`${field}: must have required property`);
             assert(JSON.parse(response.error.text).message.match(re));
           });
         });

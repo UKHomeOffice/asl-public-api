@@ -7,16 +7,19 @@ const ids = require('../data/ids');
 
 describe('/pils', () => {
 
-  beforeEach(() => {
-    return apiHelper.create()
-      .then((api) => {
-        this.api = api.api;
-        this.workflow = api.workflow;
-      });
+  beforeEach(async () => {
+    try {
+      const api = await apiHelper.create();
+      this.api = api.api;
+      this.workflow = api.workflow;
+    } catch (error) {
+      console.error('Setup error:', error);
+      throw error;
+    }
   });
 
-  afterEach(() => {
-    return apiHelper.destroy();
+  afterEach(async () => {
+    await apiHelper.destroy();
   });
 
   describe('/pil', () => {
@@ -25,9 +28,9 @@ describe('/pils', () => {
         .post(`/establishment/${ids.establishments.croydon}/profile/${ids.profiles.hasNoPil}/pil`)
         .send({ data: {} })
         .expect(200)
-        .expect(() => {
-          assert.equal(this.workflow.handler.callCount, 1);
-          const req = this.workflow.handler.firstCall.args[0];
+        .expect(async () => {
+          assert.equal(await this.workflow.handler.callCount, 1);
+          const req = await this.workflow.handler.firstCall.args[0];
           const body = req.body;
           assert.equal(req.method, 'POST');
           assert.equal(body.model, 'pil');
@@ -51,7 +54,7 @@ describe('/pils', () => {
   });
 
   describe('GET /pils', () => {
-    it('returns a list of all active pils at the establishment', () => {
+    it('returns a list of all active pils at the establishment', async () => {
       return request(this.api)
         .get(`/establishment/${ids.establishments.croydon}/pils`)
         .expect(200)
