@@ -61,7 +61,7 @@ module.exports = {
       }
 
       // Destroy Knex connection if API and database are initialized
-      const knex = apiInstance?.app?.db;
+      const knex = apiInstance.app.db;
       if (knex && knex.destroy) {
         await knex.destroy();
         console.log('Knex connection destroyed successfully.');

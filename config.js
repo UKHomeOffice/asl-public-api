@@ -15,7 +15,7 @@ module.exports = {
     database: process.env.DATABASE_NAME || 'asl',
     host: process.env.DATABASE_HOST || 'localhost',
     password: process.env.DATABASE_PASSWORD || 'test-password',
-    port: process.env.DATABASE_PORT || '5432',
+    port: process.env.DATABASE_PORT || 5432,
     user: process.env.DATABASE_USERNAME || 'postgres',
     application_name: 'public-api',
     maxConnections: parseInt(process.env.DATABASE_POOL_SIZE, 10) || 5
