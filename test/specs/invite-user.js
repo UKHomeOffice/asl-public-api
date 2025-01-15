@@ -51,7 +51,7 @@ describe('Invite User', () => {
       .expect(response => {
         assert(
           JSON.parse(response.error.text).message
-            .match(/email: is a required property/)
+            .match(/email: must have required property/)
         );
       });
   });
@@ -69,7 +69,7 @@ describe('Invite User', () => {
       .expect(response => {
         assert(
           JSON.parse(response.error.text).message
-            .match(/role: is a required property/)
+            .match(/role: must have required property/)
         );
       });
   });
