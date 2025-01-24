@@ -1,10 +1,9 @@
 {
   "comments": [
-    "GHSA-grv7-fg5c-xmjg|: knex",
-    "GHSA-4jv9-3563-23j3|: objection"
+    "GHSA-59fq-727j-hm3f: keycloak-connect contains Open redirect vulnerability in the Node.js adapter"
   ],
   "allowlist": [
-    "GHSA-grv7-fg5c-xmjg",
-    "GHSA-4jv9-3563-23j3"
+    "GHSA-59fq-727j-hm3f"
+
   ]
 }
