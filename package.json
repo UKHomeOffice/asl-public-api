@@ -11,7 +11,7 @@
     "pretest:unit": "npm run migrate",
     "test:unit": "mocha ./test/specs",
     "test:audit": "audit-ci --high --skip-dev --config .auditrc.json",
-    "migrate": "DATABASE_NAME=asl-test NODE_ENV=test knex migrate:latest --knexfile ../../node_modules/@asl/schema/knexfile.js",
+    "migrate": "DATABASE_NAME=asl-test NODE_ENV=test knex migrate:latest --knexfile ./node_modules/@asl/schema/knexfile.js",
     "rollback": "DATABASE_NAME=asl-test knex migrate:rollback"
   },
   "repository": {
